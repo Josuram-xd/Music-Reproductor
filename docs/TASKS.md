@@ -35,9 +35,9 @@ Cada épica puede ser uno o varios commits (los hace el humano). `[ ]` pendiente
 
 - [x] App shell responsive (container queries: 3 columnas / iconos + panel / tabs + bottom sheet)
 - [x] Interfaz `PlaybackSource` + `LocalAudioSource`
-- [ ] `PlayerEngine` sobre la cola (play, pause, next, seek ±10 s, volumen)
-- [ ] Doble back + toast de "primera canción"
-- [ ] Atajos de teclado y Media Session API
+- [x] `PlayerEngine` sobre la cola (play, pause, next, seek ±10 s, volumen)
+- [x] Doble back + toast de "primera canción"
+- [x] Atajos de teclado y Media Session API
 
 ## E4 · Biblioteca, subidas y carpetas
 

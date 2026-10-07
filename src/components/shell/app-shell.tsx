@@ -1,4 +1,7 @@
 import type { ReactNode } from "react";
+import { PlayerBar } from "@/components/player/player-bar";
+import { PlayerHost } from "@/components/player/player-host";
+import { Toaster } from "@/components/ui/toaster";
 import { NAV_ITEMS } from "./nav-items";
 import { NavLink } from "./nav-link";
 import { QueueButton, QueueDrawerProvider } from "./queue-drawer";
@@ -63,6 +66,8 @@ export function AppShell({ children, userMenu }: AppShellProps) {
               {children}
             </main>
 
+            <PlayerBar />
+
             <nav
               aria-label="Principal"
               className="flex shrink-0 border-t border-surface-2 bg-surface pb-[env(safe-area-inset-bottom)] @tablet:hidden"
@@ -82,6 +87,8 @@ export function AppShell({ children, userMenu }: AppShellProps) {
             <QueuePanel />
           </aside>
         </div>
+        <Toaster />
+        <PlayerHost />
       </QueueDrawerProvider>
     </div>
   );
