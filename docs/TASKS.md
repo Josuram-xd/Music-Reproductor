@@ -41,12 +41,12 @@ Cada épica puede ser uno o varios commits (los hace el humano). `[ ]` pendiente
 
 ## E4 · Biblioteca, subidas y carpetas
 
-- [ ] Migraciones `folders`, `tracks`, buckets + RLS
-- [ ] Subida directa a Storage (signed URL, drag & drop de archivos del PC, barra de progreso)
-- [ ] Vídeo local → extraer audio con ffmpeg.wasm (carga diferida, `-c:a copy` con fallback a recodificar) y subir solo el audio
-- [ ] Lectura de metadatos (duración, ID3/carátula) en el cliente
-- [ ] Árbol de carpetas: crear, renombrar, mover (drag & drop), borrar
-- [ ] Búsqueda con Trie
+- [x] Migraciones `folders`, `tracks`, buckets + RLS
+- [x] Subida directa a Storage (signed URL, drag & drop de archivos del PC, barra de progreso)
+- [x] Vídeo local → extraer audio con ffmpeg.wasm (carga diferida, `-c:a copy` con fallback a recodificar) y subir solo el audio
+- [x] Lectura de metadatos (duración, ID3/carátula) en el cliente
+- [x] Árbol de carpetas: crear, renombrar, mover (drag & drop), borrar
+- [x] Búsqueda con Trie
 
 ## E5 · Cola y drag & drop
 
