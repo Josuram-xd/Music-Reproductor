@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+/* Tokens "Dark Kawaii Neko" — ver docs/DESIGN.md. Solo tema oscuro. */
+:root {
+  color-scheme: dark;
+  --bg: #14111f;
+  --surface: #1e1a2e;
+  --surface-2: #2a2440;
+  --primary: #ff8fc7;
+  --secondary: #b69cff;
+  --accent: #8ef0d0;
+  --warn: #ffb38a;
+  --danger: #ff6b8b;
+  --text: #f5ecff;
+  --muted: #a79cc2;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-warn: var(--warn);
+  --color-danger: var(--danger);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --font-sans: var(--font-nunito);
+  --font-display: var(--font-fredoka);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+}
