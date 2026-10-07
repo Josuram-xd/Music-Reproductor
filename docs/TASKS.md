@@ -7,14 +7,14 @@ Cada épica puede ser uno o varios commits (los hace el humano). `[ ]` pendiente
 - [x] Next.js + TS strict + Tailwind + ESLint/Prettier
 - [x] Script `prepare` que activa `.githooks` (se omite en CI/Vercel)
 - [x] Vitest + Playwright configurados
-- [ ] Proyecto Supabase + variables en `.env.local` y Vercel
-- [ ] Proyecto en Vercel conectado al repo
+- [x] Proyecto Supabase + variables en `.env.local` y Vercel
+- [x] Proyecto en Vercel conectado al repo
 
 ## E1 · Estructuras de datos (`src/lib/ds`)
 
-- [ ] `DoublyLinkedList` (+ índice por id, move, insertAfter, toArray) + tests
-- [ ] Variante circular para repetir-todo + tests
-- [ ] `Stack` + `UndoManager` (Command pattern) + tests
+- [x] `DoublyLinkedList` (+ índice por id, move, insertAfter, toArray) + tests
+- [x] Variante circular para repetir-todo + tests
+- [x] `Stack` + `UndoManager` (Command pattern) + tests
 - [ ] `FolderTree` (árbol n-ario: add, move, remove, path) + tests
 - [ ] `Trie` para búsqueda + tests
 - [ ] `LRUCache` + tests
