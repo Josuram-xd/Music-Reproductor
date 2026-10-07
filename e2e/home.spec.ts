@@ -25,3 +25,20 @@ test("login form validates on the server", async ({ page }) => {
   await page.getByRole("button", { name: /Entrar/ }).click();
   await expect(page.getByText("Escribe tu correo, nya~")).toBeVisible();
 });
+
+test("heartbeat without a session answers 401 instead of redirecting", async ({ request }) => {
+  const response = await request.post("/api/session/heartbeat", { maxRedirects: 0 });
+  expect(response.status()).toBe(401);
+});
+
+test("login and register offer Google sign-in", async ({ page }) => {
+  await page.goto("/login");
+  await expect(page.getByRole("button", { name: "Continuar con Google" })).toBeVisible();
+  await page.goto("/register");
+  await expect(page.getByRole("button", { name: "Continuar con Google" })).toBeVisible();
+});
+
+test("an expired session shows its notice on the login page", async ({ page }) => {
+  await page.goto("/login?reason=expired");
+  await expect(page.getByText("Tu sesión caducó. Vuelve a entrar, nya~")).toBeVisible();
+});

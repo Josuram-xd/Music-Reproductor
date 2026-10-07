@@ -31,6 +31,8 @@ export function loginReasonMessage(reason: string | undefined): string | undefin
       return "Sesión cerrada. ¡Hasta pronto! 🐾";
     case "confirm-failed":
       return "El enlace de confirmación no es válido o ya caducó";
+    case "oauth-failed":
+      return "No se pudo entrar con Google. Inténtalo otra vez 🐾";
     default:
       return undefined;
   }

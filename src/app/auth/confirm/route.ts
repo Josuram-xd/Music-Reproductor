@@ -1,12 +1,14 @@
 import type { EmailOtpType } from "@supabase/supabase-js";
 import { type NextRequest, NextResponse } from "next/server";
 import { LOGIN_PATH, safeNextPath } from "@/lib/auth/routes";
+import { lastSeenCookie } from "@/lib/session/config";
 import { createClient } from "@/lib/supabase/server";
 
 /**
- * Email confirmation landing. Supports both link styles:
+ * Auth landing for email confirmation and OAuth (Google). Supports:
  * - `?token_hash=…&type=…` (custom email template, works on any device)
- * - `?code=…` (default PKCE link, same browser that signed up)
+ * - `?code=…` (PKCE: default email link and OAuth, same browser)
+ * - `?error=…` (OAuth cancelled or failed)
  */
 export async function GET(request: NextRequest) {
   const params = request.nextUrl.searchParams;
@@ -15,17 +17,22 @@ export async function GET(request: NextRequest) {
   const code = params.get("code");
 
   const supabase = await createClient();
-  let confirmed = false;
+  let userId: string | undefined;
   if (tokenHash && type) {
-    const { error } = await supabase.auth.verifyOtp({ type, token_hash: tokenHash });
-    confirmed = !error;
+    const { data } = await supabase.auth.verifyOtp({ type, token_hash: tokenHash });
+    userId = data.user?.id;
   } else if (code) {
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
-    confirmed = !error;
+    const { data } = await supabase.auth.exchangeCodeForSession(code);
+    userId = data.user?.id;
   }
 
-  const target = confirmed
-    ? safeNextPath(params.get("next"))
-    : `${LOGIN_PATH}?reason=confirm-failed`;
-  return NextResponse.redirect(new URL(target, request.url));
+  if (!userId) {
+    const oauth = params.get("flow") === "oauth" || params.has("error");
+    const reason = oauth ? "oauth-failed" : "confirm-failed";
+    return NextResponse.redirect(new URL(`${LOGIN_PATH}?reason=${reason}`, request.url));
+  }
+
+  const response = NextResponse.redirect(new URL(safeNextPath(params.get("next")), request.url));
+  response.cookies.set(await lastSeenCookie(userId));
+  return response;
 }

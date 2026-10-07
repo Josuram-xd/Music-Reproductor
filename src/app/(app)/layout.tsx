@@ -1,5 +1,7 @@
 import { Suspense } from "react";
 import { UserMenu } from "@/components/auth/user-menu";
+import { SessionKeeper } from "@/components/session/session-keeper";
+import { parseGraceSeconds } from "@/lib/session/grace";
 
 export default function AppLayout({ children }: LayoutProps<"/">) {
   return (
@@ -12,6 +14,7 @@ export default function AppLayout({ children }: LayoutProps<"/">) {
         </Suspense>
       </header>
       {children}
+      <SessionKeeper graceSeconds={parseGraceSeconds(process.env.SESSION_GRACE_SECONDS)} />
     </div>
   );
 }

@@ -12,6 +12,7 @@ import {
   USERNAME_MIN_LENGTH,
 } from "@/lib/auth/validation";
 import { FormMessage } from "./form-message";
+import { GoogleButton, OrDivider } from "./google-button";
 
 export function RegisterForm() {
   const [state, action, pending] = useActionState(signUp, {} as AuthFormState);
@@ -31,43 +32,48 @@ export function RegisterForm() {
   }
 
   return (
-    <form action={action} className="flex flex-col gap-4" noValidate>
+    <div className="flex flex-col gap-4">
       {state.error ? <FormMessage tone="error">{state.error}</FormMessage> : null}
 
-      <TextField
-        name="username"
-        label="Nombre"
-        autoComplete="nickname"
-        required
-        minLength={USERNAME_MIN_LENGTH}
-        maxLength={USERNAME_MAX_LENGTH}
-        defaultValue={state.values?.username}
-        error={state.fieldErrors?.username}
-        hint="Así te saludará Purrlist"
-      />
-      <TextField
-        name="email"
-        label="Correo"
-        type="email"
-        autoComplete="email"
-        required
-        defaultValue={state.values?.email}
-        error={state.fieldErrors?.email}
-      />
-      <TextField
-        name="password"
-        label="Contraseña"
-        type="password"
-        autoComplete="new-password"
-        required
-        minLength={PASSWORD_MIN_LENGTH}
-        error={state.fieldErrors?.password}
-        hint={`Mínimo ${PASSWORD_MIN_LENGTH} caracteres, con letras y números`}
-      />
+      <GoogleButton />
+      <OrDivider />
 
-      <Button type="submit" pending={pending} className="mt-2">
-        {pending ? "Creando cuenta…" : "Crear cuenta 🐾"}
-      </Button>
+      <form action={action} className="flex flex-col gap-4" noValidate>
+        <TextField
+          name="username"
+          label="Nombre"
+          autoComplete="nickname"
+          required
+          minLength={USERNAME_MIN_LENGTH}
+          maxLength={USERNAME_MAX_LENGTH}
+          defaultValue={state.values?.username}
+          error={state.fieldErrors?.username}
+          hint="Así te saludará Purrlist"
+        />
+        <TextField
+          name="email"
+          label="Correo"
+          type="email"
+          autoComplete="email"
+          required
+          defaultValue={state.values?.email}
+          error={state.fieldErrors?.email}
+        />
+        <TextField
+          name="password"
+          label="Contraseña"
+          type="password"
+          autoComplete="new-password"
+          required
+          minLength={PASSWORD_MIN_LENGTH}
+          error={state.fieldErrors?.password}
+          hint={`Mínimo ${PASSWORD_MIN_LENGTH} caracteres, con letras y números`}
+        />
+
+        <Button type="submit" pending={pending} className="mt-2">
+          {pending ? "Creando cuenta…" : "Crear cuenta 🐾"}
+        </Button>
+      </form>
 
       <p className="text-center text-sm text-muted">
         ¿Ya tienes cuenta?{" "}
@@ -75,6 +81,6 @@ export function RegisterForm() {
           Inicia sesión
         </Link>
       </p>
-    </form>
+    </div>
   );
 }

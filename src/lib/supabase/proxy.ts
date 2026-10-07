@@ -4,9 +4,9 @@ import type { Database } from "./database.types";
 import { supabaseEnv } from "./env";
 
 /**
- * Refreshes the Supabase session cookies for this request and tells whether
- * there is a signed-in user. `withSession` copies the refreshed cookies and
- * no-cache headers onto any other response (e.g. a redirect).
+ * Refreshes the Supabase session cookies for this request and returns the
+ * signed-in user id (or `null`). `withSession` copies the refreshed cookies
+ * and no-cache headers onto any other response (e.g. a redirect).
  */
 export async function updateSession(request: NextRequest) {
   const { url, key } = supabaseEnv();
@@ -33,7 +33,7 @@ export async function updateSession(request: NextRequest) {
   // Do not run code between createServerClient and getClaims: it validates the
   // JWT and refreshes an expired session, writing new cookies via setAll.
   const { data } = await supabase.auth.getClaims();
-  const isSignedIn = Boolean(data?.claims?.sub);
+  const userId = data?.claims?.sub ?? null;
 
   const withSession = (target: NextResponse) => {
     for (const cookie of response.cookies.getAll()) target.cookies.set(cookie);
@@ -41,5 +41,5 @@ export async function updateSession(request: NextRequest) {
     return target;
   };
 
-  return { response, isSignedIn, withSession };
+  return { supabase, response, userId, withSession };
 }
