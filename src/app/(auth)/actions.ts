@@ -3,7 +3,7 @@
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { authErrorMessage } from "@/lib/auth/messages";
-import { LOGIN_PATH, safeNextPath } from "@/lib/auth/routes";
+import { HOME_PATH, LOGIN_PATH, safeNextPath } from "@/lib/auth/routes";
 import { type FieldErrors, parseCredentials, parseRegistration } from "@/lib/auth/validation";
 import { lastSeenCookie } from "@/lib/session/config";
 import { LAST_SEEN_COOKIE } from "@/lib/session/grace";
@@ -65,7 +65,7 @@ export async function signUp(_prev: AuthFormState, form: FormData): Promise<Auth
   // With email confirmation off, Supabase signs the user in right away.
   if (data.session) {
     await startGraceWindow(data.session.user.id);
-    redirect("/");
+    redirect(HOME_PATH);
   }
 
   return {

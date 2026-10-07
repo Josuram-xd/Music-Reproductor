@@ -1,6 +1,7 @@
 export const LOGIN_PATH = "/login";
 export const REGISTER_PATH = "/register";
-export const HOME_PATH = "/";
+/** Home screen; `/` redirects here (next.config.ts). */
+export const HOME_PATH = "/library";
 
 /**
  * How the proxy treats a path:
@@ -38,6 +39,6 @@ export function safeNextPath(next: string | null | undefined): string {
 
 /** `/login?next=…` for a protected path the user tried to open. */
 export function loginUrlFor(pathname: string, search = ""): string {
-  if (pathname === HOME_PATH && !search) return LOGIN_PATH;
+  if ((pathname === "/" || pathname === HOME_PATH) && !search) return LOGIN_PATH;
   return `${LOGIN_PATH}?next=${encodeURIComponent(pathname + search)}`;
 }

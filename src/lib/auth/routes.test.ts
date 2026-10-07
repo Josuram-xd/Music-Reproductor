@@ -29,19 +29,20 @@ describe("safeNextPath", () => {
   test.each([null, undefined, "", "library", "https://evil.com", "//evil.com", "/\\evil.com"])(
     "falls back home for %s",
     (next) => {
-      expect(safeNextPath(next)).toBe("/");
+      expect(safeNextPath(next)).toBe("/library");
     },
   );
 
   test("never sends a signed-in user back to a guest page", () => {
-    expect(safeNextPath("/login")).toBe("/");
-    expect(safeNextPath("/register?x=1")).toBe("/");
+    expect(safeNextPath("/login")).toBe("/library");
+    expect(safeNextPath("/register?x=1")).toBe("/library");
   });
 });
 
 describe("loginUrlFor", () => {
   test("plain /login for the home page", () => {
     expect(loginUrlFor("/")).toBe("/login");
+    expect(loginUrlFor("/library")).toBe("/login");
   });
 
   test("keeps the requested path and query in next", () => {

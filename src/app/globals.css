@@ -30,6 +30,14 @@
   --font-display: var(--font-fredoka);
 }
 
+/* Layout breakpoints as container sizes (docs/DESIGN.md): @tablet = 640px,
+   @desktop = 1024px. Used with `@container` so the layout follows the real
+   window width (split screen included), not only the device. */
+@theme {
+  --container-tablet: 40rem;
+  --container-desktop: 64rem;
+}
+
 body {
   background: var(--bg);
   color: var(--text);

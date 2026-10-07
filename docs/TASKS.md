@@ -33,8 +33,8 @@ Cada épica puede ser uno o varios commits (los hace el humano). `[ ]` pendiente
 
 ## E3 · Motor de reproducción
 
-- [ ] App shell responsive (container queries: 3 columnas / iconos + panel / tabs + bottom sheet)
-- [ ] Interfaz `PlaybackSource` + `LocalAudioSource`
+- [x] App shell responsive (container queries: 3 columnas / iconos + panel / tabs + bottom sheet)
+- [x] Interfaz `PlaybackSource` + `LocalAudioSource`
 - [ ] `PlayerEngine` sobre la cola (play, pause, next, seek ±10 s, volumen)
 - [ ] Doble back + toast de "primera canción"
 - [ ] Atajos de teclado y Media Session API
