@@ -19,6 +19,7 @@ Cada épica puede ser uno o varios commits (los hace el humano). `[ ]` pendiente
 - [ ] `Trie` para búsqueda + tests
 - [ ] `LRUCache` + tests
 - [ ] Shuffle Fisher‑Yates con semilla + tests
+- [ ] `PriorityQueue` (Max‑Heap) + tests
 
 ## E2 · Auth y roles
 
@@ -31,6 +32,7 @@ Cada épica puede ser uno o varios commits (los hace el humano). `[ ]` pendiente
 
 ## E3 · Motor de reproducción
 
+- [ ] App shell responsive (container queries: 3 columnas / iconos + panel / tabs + bottom sheet)
 - [ ] Interfaz `PlaybackSource` + `LocalAudioSource`
 - [ ] `PlayerEngine` sobre la cola (play, pause, next, seek ±10 s, volumen)
 - [ ] Doble back + toast de "primera canción"
@@ -68,13 +70,41 @@ Cada épica puede ser uno o varios commits (los hace el humano). `[ ]` pendiente
 - [ ] `SpotifySource` con Web Playback SDK (aviso si no es Premium)
 - [ ] Búsqueda y añadir a cola
 
-## E8 · Diseño kawaii
+## E8 · Mini‑reproductor flotante
+
+- [ ] Migración `user_settings` (floating_player, floating_pos, radio_enabled)
+- [ ] Widget flotante: carátula, título, tiempo, progreso, ⏮ ⏯ ⏭
+- [ ] Opacidad 50 % ↔ 100 % (hover / foco / toque 4 s)
+- [ ] Arrastrar + pegar al borde + recordar posición; reajuste al redimensionar
+- [ ] Activar/desactivar (Ajustes + ✕) con fallback a barra fija
+- [ ] Document Picture‑in‑Picture ("Sacar de la ventana") con detección de soporte
+- [ ] Versión píldora en móvil
+
+## E9 · Radio neko (recomendaciones)
+
+- [ ] Migraciones `play_events`, `search_history`, `radio_feedback`
+- [ ] Registrar eventos de reproducción (completada / saltada / tiempo escuchado)
+- [ ] Generador de candidatos (biblioteca → YouTube cacheado → Spotify search)
+- [ ] Puntuación + Max‑Heap + exclusión de lo reciente + tests
+- [ ] Auto‑rellenar la cola al quedar ≤ 1 canción; etiqueta 🐾, quitar y "No me gusta"
+- [ ] Toggle en Ajustes y en la cola
+
+## E10 · Estadísticas
+
+- [ ] Migración `app_sessions` alimentada por el heartbeat + vistas `stats_*`
+- [ ] Página "Mis stats": KPIs (tiempo escuchado, uso, sesión actual en vivo, racha)
+- [ ] Top canciones / artistas / carpetas por periodo
+- [ ] Mapa de calor día × hora, más saltadas, tiempo por fuente
+- [ ] "Borrar mi historial"
+
+## E11 · Diseño kawaii
 
 - [ ] Tokens, fuentes, componentes base (Button, Modal, Toast, Slider huellita)
 - [ ] Ilustraciones SVG de gatos (vacíos, carga, orejitas)
-- [ ] Responsive móvil + accesibilidad (foco, contraste, reduced motion)
+- [ ] QA responsive (móvil, pantalla dividida, escritorio) con Playwright en 3 viewports
+- [ ] Accesibilidad (foco, contraste, reduced motion, táctil ≥ 44 px)
 
-## E9 · Deploy
+## E12 · Deploy
 
 - [ ] Variables de entorno en Vercel, dominio, redirect URIs de Spotify
 - [ ] GitHub Actions: lint + typecheck + tests en PRs

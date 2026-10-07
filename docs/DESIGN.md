@@ -29,7 +29,21 @@ Solo tema oscuro. Tierno pero no infantil: noche violeta, acentos pastel, detall
 - Bordes muy redondeados (16–24 px), sombras con glow rosa suave.
 - `prefers-reduced-motion` desactiva animaciones.
 
-## Layout
+## Layout responsive (por ancho de ventana, vía container queries)
 
-- Escritorio: sidebar (biblioteca/carpetas) · contenido · panel de cola a la derecha · reproductor fijo abajo.
-- Móvil: tabs abajo, mini‑player que se expande a pantalla completa.
+- **≥ 1024 px** (navegador completo): sidebar (biblioteca/carpetas) · contenido · panel de cola a la derecha.
+- **640–1024 px** (tablet / pantalla dividida): sidebar compacto de iconos · contenido · cola en panel desplegable.
+- **< 640 px** (móvil / ventana estrecha): tabs abajo, cola como bottom sheet, "Ahora suena" a pantalla completa.
+- Controles de reproducción: **mini‑reproductor flotante** (por defecto) o **barra fija abajo** (si el usuario quita el flotante).
+
+## Mini‑reproductor flotante
+
+- Tarjeta redondeada (radio 20 px) con orejitas de gato en la esquina, carátula, título, tiempo y ⏮ ⏯ ⏭.
+- 50 % de opacidad en reposo → 100 % con hover / foco / toque; `backdrop-filter: blur` para que se lea encima de cualquier fondo.
+- En móvil se reduce a una "píldora" con carátula + ⏯ que se expande al tocarla.
+- Asa de arrastre con huellita; ✕ para ocultarlo; ⧉ para sacarlo de la ventana (Document PiP).
+
+## Estadísticas
+
+- Tarjetas de KPI (tiempo escuchado, tiempo de uso, sesión actual, racha) con iconos de gato.
+- Top canciones / artistas como lista con barras rosas; mapa de calor día × hora en la escala lavanda → rosa.
