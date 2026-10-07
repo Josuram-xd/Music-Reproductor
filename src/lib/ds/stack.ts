@@ -1,12 +1,12 @@
 /**
- * Pila LIFO. Con `capacity` se descarta el elemento más antiguo al
- * llenarse (útil para historial y undo acotados).
+ * LIFO stack. With `capacity`, the oldest item is dropped when full
+ * (useful for bounded history and undo).
  */
 export class Stack<T> {
   private items: T[] = [];
 
   constructor(private readonly capacity = Infinity) {
-    if (!(capacity > 0)) throw new RangeError(`Capacidad inválida: ${capacity}`);
+    if (!(capacity > 0)) throw new RangeError(`Invalid capacity: ${capacity}`);
   }
 
   get size(): number {
@@ -34,7 +34,7 @@ export class Stack<T> {
     this.items = [];
   }
 
-  /** Copia de fondo a cima. */
+  /** Copy ordered from bottom to top. */
   toArray(): T[] {
     return [...this.items];
   }

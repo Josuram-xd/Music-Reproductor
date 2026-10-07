@@ -8,10 +8,10 @@ interface ListNode<T> {
 }
 
 /**
- * Lista doblemente enlazada con índice `Map<id, nodo>`.
- * Acceso, inserción, borrado y movimiento por id en O(1)
- * (salvo `moveTo`/`at`/`indexOf`, que recorren la lista: O(n)).
- * Los ids deben ser únicos.
+ * Doubly linked list with a `Map<id, node>` index.
+ * Lookup, insertion, removal and moves by id are O(1)
+ * (except `moveTo`/`at`/`indexOf`, which walk the list: O(n)).
+ * Ids must be unique.
  */
 export class DoublyLinkedList<T> {
   protected head: ListNode<T> | null = null;
@@ -49,12 +49,12 @@ export class DoublyLinkedList<T> {
     return this.index.get(id)?.value;
   }
 
-  /** Siguiente valor tras `id`, o `undefined` si es el último. */
+  /** Value after `id`, or `undefined` if it is the last one. */
   nextOf(id: Id): T | undefined {
     return this.node(id).next?.value;
   }
 
-  /** Valor anterior a `id`, o `undefined` si es el primero. */
+  /** Value before `id`, or `undefined` if it is the first one. */
   prevOf(id: Id): T | undefined {
     return this.node(id).prev?.value;
   }
@@ -67,19 +67,19 @@ export class DoublyLinkedList<T> {
     this.linkAfter(this.createNode(value), null);
   }
 
-  /** Inserta `value` justo después del nodo `refId`. */
+  /** Inserts `value` right after the `refId` node. */
   insertAfter(refId: Id, value: T): void {
     const ref = this.node(refId);
     this.linkAfter(this.createNode(value), ref);
   }
 
-  /** Inserta `value` justo antes del nodo `refId`. */
+  /** Inserts `value` right before the `refId` node. */
   insertBefore(refId: Id, value: T): void {
     const ref = this.node(refId);
     this.linkAfter(this.createNode(value), ref.prev);
   }
 
-  /** Quita el nodo y devuelve su valor, o `undefined` si no existe. */
+  /** Removes the node and returns its value, or `undefined` if missing. */
   remove(id: Id): T | undefined {
     const node = this.index.get(id);
     if (!node) return undefined;
@@ -88,30 +88,30 @@ export class DoublyLinkedList<T> {
     return node.value;
   }
 
-  /** Mueve `id` justo después de `refId` (`null` = al principio). O(1). */
+  /** Moves `id` right after `refId` (`null` = to the front). O(1). */
   moveAfter(id: Id, refId: Id | null): void {
     const node = this.node(id);
     const ref = refId === null ? null : this.node(refId);
-    if (ref === node) throw new Error(`No se puede mover "${id}" después de sí mismo`);
+    if (ref === node) throw new Error(`Cannot move "${id}" after itself`);
     if (node.prev === ref) return;
     this.unlink(node);
     this.linkAfter(node, ref);
   }
 
-  /** Mueve `id` justo antes de `refId`. O(1). */
+  /** Moves `id` right before `refId`. O(1). */
   moveBefore(id: Id, refId: Id): void {
     const node = this.node(id);
     const ref = this.node(refId);
-    if (ref === node) throw new Error(`No se puede mover "${id}" antes de sí mismo`);
+    if (ref === node) throw new Error(`Cannot move "${id}" before itself`);
     this.unlink(node);
     this.linkAfter(node, ref.prev);
   }
 
-  /** Mueve `id` para que quede en la posición `toIndex` (0-based). O(n). */
+  /** Moves `id` so it ends up at position `toIndex` (0-based). O(n). */
   moveTo(id: Id, toIndex: number): void {
     const node = this.node(id);
     if (!Number.isInteger(toIndex) || toIndex < 0 || toIndex >= this.size) {
-      throw new RangeError(`Índice fuera de rango: ${toIndex}`);
+      throw new RangeError(`Index out of range: ${toIndex}`);
     }
     this.unlink(node);
     let ref: ListNode<T> | null = null;
@@ -123,7 +123,7 @@ export class DoublyLinkedList<T> {
     this.linkAfter(node, ref);
   }
 
-  /** Posición de `id`, o -1 si no está. O(n). */
+  /** Position of `id`, or -1 if missing. O(n). */
   indexOf(id: Id): number {
     let i = 0;
     for (let n = this.head; n; n = n.next, i++) {
@@ -132,7 +132,7 @@ export class DoublyLinkedList<T> {
     return -1;
   }
 
-  /** Valor en la posición `i`, o `undefined`. O(n). */
+  /** Value at position `i`, or `undefined`. O(n). */
   at(i: number): T | undefined {
     let n = this.head;
     for (let k = 0; k < i && n; k++) n = n.next;
@@ -154,19 +154,19 @@ export class DoublyLinkedList<T> {
 
   protected node(id: Id): ListNode<T> {
     const node = this.index.get(id);
-    if (!node) throw new Error(`No existe el id "${id}" en la lista`);
+    if (!node) throw new Error(`Id "${id}" is not in the list`);
     return node;
   }
 
   private createNode(value: T): ListNode<T> {
     const id = this.getId(value);
-    if (this.index.has(id)) throw new Error(`El id "${id}" ya está en la lista`);
+    if (this.index.has(id)) throw new Error(`Id "${id}" is already in the list`);
     const node: ListNode<T> = { id, value, prev: null, next: null };
     this.index.set(id, node);
     return node;
   }
 
-  /** Enlaza `node` (ya desenlazado) después de `ref`; `ref = null` lo pone al principio. */
+  /** Links an unlinked `node` after `ref`; `ref = null` puts it at the front. */
   private linkAfter(node: ListNode<T>, ref: ListNode<T> | null): void {
     const next = ref ? ref.next : this.head;
     node.prev = ref;

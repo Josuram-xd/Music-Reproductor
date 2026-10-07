@@ -1,6 +1,6 @@
 import { Stack } from "./stack";
 
-/** Acción reversible (Command pattern). */
+/** Reversible action (Command pattern). */
 export interface Command {
   readonly label?: string;
   execute(): void;
@@ -8,8 +8,8 @@ export interface Command {
 }
 
 /**
- * Pilas undo/redo sobre `Command`s. Ejecutar uno nuevo vacía el redo.
- * Si un comando lanza, las pilas no cambian.
+ * Undo/redo stacks of `Command`s. Executing a new command clears redo.
+ * If a command throws, the stacks are left unchanged.
  */
 export class UndoManager {
   private readonly undoStack: Stack<Command>;
@@ -28,7 +28,7 @@ export class UndoManager {
     return !this.redoStack.isEmpty;
   }
 
-  /** Comando que se desharía con el próximo `undo()`. */
+  /** Command that the next `undo()` would revert. */
   peekUndo(): Command | undefined {
     return this.undoStack.peek();
   }
@@ -43,7 +43,7 @@ export class UndoManager {
     this.redoStack.clear();
   }
 
-  /** Deshace el último comando y lo devuelve, o `undefined` si no hay. */
+  /** Reverts the last command and returns it, or `undefined` if none. */
   undo(): Command | undefined {
     const command = this.undoStack.peek();
     if (!command) return undefined;

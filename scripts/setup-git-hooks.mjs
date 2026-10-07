@@ -1,5 +1,5 @@
-// Activa los hooks de .githooks al hacer `npm install`.
-// En CI / Vercel no hay repo git completo, así que se omite sin fallar.
+// Enables the .githooks hooks on `npm install`.
+// CI / Vercel have no full git repo, so it is skipped without failing.
 import { execSync } from "node:child_process";
 import { existsSync } from "node:fs";
 
@@ -9,7 +9,7 @@ if (process.env.CI || process.env.VERCEL || !existsSync(".git")) {
 
 try {
   execSync("git config core.hooksPath .githooks", { stdio: "ignore" });
-  console.log("🐾 Hooks de git activados (.githooks)");
+  console.log("🐾 Git hooks enabled (.githooks)");
 } catch {
-  console.warn("⚠️  No se pudieron activar los hooks de git (.githooks)");
+  console.warn("⚠️  Could not enable git hooks (.githooks)");
 }

@@ -6,11 +6,11 @@ interface Song {
   title: string;
 }
 
-const song = (id: string): Song => ({ id, title: `Canción ${id}` });
+const song = (id: string): Song => ({ id, title: `Song ${id}` });
 const ids = (list: DoublyLinkedList<Song>) => list.toArray().map((s) => s.id);
 const make = (...keys: string[]) => new DoublyLinkedList<Song>((s) => s.id, keys.map(song));
 
-/** Comprueba que los enlaces prev coinciden con el orden hacia delante. */
+/** Checks that the prev links match the forward order. */
 function expectConsistent(list: DoublyLinkedList<Song>) {
   const forward = ids(list);
   const backward: string[] = [];
@@ -26,7 +26,7 @@ function expectConsistent(list: DoublyLinkedList<Song>) {
 }
 
 describe("DoublyLinkedList", () => {
-  test("empieza vacía", () => {
+  test("starts empty", () => {
     const list = make();
     expect(list.size).toBe(0);
     expect(list.isEmpty).toBe(true);
@@ -35,7 +35,7 @@ describe("DoublyLinkedList", () => {
     expect(list.toArray()).toEqual([]);
   });
 
-  test("append, prepend y constructor con valores", () => {
+  test("append, prepend and constructor values", () => {
     const list = make("b");
     list.append(song("c"));
     list.prepend(song("a"));
@@ -43,9 +43,9 @@ describe("DoublyLinkedList", () => {
     expectConsistent(list);
   });
 
-  test("get, has y navegación nextOf / prevOf", () => {
+  test("get, has and nextOf / prevOf navigation", () => {
     const list = make("a", "b", "c");
-    expect(list.get("b")?.title).toBe("Canción b");
+    expect(list.get("b")?.title).toBe("Song b");
     expect(list.has("z")).toBe(false);
     expect(list.nextOf("a")?.id).toBe("b");
     expect(list.nextOf("c")).toBeUndefined();
@@ -53,21 +53,21 @@ describe("DoublyLinkedList", () => {
     expect(list.prevOf("c")?.id).toBe("b");
   });
 
-  test("rechaza ids duplicados", () => {
+  test("rejects duplicate ids", () => {
     const list = make("a");
-    expect(() => list.append(song("a"))).toThrow(/ya está/);
+    expect(() => list.append(song("a"))).toThrow(/already/);
     expect(list.size).toBe(1);
   });
 
-  test("lanza con ids inexistentes", () => {
+  test("throws on unknown ids", () => {
     const list = make("a");
-    expect(() => list.nextOf("z")).toThrow(/No existe/);
-    expect(() => list.insertAfter("z", song("b"))).toThrow(/No existe/);
-    expect(() => list.moveAfter("a", "z")).toThrow(/No existe/);
+    expect(() => list.nextOf("z")).toThrow(/not in the list/);
+    expect(() => list.insertAfter("z", song("b"))).toThrow(/not in the list/);
+    expect(() => list.moveAfter("a", "z")).toThrow(/not in the list/);
     expect(list.size).toBe(1);
   });
 
-  test("insertAfter / insertBefore en medio y extremos", () => {
+  test("insertAfter / insertBefore in the middle and at the ends", () => {
     const list = make("a", "c");
     list.insertAfter("a", song("b"));
     list.insertAfter("c", song("d"));
@@ -77,7 +77,7 @@ describe("DoublyLinkedList", () => {
     expectConsistent(list);
   });
 
-  test("remove de cabeza, medio, cola y único", () => {
+  test("remove head, middle, tail and single node", () => {
     const list = make("a", "b", "c", "d");
     expect(list.remove("a")?.id).toBe("a");
     expect(list.remove("c")?.id).toBe("c");
@@ -90,14 +90,14 @@ describe("DoublyLinkedList", () => {
     expectConsistent(list);
   });
 
-  test("un id quitado se puede volver a añadir", () => {
+  test("a removed id can be added again", () => {
     const list = make("a", "b");
     list.remove("a");
     list.append(song("a"));
     expect(ids(list)).toEqual(["b", "a"]);
   });
 
-  test("moveAfter: al principio, al final, en medio y no-op", () => {
+  test("moveAfter: to front, to end, middle and no-op", () => {
     const list = make("a", "b", "c", "d");
     list.moveAfter("d", null);
     expect(ids(list)).toEqual(["d", "a", "b", "c"]);
@@ -111,7 +111,7 @@ describe("DoublyLinkedList", () => {
     expect(() => list.moveAfter("a", "a")).toThrow();
   });
 
-  test("moveBefore, incluido el vecino inmediato", () => {
+  test("moveBefore, including the immediate neighbor", () => {
     const list = make("a", "b", "c");
     list.moveBefore("c", "a");
     expect(ids(list)).toEqual(["c", "a", "b"]);
@@ -123,7 +123,7 @@ describe("DoublyLinkedList", () => {
     expect(() => list.moveBefore("a", "a")).toThrow();
   });
 
-  test("moveTo coloca el elemento en el índice indicado", () => {
+  test("moveTo puts the item at the given index", () => {
     const list = make("a", "b", "c", "d");
     list.moveTo("a", 3);
     expect(ids(list)).toEqual(["b", "c", "d", "a"]);
@@ -136,7 +136,7 @@ describe("DoublyLinkedList", () => {
     expectConsistent(list);
   });
 
-  test("moveTo es reversible con indexOf (base del undo)", () => {
+  test("moveTo is reversible with indexOf (basis for undo)", () => {
     const list = make("a", "b", "c", "d", "e");
     const before = ids(list);
     const from = list.indexOf("b");
@@ -145,7 +145,7 @@ describe("DoublyLinkedList", () => {
     expect(ids(list)).toEqual(before);
   });
 
-  test("moveTo valida el índice", () => {
+  test("moveTo validates the index", () => {
     const list = make("a", "b");
     expect(() => list.moveTo("a", 2)).toThrow(RangeError);
     expect(() => list.moveTo("a", -1)).toThrow(RangeError);
@@ -153,7 +153,7 @@ describe("DoublyLinkedList", () => {
     expect(ids(list)).toEqual(["a", "b"]);
   });
 
-  test("indexOf y at", () => {
+  test("indexOf and at", () => {
     const list = make("a", "b", "c");
     expect(list.indexOf("c")).toBe(2);
     expect(list.indexOf("z")).toBe(-1);
@@ -162,7 +162,7 @@ describe("DoublyLinkedList", () => {
     expect(list.at(-1)).toBeUndefined();
   });
 
-  test("clear vacía lista e índice", () => {
+  test("clear empties the list and the index", () => {
     const list = make("a", "b");
     list.clear();
     expect(list.isEmpty).toBe(true);
@@ -171,7 +171,7 @@ describe("DoublyLinkedList", () => {
     expect(ids(list)).toEqual(["a"]);
   });
 
-  test("toArray devuelve una copia", () => {
+  test("toArray returns a copy", () => {
     const list = make("a");
     list.toArray().push(song("x"));
     expect(list.size).toBe(1);

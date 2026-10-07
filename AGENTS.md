@@ -30,6 +30,7 @@ App: **Purrlist** — reproductor musical kawaii neko (tema oscuro). Ver `docs/A
 - Supabase: Auth, Postgres (con RLS), Storage.
 - Estructuras de datos propias en `src/lib/ds/` con tests en Vitest. No sustituirlas por librerías.
 - UI en español, con tono neko ("nya~") pero claro.
+- **Código en inglés**: nombres, comentarios, errores internos, logs y nombres de tests. Solo los textos que ve el usuario en la app van en español.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

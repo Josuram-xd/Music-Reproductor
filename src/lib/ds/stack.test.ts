@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 import { Stack } from "./stack";
 
 describe("Stack", () => {
-  test("empieza vacía", () => {
+  test("starts empty", () => {
     const stack = new Stack<number>();
     expect(stack.isEmpty).toBe(true);
     expect(stack.size).toBe(0);
@@ -10,7 +10,7 @@ describe("Stack", () => {
     expect(stack.peek()).toBeUndefined();
   });
 
-  test("LIFO: push, peek y pop", () => {
+  test("LIFO: push, peek and pop", () => {
     const stack = new Stack<number>();
     stack.push(1);
     stack.push(2);
@@ -23,7 +23,7 @@ describe("Stack", () => {
     expect(stack.isEmpty).toBe(true);
   });
 
-  test("con capacidad descarta el más antiguo", () => {
+  test("with a capacity, drops the oldest item", () => {
     const stack = new Stack<number>(2);
     stack.push(1);
     stack.push(2);
@@ -31,13 +31,13 @@ describe("Stack", () => {
     expect(stack.toArray()).toEqual([2, 3]);
   });
 
-  test("rechaza capacidades no positivas", () => {
+  test("rejects non-positive capacities", () => {
     expect(() => new Stack(0)).toThrow(RangeError);
     expect(() => new Stack(-1)).toThrow(RangeError);
     expect(() => new Stack(NaN)).toThrow(RangeError);
   });
 
-  test("clear y toArray (copia, de fondo a cima)", () => {
+  test("clear and toArray (copy, bottom to top)", () => {
     const stack = new Stack<string>();
     stack.push("a");
     stack.push("b");

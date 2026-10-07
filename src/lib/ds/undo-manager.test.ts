@@ -2,11 +2,11 @@ import { describe, expect, test } from "vitest";
 import { DoublyLinkedList } from "./doubly-linked-list";
 import { type Command, UndoManager } from "./undo-manager";
 
-/** Comando de ejemplo: mueve `id` a `toIndex` y recuerda de dónde venía. */
+/** Sample command: moves `id` to `toIndex` and remembers where it came from. */
 function moveCommand(list: DoublyLinkedList<string>, id: string, toIndex: number): Command {
   let from = -1;
   return {
-    label: `mover ${id}`,
+    label: `move ${id}`,
     execute() {
       from = list.indexOf(id);
       list.moveTo(id, toIndex);
@@ -27,7 +27,7 @@ const counter = () => {
 };
 
 describe("UndoManager", () => {
-  test("sin historial no hace nada", () => {
+  test("does nothing without history", () => {
     const manager = new UndoManager();
     expect(manager.canUndo).toBe(false);
     expect(manager.canRedo).toBe(false);
@@ -35,7 +35,7 @@ describe("UndoManager", () => {
     expect(manager.redo()).toBeUndefined();
   });
 
-  test("execute, undo y redo", () => {
+  test("execute, undo and redo", () => {
     const { state, add } = counter();
     const manager = new UndoManager();
     manager.execute(add(1));
@@ -56,7 +56,7 @@ describe("UndoManager", () => {
     expect(manager.canRedo).toBe(false);
   });
 
-  test("un comando nuevo vacía el redo", () => {
+  test("a new command clears redo", () => {
     const { state, add } = counter();
     const manager = new UndoManager();
     manager.execute(add(1));
@@ -66,18 +66,18 @@ describe("UndoManager", () => {
     expect(state.value).toBe(5);
   });
 
-  test("undo/redo devuelven el comando y peek lo muestra", () => {
+  test("undo/redo return the command and peek shows it", () => {
     const { add } = counter();
     const manager = new UndoManager();
-    const cmd = { ...add(1), label: "sumar" };
+    const cmd = { ...add(1), label: "add" };
     manager.execute(cmd);
     expect(manager.peekUndo()).toBe(cmd);
     expect(manager.undo()).toBe(cmd);
-    expect(manager.peekRedo()?.label).toBe("sumar");
+    expect(manager.peekRedo()?.label).toBe("add");
     expect(manager.redo()).toBe(cmd);
   });
 
-  test("clear vacía ambas pilas", () => {
+  test("clear empties both stacks", () => {
     const { add } = counter();
     const manager = new UndoManager();
     manager.execute(add(1));
@@ -88,7 +88,7 @@ describe("UndoManager", () => {
     expect(manager.canRedo).toBe(false);
   });
 
-  test("respeta el límite de historial", () => {
+  test("respects the history limit", () => {
     const { state, add } = counter();
     const manager = new UndoManager(2);
     manager.execute(add(1));
@@ -100,7 +100,7 @@ describe("UndoManager", () => {
     expect(state.value).toBe(1);
   });
 
-  test("si un comando lanza, las pilas no cambian", () => {
+  test("if a command throws, the stacks are unchanged", () => {
     const manager = new UndoManager();
     let fail = false;
     manager.execute({
@@ -124,7 +124,7 @@ describe("UndoManager", () => {
     expect(manager.peekUndo()).not.toBe(failing);
   });
 
-  test('deshace movimientos en la cola ("fue un error")', () => {
+  test('reverts queue moves (the "it was a mistake" option)', () => {
     const queue = new DoublyLinkedList<string>((s) => s, ["a", "b", "c", "d"]);
     const manager = new UndoManager();
 
