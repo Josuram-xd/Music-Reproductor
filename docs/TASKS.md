@@ -23,9 +23,9 @@ Cada épica puede ser uno o varios commits (los hace el humano). `[ ]` pendiente
 
 ## E2 · Auth y roles
 
-- [ ] Migración `profiles` + trigger al registrarse
-- [ ] Login / registro / logout (Supabase Auth)
-- [ ] Middleware que protege `(app)`; rol `owner` asignado por SQL
+- [x] Migración `profiles` + trigger al registrarse
+- [x] Login / registro / logout (Supabase Auth)
+- [x] Middleware que protege `(app)`; rol `owner` asignado por SQL
 - [ ] Heartbeat `/api/session/heartbeat` + cookie firmada `pl_last_seen`
 - [ ] Middleware: logout si `now - last_seen > SESSION_GRACE_SECONDS` → `/login?reason=expired`
 - [ ] Overlay "Reconectando…" con cuenta atrás de la gracia + refresh al volver la red

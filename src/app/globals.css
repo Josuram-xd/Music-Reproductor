@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Tokens "Dark Kawaii Neko" — ver docs/DESIGN.md. Solo tema oscuro. */
+/* "Dark Kawaii Neko" tokens — see docs/DESIGN.md. Dark theme only. */
 :root {
   color-scheme: dark;
   --bg: #14111f;
