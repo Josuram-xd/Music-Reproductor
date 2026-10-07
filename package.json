@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "node scripts/copy-ffmpeg.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/copy-ffmpeg.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
@@ -19,6 +21,7 @@
     "prepare": "node scripts/setup-git-hooks.mjs"
   },
   "dependencies": {
+    "@ffmpeg/ffmpeg": "^0.12.15",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.117.3",
     "lucide-react": "^1.52.0",

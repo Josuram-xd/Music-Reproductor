@@ -42,3 +42,18 @@ test("an expired session shows its notice on the login page", async ({ page }) =
   await page.goto("/login?reason=expired");
   await expect(page.getByText("Tu sesión caducó. Vuelve a entrar, nya~")).toBeVisible();
 });
+
+test("vendored ffmpeg.wasm is served as JavaScript, not redirected to login", async ({
+  request,
+}) => {
+  const response = await request.get("/vendor/ffmpeg/index.js", { maxRedirects: 0 });
+  expect(response.status()).toBe(200);
+  expect(response.headers()["content-type"]).toMatch(/javascript/);
+});
+
+test("upload endpoints require a session", async ({ request }) => {
+  for (const path of ["/api/upload/sign", "/api/upload/complete"]) {
+    const response = await request.post(path, { data: {}, maxRedirects: 0 });
+    expect(response.status()).toBe(401);
+  }
+});
