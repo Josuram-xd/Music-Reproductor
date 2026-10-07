@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "includeCoAuthoredBy": false,
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "permissions": {
+    "deny": [
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git config core.hooksPath:*)",
+      "Bash(git -c:*)",
+      "Bash(gh pr create:*)",
+      "Bash(gh pr merge:*)",
+      "PowerShell(git commit:*)",
+      "PowerShell(git push:*)",
+      "PowerShell(git config core.hooksPath:*)",
+      "PowerShell(git -c:*)",
+      "PowerShell(gh pr create:*)",
+      "PowerShell(gh pr merge:*)",
+      "Edit(.githooks/**)",
+      "Write(.githooks/**)",
+      "mcp__plugin_gitkraken_gitkraken__git_commit",
+      "mcp__plugin_gitkraken_gitkraken__git_commit_composer",
+      "mcp__plugin_gitkraken_gitkraken__git_push",
+      "mcp__plugin_gitkraken_gitkraken__pull_request_create"
+    ]
+  }
+}

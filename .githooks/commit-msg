@@ -1,0 +1,13 @@
+#!/bin/sh
+# Rechaza mensajes de commit con co-autoría o firmas de herramientas de IA.
+msg_file="$1"
+
+if grep -qiE '^[[:space:]]*co-authored-by:' "$msg_file"; then
+  echo "✖ Commit rechazado: no se permiten trailers 'Co-authored-by'." >&2
+  exit 1
+fi
+
+if grep -qiE 'noreply@anthropic\.com|generated with \[?claude|claude code|cursoragent@|noreply@cursor|openai\.com>|codex@' "$msg_file"; then
+  echo "✖ Commit rechazado: el mensaje contiene una firma de herramienta de IA." >&2
+  exit 1
+fi
