@@ -3,7 +3,8 @@
 import { AudioLines, Film, FolderInput, Play } from "lucide-react";
 import { type LibraryTrack, toPlayerTrack } from "@/lib/library/tracks";
 import { formatTime } from "@/lib/player/format";
-import { getPlayer, usePlayerStore } from "@/stores/player-store";
+import { usePlayerStore } from "@/stores/player-store";
+import { queue } from "@/stores/queue-store";
 import { draggableProps } from "./dnd";
 
 interface TrackListProps {
@@ -12,13 +13,16 @@ interface TrackListProps {
   onMove?: (track: LibraryTrack) => void;
 }
 
-/** The library's tracks. Clicking one plays the whole list from there. */
+/**
+ * The library's tracks. Clicking one plays the whole list from there;
+ * dragging one onto the queue adds it (or onto a folder to move it).
+ */
 export function TrackList({ tracks, onMove }: TrackListProps) {
   const currentId = usePlayerStore((s) => s.current?.id);
   const playing = usePlayerStore((s) => s.state === "playing");
 
   const play = (id: string) => {
-    void getPlayer().setQueue(tracks.map(toPlayerTrack), { startId: id });
+    queue.playList(tracks.map(toPlayerTrack), id);
   };
 
   return (
@@ -29,7 +33,7 @@ export function TrackList({ tracks, onMove }: TrackListProps) {
           <li
             key={track.id}
             className="group flex items-center gap-1 rounded-2xl transition hover:bg-surface has-aria-[current=true]:bg-primary/10"
-            {...(onMove ? draggableProps({ kind: "track", id: track.id }) : {})}
+            {...draggableProps({ kind: "track", id: track.id, track: toPlayerTrack(track) })}
           >
             <button
               type="button"

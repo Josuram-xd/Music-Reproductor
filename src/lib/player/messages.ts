@@ -24,3 +24,17 @@ export function playbackErrorMessage(error: PlaybackError): string {
       return "Algo falló al reproducir. Inténtalo otra vez";
   }
 }
+
+export const QUEUE_MESSAGES = {
+  added: "¡Nya~! Canción añadida a la cola",
+} as const;
+
+/** Texts of the "dropped on top of the current track" flow (docs/ARCHITECTURE.md). */
+export const DROP_MESSAGES = {
+  undo: "↩️ Deshacer",
+  applied: {
+    playNow: (title: string) => `Sonando ahora: ${title}`,
+    playNext: (title: string) => `${title} va a continuación`,
+  },
+  remembered: "Vale, no volveré a preguntar en esta sesión. Puedes reactivarlo en Ajustes 🐾",
+} as const;

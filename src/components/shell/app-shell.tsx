@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { PlayerBar } from "@/components/player/player-bar";
 import { PlayerHost } from "@/components/player/player-host";
+import { DropChoiceDialog } from "@/components/queue/drop-choice-dialog";
 import { Toaster } from "@/components/ui/toaster";
 import { NAV_ITEMS } from "./nav-items";
 import { NavLink } from "./nav-link";
@@ -88,6 +89,7 @@ export function AppShell({ children, userMenu }: AppShellProps) {
           </aside>
         </div>
         <Toaster />
+        <DropChoiceDialog />
         <PlayerHost />
       </QueueDrawerProvider>
     </div>

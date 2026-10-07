@@ -41,4 +41,15 @@ describe("toast store", () => {
     useToastStore.getState().dismiss(id);
     expect(messages()).toEqual([]);
   });
+
+  test("toasts with an action are never merged", () => {
+    const run = vi.fn();
+    const first = toast("Sonando ahora", { action: { label: "Deshacer", run } });
+    const second = toast("Sonando ahora", { action: { label: "Deshacer", run } });
+    expect(second).not.toBe(first);
+    expect(useToastStore.getState().toasts.map((t) => t.action?.label)).toEqual([
+      "Deshacer",
+      "Deshacer",
+    ]);
+  });
 });

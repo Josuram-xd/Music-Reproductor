@@ -50,9 +50,9 @@ Cada épica puede ser uno o varios commits (los hace el humano). `[ ]` pendiente
 
 ## E5 · Cola y drag & drop
 
-- [ ] Panel de cola ordenable (dnd-kit), arrastrar desde biblioteca a cola
-- [ ] Modal de 3 opciones al soltar encima de la que suena (reproducir ahora / revertir / a continuación)
-- [ ] "No volver a preguntar en esta sesión" (sessionStorage) + toast "Deshacer" 5 s + reactivar en Ajustes
+- [x] Panel de cola ordenable (dnd-kit), arrastrar desde biblioteca a cola
+- [x] Modal de 3 opciones al soltar encima de la que suena (reproducir ahora / revertir / a continuación)
+- [x] "No volver a preguntar en esta sesión" (sessionStorage) + toast "Deshacer" 5 s + reactivar en Ajustes
 - [ ] Undo/redo de la cola (Ctrl+Z)
 - [ ] Persistir `queue_state`
 - [ ] Playlists con rank fraccional

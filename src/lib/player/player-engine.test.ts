@@ -1,93 +1,7 @@
 import { describe, expect, test, vi } from "vitest";
-import { Emitter } from "./emitter";
+import { FakeSource } from "./fake-source.test-utils";
 import { PlayerEngine, type PlayerSnapshot } from "./player-engine";
-import {
-  PlaybackError,
-  type PlaybackEvents,
-  type PlaybackSource,
-  type PlaybackState,
-  type Track,
-  type TrackSource,
-} from "./types";
-
-/** In-memory PlaybackSource: loads instantly and lets tests drive time/end. */
-class FakeSource implements PlaybackSource {
-  readonly events = new Emitter<PlaybackEvents>();
-  state: PlaybackState = "idle";
-  time = 0;
-  duration = 0;
-  volume = 1;
-  loaded: Track | null = null;
-  playError: PlaybackError | null = null;
-  loadError: PlaybackError | null = null;
-  /** When set, load() waits for this promise (to test races). */
-  loadGate: Promise<void> | null = null;
-
-  constructor(readonly kind: TrackSource = "audio") {}
-
-  canPlay(track: Track) {
-    return track.source === this.kind;
-  }
-  async load(track: Track) {
-    this.setState("loading");
-    if (this.loadGate) await this.loadGate;
-    if (this.loadError) {
-      this.setState("error");
-      this.events.emit("error", this.loadError);
-      throw this.loadError;
-    }
-    this.loaded = track;
-    this.time = 0;
-    this.duration = track.durationS ?? 100;
-    this.setState("paused");
-  }
-  async play() {
-    if (this.playError) {
-      this.setState("error");
-      throw this.playError;
-    }
-    this.setState("playing");
-  }
-  pause() {
-    if (this.state === "playing") this.setState("paused");
-  }
-  seek(seconds: number) {
-    this.time = Math.min(Math.max(0, seconds), this.duration);
-    if (this.state === "ended") this.setState("paused");
-    this.events.emit("time", { current: this.time, duration: this.duration });
-  }
-  getTime() {
-    return this.time;
-  }
-  getDuration() {
-    return this.duration;
-  }
-  getState() {
-    return this.state;
-  }
-  setVolume(volume: number) {
-    this.volume = volume;
-  }
-  on<E extends keyof PlaybackEvents>(event: E, listener: (p: PlaybackEvents[E]) => void) {
-    return this.events.on(event, listener);
-  }
-  destroy = vi.fn();
-
-  /** Test helpers */
-  setState(state: PlaybackState) {
-    this.state = state;
-    this.events.emit("state", state);
-  }
-  advanceTo(seconds: number) {
-    this.time = seconds;
-    this.events.emit("time", { current: seconds, duration: this.duration });
-  }
-  finish() {
-    this.time = this.duration;
-    this.setState("ended");
-    this.events.emit("ended", undefined);
-  }
-}
+import { PlaybackError, type Track, type TrackSource } from "./types";
 
 const track = (id: string, source: TrackSource = "audio"): Track => ({
   id,
@@ -423,5 +337,86 @@ describe("PlayerEngine", () => {
     engine.destroy();
     expect(audio.destroy).toHaveBeenCalledOnce();
     expect(youtube.destroy).toHaveBeenCalledOnce();
+  });
+
+  describe("queue edits", () => {
+    const ids = (engine: PlayerEngine) => engine.getSnapshot().queue.map((t) => t.id);
+
+    test("insert puts a track after another one or at the front", async () => {
+      const { engine, tracks } = setup();
+      await engine.setQueue(tracks);
+      expect(engine.insert(track("x"), "a")).toBe(true);
+      expect(engine.insert(track("y"), null)).toBe(true);
+      expect(ids(engine)).toEqual(["y", "a", "x", "b", "c"]);
+    });
+
+    test("insert rejects duplicates and unknown anchors", async () => {
+      const { engine, tracks } = setup();
+      await engine.setQueue(tracks);
+      expect(engine.insert(track("b"), "a")).toBe(false);
+      expect(engine.insert(track("x"), "missing")).toBe(false);
+      expect(ids(engine)).toEqual(["a", "b", "c"]);
+    });
+
+    test("move reorders without touching the current track", async () => {
+      const { engine, tracks, current } = setup();
+      await engine.setQueue(tracks);
+      expect(engine.move("c", "a")).toBe(true);
+      expect(engine.move("a", null)).toBe(true); // already first: a harmless no-op
+      expect(ids(engine)).toEqual(["a", "c", "b"]);
+      expect(engine.move("a", "a")).toBe(false);
+      expect(engine.move("missing", null)).toBe(false);
+      expect(current()).toBe("a");
+      expect(engine.getSnapshot().hasNext).toBe(true);
+    });
+
+    test("remove refuses the loaded track", async () => {
+      const { engine, tracks } = setup();
+      await engine.setQueue(tracks);
+      expect(engine.remove("a")).toBe(false);
+      expect(engine.remove("b")).toBe(true);
+      expect(engine.remove("b")).toBe(false);
+      expect(ids(engine)).toEqual(["a", "c"]);
+    });
+
+    test("previousIdOf does not wrap around", async () => {
+      const { engine, tracks } = setup();
+      await engine.setQueue(tracks);
+      engine.setRepeat("all");
+      expect(engine.previousIdOf("a")).toBeNull();
+      expect(engine.previousIdOf("c")).toBe("b");
+      expect(engine.previousIdOf("missing")).toBeNull();
+    });
+
+    test("jumpTo plays a queued track and remembers the old one for ⏮", async () => {
+      const { engine, tracks, current } = setup();
+      await engine.setQueue(tracks);
+      await engine.jumpTo("c");
+      expect(current()).toBe("c");
+      expect(engine.getSnapshot().state).toBe("playing");
+      expect(await engine.back()).toBe("previous");
+      expect(current()).toBe("a");
+    });
+
+    test("jumpTo can resume paused at a position without touching history", async () => {
+      const { engine, audio, tracks, current } = setup();
+      await engine.setQueue(tracks);
+      await engine.jumpTo("b", { startAt: 42, autoplay: false, remember: false });
+      expect(current()).toBe("b");
+      expect(audio.time).toBe(42);
+      expect(engine.getSnapshot()).toMatchObject({ state: "paused", time: 42 });
+      expect(engine.isPlaying).toBe(false);
+      // "a" was not pushed to the history: ⏮ falls back to the queue order.
+      await engine.jumpTo("c", { remember: false });
+      expect(await engine.back()).toBe("previous");
+      expect(current()).toBe("b");
+    });
+
+    test("jumpTo ignores tracks that are not queued", async () => {
+      const { engine, tracks, current } = setup();
+      await engine.setQueue(tracks);
+      await engine.jumpTo("missing");
+      expect(current()).toBe("a");
+    });
   });
 });

@@ -27,6 +27,18 @@ export function Toaster() {
           className={`pointer-events-auto flex max-w-sm items-center gap-2 rounded-2xl border bg-surface py-2 pr-1 pl-4 text-sm shadow-[0_8px_32px_-8px_rgb(0_0_0/0.6)] transition motion-reduce:transition-none starting:translate-y-2 starting:opacity-0 ${TONES[t.tone]}`}
         >
           <span className="flex-1">{t.message}</span>
+          {t.action ? (
+            <button
+              type="button"
+              onClick={() => {
+                dismiss(t.id);
+                t.action!.run();
+              }}
+              className="h-9 shrink-0 rounded-xl px-3 font-semibold text-secondary hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-secondary focus-visible:outline-none"
+            >
+              {t.action.label}
+            </button>
+          ) : null}
           <button
             type="button"
             aria-label="Cerrar aviso"

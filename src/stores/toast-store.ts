@@ -2,15 +2,28 @@ import { create } from "zustand";
 
 export type ToastTone = "info" | "success" | "warn" | "error";
 
+/** Button inside the toast (e.g. "Deshacer"); clicking it also dismisses the toast. */
+export interface ToastAction {
+  label: string;
+  run: () => void;
+}
+
 export interface Toast {
   id: number;
   message: string;
   tone: ToastTone;
+  action?: ToastAction;
+}
+
+interface ToastOptions {
+  tone?: ToastTone;
+  durationMs?: number;
+  action?: ToastAction;
 }
 
 interface ToastStore {
   toasts: Toast[];
-  show: (message: string, options?: { tone?: ToastTone; durationMs?: number }) => number;
+  show: (message: string, options?: ToastOptions) => number;
   dismiss: (id: number) => void;
 }
 
@@ -19,12 +32,16 @@ let nextId = 1;
 
 export const useToastStore = create<ToastStore>()((set, get) => ({
   toasts: [],
-  show(message, { tone = "info", durationMs = 4000 } = {}) {
+  show(message, { tone = "info", durationMs = 4000, action } = {}) {
     // The same message twice in a row (e.g. repeated ⏮) just stays on screen.
-    const existing = get().toasts.find((t) => t.message === message);
+    // Toasts with an action are never merged: each one undoes something different.
+    const existing = action
+      ? undefined
+      : get().toasts.find((t) => t.message === message && !t.action);
     if (existing) return existing.id;
     const id = nextId++;
-    set((state) => ({ toasts: [...state.toasts, { id, message, tone }].slice(-MAX_TOASTS) }));
+    const added: Toast = action ? { id, message, tone, action } : { id, message, tone };
+    set((state) => ({ toasts: [...state.toasts, added].slice(-MAX_TOASTS) }));
     if (durationMs > 0) setTimeout(() => get().dismiss(id), durationMs);
     return id;
   },

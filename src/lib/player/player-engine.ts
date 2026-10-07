@@ -139,6 +139,71 @@ export class PlayerEngine {
     return true;
   }
 
+  /**
+   * Inserts `track` right after `afterId` (`null` = at the front).
+   * Returns false if it is already queued or `afterId` is missing.
+   */
+  insert(track: Track, afterId: string | null): boolean {
+    if (this.queue.has(track.id) || (afterId !== null && !this.queue.has(afterId))) return false;
+    if (afterId === null) this.queue.prepend(track);
+    else this.queue.insertAfter(afterId, track);
+    this.queueChanged();
+    this.publish();
+    return true;
+  }
+
+  /** Moves `id` right after `afterId` (`null` = to the front). Returns false if it cannot. */
+  move(id: string, afterId: string | null): boolean {
+    if (!this.queue.has(id) || id === afterId) return false;
+    if (afterId !== null && !this.queue.has(afterId)) return false;
+    this.queue.moveAfter(id, afterId);
+    this.queueChanged();
+    this.publish();
+    return true;
+  }
+
+  /** Removes a queued track. The one loaded in the player cannot be removed. */
+  remove(id: string): boolean {
+    if (id === this.currentId || !this.queue.remove(id)) return false;
+    this.queueChanged();
+    this.publish();
+    return true;
+  }
+
+  has(id: string): boolean {
+    return this.queue.has(id);
+  }
+
+  /** Id of the track before `id` in queue order (no wrap-around), or null. */
+  previousIdOf(id: string): string | null {
+    const index = this.queueCache.findIndex((track) => track.id === id);
+    return index > 0 ? this.queueCache[index - 1]!.id : null;
+  }
+
+  /**
+   * Loads a queued track, cutting the current one.
+   * `startAt` resumes at that second; `remember: false` keeps the
+   * current track out of the back history (e.g. when undoing a jump).
+   */
+  async jumpTo(
+    id: string,
+    {
+      startAt,
+      autoplay = true,
+      remember = true,
+    }: { startAt?: number; autoplay?: boolean; remember?: boolean } = {},
+  ): Promise<void> {
+    if (!this.queue.has(id)) return;
+    if (remember) this.pushHistory();
+    this.wantsToPlay = autoplay;
+    await this.loadTrack(id, startAt);
+  }
+
+  /** Whether the user wants sound (playing, or about to once loaded). */
+  get isPlaying(): boolean {
+    return this.wantsToPlay;
+  }
+
   // ── Transport ────────────────────────────────────────────────────────
 
   async play(): Promise<void> {
@@ -232,7 +297,7 @@ export class PlayerEngine {
 
   // ── Internals ────────────────────────────────────────────────────────
 
-  private async loadTrack(id: string): Promise<void> {
+  private async loadTrack(id: string, startAt = 0): Promise<void> {
     const track = this.queue.get(id);
     if (!track) return;
     const token = ++this.loadToken;
@@ -268,6 +333,7 @@ export class PlayerEngine {
     }
     if (token !== this.loadToken) return;
 
+    if (startAt > 0) source.seek(startAt);
     this.state = source.getState();
     this.duration = source.getDuration() || this.duration;
     this.publish();

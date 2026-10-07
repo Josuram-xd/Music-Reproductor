@@ -1,11 +1,14 @@
 "use client";
 
 import { type DragEvent, useState } from "react";
+import type { Track } from "@/lib/player/types";
 
 /** Something from the library being dragged inside the app (not files from the PC). */
 export interface DragItem {
   kind: "folder" | "track";
   id: string;
+  /** The playable track, so it can be dropped on the queue. */
+  track?: Track;
 }
 
 const MIME = "application/x-purrlist-item";
@@ -23,12 +26,23 @@ export function draggableProps(item: DragItem) {
     onDragStart(event: DragEvent) {
       dragging = item;
       event.dataTransfer.setData(MIME, JSON.stringify(item));
-      event.dataTransfer.effectAllowed = "move";
+      // "copy" for the queue (the track stays in the library), "move" for folders.
+      event.dataTransfer.effectAllowed = "copyMove";
     },
     onDragEnd() {
       dragging = null;
     },
   };
+}
+
+/** The library item being dragged in `event`, or null (files from the PC, other apps…). */
+export function draggedItem(event: DragEvent): DragItem | null {
+  return event.dataTransfer.types.includes(MIME) ? dragging : null;
+}
+
+/** Ends the drag after a custom drop target accepted it. */
+export function finishDrag(): void {
+  dragging = null;
 }
 
 /**
@@ -40,8 +54,10 @@ export function useDropTarget(
   canDrop: (item: DragItem) => boolean = () => true,
 ) {
   const [over, setOver] = useState(false);
-  const accepts = (event: DragEvent) =>
-    event.dataTransfer.types.includes(MIME) && dragging !== null && canDrop(dragging);
+  const accepts = (event: DragEvent) => {
+    const item = draggedItem(event);
+    return item !== null && canDrop(item);
+  };
 
   return {
     over,
