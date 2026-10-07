@@ -75,6 +75,15 @@ export const queue = {
     if (added) toast(QUEUE_MESSAGES.added, { tone: "success", durationMs: 2500 });
   },
 
+  /** "Añadir a la cola" button: to the end, unless it is already queued. */
+  add(track: Track) {
+    if (getPlayer().has(track.id)) {
+      toast(QUEUE_MESSAGES.alreadyQueued, { durationMs: 2500 });
+      return;
+    }
+    queue.append(track);
+  },
+
   /** Drop at the end of the queue. */
   append(track: Track) {
     const items = getPlayer().getSnapshot().queue;

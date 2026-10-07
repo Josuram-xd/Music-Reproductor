@@ -43,6 +43,25 @@ describe("queue store", () => {
     expect(pending()).toBeNull();
   });
 
+  test("add puts a new track at the end with a toast", () => {
+    queue.add(track("x"));
+    expect(order()).toEqual(["a", "b", "c", "d", "x"]);
+    expect(toasts().map((t) => t.message)).toEqual([QUEUE_MESSAGES.added]);
+  });
+
+  test("add leaves a queued track where it is and says so", () => {
+    queue.add(track("a"));
+    expect(order()).toEqual(["a", "b", "c", "d"]);
+    expect(toasts().map((t) => t.message)).toEqual([QUEUE_MESSAGES.alreadyQueued]);
+  });
+
+  test("add to an empty queue does not start playing", () => {
+    engine.current = new PlayerEngine({ sources: [new FakeSource("audio")] });
+    queue.add(track("x"));
+    expect(order()).toEqual(["x"]);
+    expect(current()).toBeUndefined();
+  });
+
   test("append adds at the end", () => {
     queue.append(track("x"));
     queue.append(track("a"));

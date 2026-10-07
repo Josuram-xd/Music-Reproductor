@@ -53,9 +53,21 @@ Cada épica puede ser uno o varios commits (los hace el humano). `[ ]` pendiente
 - [x] Panel de cola ordenable (dnd-kit), arrastrar desde biblioteca a cola
 - [x] Modal de 3 opciones al soltar encima de la que suena (reproducir ahora / revertir / a continuación)
 - [x] "No volver a preguntar en esta sesión" (sessionStorage) + toast "Deshacer" 5 s + reactivar en Ajustes
+- [x] Botón "Añadir a la cola" en cada canción (alternativa al arrastre en móvil, tablet y teclado)
 - [ ] Undo/redo de la cola (Ctrl+Z)
 - [ ] Persistir `queue_state`
-- [ ] Playlists con rank fraccional
+
+## E5.1 · Listas de reproducción
+
+- [ ] Migraciones `playlists` y `playlist_items` (rank fraccional / lexorank) + RLS
+- [ ] Utilidad de rank fraccional (entre dos ranks, inicio, fin, rebalanceo) + tests
+- [ ] Página Playlists: crear varias listas, renombrar, borrar (con confirmación)
+- [ ] Vista de una playlist: canciones ordenables con dnd-kit (solo se reescribe el rank movido)
+- [ ] Añadir canciones a una playlist desde la biblioteca (menú "Añadir a…" + arrastrar)
+- [ ] Quitar canciones de una playlist (sin borrarlas de la biblioteca)
+- [ ] Reproducir una playlist (reemplaza la cola) / añadirla entera a la cola
+- [ ] Carátula de la playlist (subida o mosaico de las 4 primeras carátulas)
+- [ ] Guardar la cola actual como playlist
 
 ## E6 · YouTube
 

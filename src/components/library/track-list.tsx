@@ -1,6 +1,6 @@
 "use client";
 
-import { AudioLines, Film, FolderInput, Play } from "lucide-react";
+import { AudioLines, Film, FolderInput, ListPlus, Play } from "lucide-react";
 import { type LibraryTrack, toPlayerTrack } from "@/lib/library/tracks";
 import { formatTime } from "@/lib/player/format";
 import { usePlayerStore } from "@/stores/player-store";
@@ -15,7 +15,7 @@ interface TrackListProps {
 
 /**
  * The library's tracks. Clicking one plays the whole list from there;
- * dragging one onto the queue adds it (or onto a folder to move it).
+ * the ➕ button or dragging one onto the queue adds it (or onto a folder to move it).
  */
 export function TrackList({ tracks, onMove }: TrackListProps) {
   const currentId = usePlayerStore((s) => s.current?.id);
@@ -86,6 +86,15 @@ export function TrackList({ tracks, onMove }: TrackListProps) {
               <span className="shrink-0 text-sm text-muted tabular-nums">
                 {track.duration_s !== null ? formatTime(Number(track.duration_s)) : ""}
               </span>
+            </button>
+            <button
+              type="button"
+              onClick={() => queue.add(toPlayerTrack(track))}
+              aria-label={`Añadir ${track.title} a la cola`}
+              title="Añadir a la cola"
+              className={`${onMove ? "" : "mr-1"}flex size-9 shrink-0 items-center justify-center rounded-xl text-muted opacity-60 transition group-hover:opacity-100 hover:bg-surface-2 hover:text-text focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-secondary focus-visible:outline-none`}
+            >
+              <ListPlus aria-hidden className="size-4" />
             </button>
             {onMove ? (
               <button

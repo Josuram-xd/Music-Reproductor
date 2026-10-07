@@ -27,6 +27,7 @@ export function playbackErrorMessage(error: PlaybackError): string {
 
 export const QUEUE_MESSAGES = {
   added: "¡Nya~! Canción añadida a la cola",
+  alreadyQueued: "Esa canción ya está en la cola, nya~",
 } as const;
 
 /** Texts of the "dropped on top of the current track" flow (docs/ARCHITECTURE.md). */
