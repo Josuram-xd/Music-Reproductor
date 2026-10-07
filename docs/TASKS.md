@@ -15,9 +15,9 @@ Cada épica puede ser uno o varios commits (los hace el humano). `[ ]` pendiente
 - [x] `DoublyLinkedList` (+ índice por id, move, insertAfter, toArray) + tests
 - [x] Variante circular para repetir-todo + tests
 - [x] `Stack` + `UndoManager` (Command pattern) + tests
-- [ ] `FolderTree` (árbol n-ario: add, move, remove, path) + tests
-- [ ] `Trie` para búsqueda + tests
-- [ ] `LRUCache` + tests
+- [x] `FolderTree` (árbol n-ario: add, move, remove, path) + tests
+- [x] `Trie` para búsqueda + tests
+- [x] `LRUCache` + tests
 - [ ] Shuffle Fisher‑Yates con semilla + tests
 - [ ] `PriorityQueue` (Max‑Heap) + tests
 
