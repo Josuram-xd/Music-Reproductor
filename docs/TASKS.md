@@ -18,8 +18,8 @@ Cada épica puede ser uno o varios commits (los hace el humano). `[ ]` pendiente
 - [x] `FolderTree` (árbol n-ario: add, move, remove, path) + tests
 - [x] `Trie` para búsqueda + tests
 - [x] `LRUCache` + tests
-- [ ] Shuffle Fisher‑Yates con semilla + tests
-- [ ] `PriorityQueue` (Max‑Heap) + tests
+- [x] Shuffle Fisher‑Yates con semilla + tests
+- [x] `PriorityQueue` (Max‑Heap) + tests
 
 ## E2 · Auth y roles
 
