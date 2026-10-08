@@ -95,6 +95,7 @@ Cada épica puede ser uno o varios commits (los hace el humano). `[ ]` pendiente
 - [x] Arrastrar + pegar al borde + recordar posición; reajuste al redimensionar
 - [x] Activar/desactivar (Ajustes + ✕) con fallback a barra fija
 - [x] Document Picture‑in‑Picture ("Sacar de la ventana") con detección de soporte
+- [x] Abrir el Picture-in-Picture al activar el mini-reproductor (navegadores compatibles)
 - [x] Versión píldora en móvil
 
 ## E9 · Radio neko (recomendaciones)

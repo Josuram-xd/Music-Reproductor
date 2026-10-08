@@ -1,5 +1,11 @@
 import { describe, expect, test, vi } from "vitest";
-import { copyStyles, openDocumentPip, PIP_SIZE, supportsDocumentPip } from "./document-pip";
+import {
+  copyStyles,
+  currentDocumentPipWindow,
+  openDocumentPip,
+  PIP_SIZE,
+  supportsDocumentPip,
+} from "./document-pip";
 
 describe("Document Picture-in-Picture", () => {
   test("support is detected from the API", () => {
@@ -9,6 +15,16 @@ describe("Document Picture-in-Picture", () => {
         documentPictureInPicture: { requestWindow: vi.fn(), window: null },
       } as unknown as Window),
     ).toBe(true);
+  });
+
+  test("returns the current PiP window", () => {
+    const pip = {} as Window;
+    expect(
+      currentDocumentPipWindow({
+        documentPictureInPicture: { requestWindow: vi.fn(), window: pip },
+      } as unknown as Window),
+    ).toBe(pip);
+    expect(currentDocumentPipWindow({} as Window)).toBeNull();
   });
 
   test("copies readable styles inline and <html> classes/data attributes", () => {

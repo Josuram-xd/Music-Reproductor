@@ -15,6 +15,11 @@ export function supportsDocumentPip(win: Window = window): boolean {
   return typeof win.documentPictureInPicture?.requestWindow === "function";
 }
 
+/** The currently open PiP window, if one exists. */
+export function currentDocumentPipWindow(win: Window = window): Window | null {
+  return win.documentPictureInPicture?.window ?? null;
+}
+
 /**
  * Copies the page styles into the PiP document, so the mini-player looks the
  * same there: inline rules when readable, `<link>` for cross-origin sheets.

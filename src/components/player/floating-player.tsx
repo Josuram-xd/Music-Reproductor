@@ -25,7 +25,11 @@ import {
   useSyncExternalStore,
 } from "react";
 import { createPortal } from "react-dom";
-import { openDocumentPip, supportsDocumentPip } from "@/lib/player/document-pip";
+import {
+  currentDocumentPipWindow,
+  openDocumentPip,
+  supportsDocumentPip,
+} from "@/lib/player/document-pip";
 import {
   type Area,
   AVOID_ATTR,
@@ -214,7 +218,9 @@ export function FloatingPlayer() {
   const saved = useSettingsStore((s) => s.floatingPos);
   const ref = useRef<HTMLElement>(null);
   const [drag, setDrag] = useState<{ point: Point; offset: Point } | null>(null);
-  const [pipWindow, setPipWindow] = useState<Window | null>(null);
+  const [pipWindow, setPipWindow] = useState<Window | null>(() =>
+    typeof window === "undefined" ? null : currentDocumentPipWindow(),
+  );
   const pipSupported = useSyncExternalStore(
     noop,
     () => supportsDocumentPip(),
@@ -224,6 +230,16 @@ export function FloatingPlayer() {
   const [expanded, setExpanded] = useState(false);
   const compact = narrow && !expanded;
   const layout = useLayout(ref, pipWindow === null);
+
+  // Settings can open PiP directly from its checkbox while this component is
+  // mounting; adopt that window so the player portal renders into it.
+  useEffect(() => {
+    const pip = currentDocumentPipWindow();
+    if (!pip) return;
+    const onPageHide = () => setPipWindow(null);
+    pip.addEventListener("pagehide", onPageHide, { once: true });
+    return () => pip.removeEventListener("pagehide", onPageHide);
+  }, []);
 
   // An open card on a phone folds back into the pill when tapping elsewhere.
   useEffect(() => {

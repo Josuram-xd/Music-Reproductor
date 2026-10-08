@@ -67,6 +67,7 @@ export const DROP_MESSAGES = {
 export const FLOATING_MESSAGES = {
   closed: "Mini-reproductor oculto. Puedes volver a activarlo en Ajustes",
   pipFailed: "No se pudo sacar el reproductor de la ventana",
+  pipUnsupported: "Tu navegador no permite mostrar el reproductor encima de otras aplicaciones",
 } as const;
 
 /** Neko radio texts. */
