@@ -55,7 +55,7 @@ function IconButton({
 }
 
 /**
- * Fixed player bar (the "classic bar"; the floating mini-player comes in E8).
+ * Fixed player bar: the "classic bar", used when the floating mini-player is off.
  * ⏮ uses the double back; ±10 s, progress and volume act on the engine.
  */
 export function PlayerBar() {

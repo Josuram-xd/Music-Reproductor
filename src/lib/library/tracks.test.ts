@@ -28,7 +28,14 @@ describe("toPlayerTrack", () => {
       durationS: 183.25,
       storagePath: "u/t1.m4a",
       externalId: null,
+      coverUrl: null,
     });
+  });
+
+  test("passes the signed cover along", () => {
+    expect(toPlayerTrack({ ...row, cover_url: "https://cdn.test/c.jpg" }).coverUrl).toBe(
+      "https://cdn.test/c.jpg",
+    );
   });
 
   test("keeps an unknown duration as null", () => {

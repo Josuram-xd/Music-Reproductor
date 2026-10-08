@@ -10,15 +10,16 @@ export const YOUTUBE_SLOT_ATTR = "data-youtube-slot";
 /** Marks a scroll container that clips the slot (the queue column). */
 export const YOUTUBE_CLIP_ATTR = "data-youtube-clip";
 
+// Top corner: the bottom one belongs to the floating mini-player and the toasts.
 const FLOATING =
-  "position:fixed;right:16px;bottom:calc(9.5rem + env(safe-area-inset-bottom));width:min(240px,calc(100vw - 32px));aspect-ratio:16/9;";
+  "position:fixed;right:16px;top:calc(4.5rem + env(safe-area-inset-top));width:min(240px,calc(100vw - 32px));aspect-ratio:16/9;";
 const SHARED =
   "z-index:30;overflow:hidden;border-radius:16px;background:#000;box-shadow:0 8px 32px -8px rgb(0 0 0/0.6);";
 
 /**
  * Keeps the YouTube player visible (YouTube ToS) while a YouTube track is
  * loaded: over the "Ahora suena" slot when one is on screen, otherwise
- * floating above the player bar. The iframe itself never moves in the DOM.
+ * floating in the top corner. The iframe itself never moves in the DOM.
  * Slots inside an open modal (the mobile queue sheet) are skipped: the top
  * layer would cover the video.
  */

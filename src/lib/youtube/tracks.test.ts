@@ -18,6 +18,7 @@ describe("YouTube tracks", () => {
       artist: "Cats",
       durationS: 60,
       externalId: "aaaaaaaaaaa",
+      coverUrl: null,
     });
     expect(youtubeTrackId("aaaaaaaaaaa")).toBe("yt:aaaaaaaaaaa");
   });

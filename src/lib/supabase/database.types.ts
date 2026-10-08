@@ -79,6 +79,15 @@ export type UserIntegrationRow = {
   updated_at: string;
 };
 
+export type UserSettingsRow = {
+  owner_id: string;
+  floating_player: boolean;
+  /** `FloatingPosition` (src/lib/settings/settings.ts). */
+  floating_pos: unknown;
+  radio_enabled: boolean;
+  updated_at: string;
+};
+
 export interface Database {
   public: {
     Tables: {
@@ -136,6 +145,12 @@ export interface Database {
         Insert: Pick<UserIntegrationRow, "provider"> &
           Partial<Omit<UserIntegrationRow, "provider" | "created_at">>;
         Update: Partial<Omit<UserIntegrationRow, "owner_id" | "provider" | "created_at">>;
+        Relationships: [];
+      };
+      user_settings: {
+        Row: UserSettingsRow;
+        Insert: Pick<UserSettingsRow, "owner_id"> & Partial<Omit<UserSettingsRow, "owner_id">>;
+        Update: Partial<Omit<UserSettingsRow, "owner_id">>;
         Relationships: [];
       };
       queue_state: {

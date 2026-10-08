@@ -15,5 +15,6 @@ export function spotifyResultToTrack(result: SpotifyResult): Track {
     artist: result.artists || null,
     durationS: result.durationS || null,
     externalId: result.uri,
+    coverUrl: result.image,
   };
 }

@@ -67,6 +67,7 @@ describe("Spotify Web API", () => {
       artist: "Ana",
       durationS: 185,
       externalId: "spotify:track:abc",
+      coverUrl: null,
     });
   });
 

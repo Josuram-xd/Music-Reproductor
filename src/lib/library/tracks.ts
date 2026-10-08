@@ -35,5 +35,6 @@ export function toPlayerTrack(row: LibraryTrack): Track {
     durationS: row.duration_s === null ? null : Number(row.duration_s),
     storagePath: row.storage_path,
     externalId: row.external_id,
+    coverUrl: row.cover_url ?? null,
   };
 }

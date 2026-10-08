@@ -15,6 +15,7 @@ export function resultToTrack(result: YouTubeResult): Track {
     artist: result.channel || null,
     durationS: result.durationS,
     externalId: result.videoId,
+    coverUrl: result.thumbnail || null,
   };
 }
 

@@ -11,6 +11,8 @@ export interface Track {
   storagePath?: string | null;
   /** YouTube video id or Spotify URI. */
   externalId?: string | null;
+  /** Image to show (signed cover, YouTube thumbnail, album art). */
+  coverUrl?: string | null;
 }
 
 export type PlaybackState = "idle" | "loading" | "paused" | "playing" | "ended" | "error";

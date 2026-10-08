@@ -2,9 +2,11 @@ import { Suspense } from "react";
 import { UserMenu } from "@/components/auth/user-menu";
 import { SidebarPlaylists } from "@/components/playlists/sidebar-playlists";
 import { SessionKeeper } from "@/components/session/session-keeper";
+import { SettingsHydrator } from "@/components/settings/settings-hydrator";
 import { AppShell } from "@/components/shell/app-shell";
 import { getPlaylistNames } from "@/lib/playlists/queries";
 import { parseGraceSeconds } from "@/lib/session/grace";
+import { getUserSettings } from "@/lib/settings/queries";
 
 export default function AppLayout({ children }: LayoutProps<"/">) {
   return (
@@ -24,6 +26,10 @@ export default function AppLayout({ children }: LayoutProps<"/">) {
       >
         {children}
       </AppShell>
+      {/* Reads the user's preferences: streams in (Cache Components). */}
+      <Suspense fallback={null}>
+        <Settings />
+      </Suspense>
       <SessionKeeper graceSeconds={parseGraceSeconds(process.env.SESSION_GRACE_SECONDS)} />
     </>
   );
@@ -31,4 +37,8 @@ export default function AppLayout({ children }: LayoutProps<"/">) {
 
 async function Playlists() {
   return <SidebarPlaylists playlists={await getPlaylistNames()} />;
+}
+
+async function Settings() {
+  return <SettingsHydrator values={await getUserSettings()} />;
 }
