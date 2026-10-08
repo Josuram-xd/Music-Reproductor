@@ -31,6 +31,23 @@ export type TrackRow = {
   created_at: string;
 };
 
+export type PlaylistRow = {
+  id: string;
+  owner_id: string;
+  name: string;
+  cover_path: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type PlaylistItemRow = {
+  playlist_id: string;
+  track_id: string;
+  owner_id: string;
+  rank: string;
+  added_at: string;
+};
+
 export type QueueStateRow = {
   owner_id: string;
   track_ids: string[];
@@ -70,6 +87,18 @@ export interface Database {
         Update: Partial<
           Pick<TrackRow, "folder_id" | "title" | "artist" | "duration_s" | "cover_path">
         >;
+        Relationships: [];
+      };
+      playlists: {
+        Row: PlaylistRow;
+        Insert: Pick<PlaylistRow, "name"> & Partial<Pick<PlaylistRow, "id" | "cover_path">>;
+        Update: Partial<Pick<PlaylistRow, "name" | "cover_path">>;
+        Relationships: [];
+      };
+      playlist_items: {
+        Row: PlaylistItemRow;
+        Insert: Pick<PlaylistItemRow, "playlist_id" | "track_id" | "rank">;
+        Update: Partial<Pick<PlaylistItemRow, "rank">>;
         Relationships: [];
       };
       queue_state: {
