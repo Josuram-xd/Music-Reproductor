@@ -14,7 +14,7 @@ export const YOUTUBE_CLIP_ATTR = "data-youtube-clip";
 const FLOATING =
   "position:fixed;right:16px;top:calc(4.5rem + env(safe-area-inset-top));width:min(240px,calc(100vw - 32px));aspect-ratio:16/9;";
 const SHARED =
-  "z-index:30;overflow:hidden;border-radius:16px;background:#000;box-shadow:0 8px 32px -8px rgb(0 0 0/0.6);";
+  "z-index:30;overflow:hidden;background:#000;box-shadow:4px 4px 0 0 var(--pixel-shadow);";
 
 /**
  * Keeps the YouTube player visible (YouTube ToS) while a YouTube track is

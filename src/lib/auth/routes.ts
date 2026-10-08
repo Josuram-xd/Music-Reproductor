@@ -2,6 +2,8 @@ export const LOGIN_PATH = "/login";
 export const REGISTER_PATH = "/register";
 /** Home screen; `/` redirects here (next.config.ts). */
 export const HOME_PATH = "/library";
+/** Where the browser lands after "Cerrar sesión" (a full page load). */
+export const SIGNED_OUT_PATH = `${LOGIN_PATH}?reason=signed-out`;
 
 /**
  * How the proxy treats a path:

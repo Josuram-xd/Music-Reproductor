@@ -1,6 +1,5 @@
-import { LogOut } from "lucide-react";
-import { signOut } from "@/app/(auth)/actions";
 import { requireUser } from "@/lib/auth/dal";
+import { SignOutButton } from "./sign-out-button";
 
 export async function UserMenu() {
   const user = await requireUser();
@@ -14,16 +13,7 @@ export async function UserMenu() {
           </span>
         ) : null}
       </span>
-      <form action={signOut}>
-        <button
-          type="submit"
-          title="Cerrar sesión"
-          className="flex h-11 items-center gap-2 rounded-2xl px-3 text-muted transition hover:bg-surface-2 hover:text-text focus-visible:ring-2 focus-visible:ring-secondary focus-visible:outline-none"
-        >
-          <LogOut aria-hidden className="size-5" />
-          <span className="sr-only @desktop:not-sr-only">Cerrar sesión</span>
-        </button>
-      </form>
+      <SignOutButton />
     </div>
   );
 }

@@ -88,9 +88,13 @@ export async function signInWithGoogle(form: FormData): Promise<void> {
   redirect(data.url);
 }
 
+/**
+ * Ends the session on the server (Supabase cookies + the grace cookie).
+ * It does not redirect: the client then does a full page load to
+ * SIGNED_OUT_PATH (lib/auth/routes), so no player, queue or video survives the sign-out.
+ */
 export async function signOut(): Promise<void> {
   const supabase = await createClient();
   await supabase.auth.signOut();
   (await cookies()).delete(LAST_SEEN_COOKIE);
-  redirect(`${LOGIN_PATH}?reason=signed-out`);
 }
