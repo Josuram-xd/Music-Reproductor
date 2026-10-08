@@ -85,13 +85,13 @@ Cada épica puede ser uno o varios commits (los hace el humano). `[ ]` pendiente
 
 ## E8 · Mini‑reproductor flotante
 
-- [ ] Migración `user_settings` (floating_player, floating_pos, radio_enabled)
-- [ ] Widget flotante: carátula, título, tiempo, progreso, ⏮ ⏯ ⏭
-- [ ] Opacidad 50 % ↔ 100 % (hover / foco / toque 4 s)
-- [ ] Arrastrar + pegar al borde + recordar posición; reajuste al redimensionar
-- [ ] Activar/desactivar (Ajustes + ✕) con fallback a barra fija
-- [ ] Document Picture‑in‑Picture ("Sacar de la ventana") con detección de soporte
-- [ ] Versión píldora en móvil
+- [x] Migración `user_settings` (floating_player, floating_pos, radio_enabled)
+- [x] Widget flotante: carátula, título, tiempo, progreso, ⏮ ⏯ ⏭
+- [x] Opacidad 50 % ↔ 100 % (hover / foco / toque 4 s)
+- [x] Arrastrar + pegar al borde + recordar posición; reajuste al redimensionar
+- [x] Activar/desactivar (Ajustes + ✕) con fallback a barra fija
+- [x] Document Picture‑in‑Picture ("Sacar de la ventana") con detección de soporte
+- [x] Versión píldora en móvil
 
 ## E9 · Radio neko (recomendaciones)
 
