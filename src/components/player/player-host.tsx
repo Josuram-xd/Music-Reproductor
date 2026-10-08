@@ -2,14 +2,23 @@
 
 import { useEffect } from "react";
 import { bindMediaSession, syncMediaSession } from "@/lib/player/media-session";
-import { shortcutFor } from "@/lib/player/shortcuts";
+import { queueShortcutFor, shortcutFor } from "@/lib/player/shortcuts";
 import { player, runPlayerAction, usePlayerStore } from "@/stores/player-store";
+import { queue } from "@/stores/queue-store";
 
-/** Wires the player to the keyboard and to the system media controls. Renders nothing. */
+/**
+ * Wires the player (and queue undo/redo) to the keyboard and to the system
+ * media controls. Renders nothing.
+ */
 export function PlayerHost() {
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.defaultPrevented) return;
+      const queueAction = queueShortcutFor(event);
+      if (queueAction) {
+        event.preventDefault();
+        return queueAction === "undo" ? queue.undo() : queue.redo();
+      }
       const action = shortcutFor(event);
       if (!action) return;
       event.preventDefault(); // e.g. Space would scroll the page

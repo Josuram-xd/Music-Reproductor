@@ -15,6 +15,8 @@ const store = vi.hoisted(() => ({
   usePlayerStore: { getState: vi.fn(() => ({ current: null })), subscribe: vi.fn(() => () => {}) },
 }));
 vi.mock("@/stores/player-store", () => store);
+const queueStore = vi.hoisted(() => ({ queue: { undo: vi.fn(), redo: vi.fn() } }));
+vi.mock("@/stores/queue-store", () => queueStore);
 
 const press = (key: string, init: KeyboardEventInit = {}) => {
   const event = new KeyboardEvent("keydown", { key, cancelable: true, ...init });
@@ -66,5 +68,17 @@ describe("PlayerHost", () => {
     expect(store.usePlayerStore.subscribe).toHaveBeenCalledOnce();
     unmount();
     expect(setActionHandler).toHaveBeenCalledWith("play", null);
+  });
+
+  test("Ctrl+Z / Ctrl+Shift+Z undo and redo queue edits", () => {
+    render(<PlayerHost />);
+    const undo = press("z", { ctrlKey: true });
+    press("z", { ctrlKey: true, shiftKey: true });
+    press("y", { metaKey: true });
+
+    expect(undo.defaultPrevented).toBe(true);
+    expect(queueStore.queue.undo).toHaveBeenCalledOnce();
+    expect(queueStore.queue.redo).toHaveBeenCalledTimes(2);
+    expect(store.runPlayerAction).not.toHaveBeenCalled();
   });
 });

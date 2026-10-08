@@ -1,3 +1,6 @@
+/** Queue edits, handled by the queue store (they are not player actions). */
+export type QueueAction = "undo" | "redo";
+
 export type PlayerAction =
   "toggle" | "seekBackward" | "seekForward" | "previous" | "next" | "toggleMute" | "cycleRepeat";
 
@@ -8,6 +11,8 @@ export const SHORTCUTS: readonly { keys: string; label: string }[] = [
   { keys: "Shift + ← / →", label: "Anterior / siguiente" },
   { keys: "M", label: "Silenciar" },
   { keys: "R", label: "Repetir: no / todo / una" },
+  { keys: "Ctrl + Z", label: "Deshacer el último cambio de la cola" },
+  { keys: "Ctrl + Shift + Z / Ctrl + Y", label: "Rehacer en la cola" },
 ];
 
 interface KeyLike {
@@ -62,4 +67,17 @@ export function shortcutFor(event: KeyLike): PlayerAction | null {
     default:
       return null;
   }
+}
+
+/**
+ * Ctrl/⌘+Z undoes the last queue edit; Ctrl/⌘+Shift+Z or Ctrl+Y redoes it.
+ * Text fields keep their own undo.
+ */
+export function queueShortcutFor(event: KeyLike): QueueAction | null {
+  if (!(event.ctrlKey || event.metaKey) || event.altKey) return null;
+  const key = event.key.toLowerCase();
+  if (isInteractive(event.target, key)) return null;
+  if (key === "z") return event.shiftKey ? "redo" : "undo";
+  if (key === "y" && !event.shiftKey) return "redo";
+  return null;
 }

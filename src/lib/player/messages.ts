@@ -28,6 +28,20 @@ export function playbackErrorMessage(error: PlaybackError): string {
 export const QUEUE_MESSAGES = {
   added: "¡Nya~! Canción añadida a la cola",
   alreadyQueued: "Esa canción ya está en la cola, nya~",
+  undone: (label?: string) =>
+    label === "insert"
+      ? "↩️ Deshecho: canción quitada de la cola"
+      : label === "playNow"
+        ? "↩️ Deshecho: vuelve la canción de antes"
+        : "↩️ Deshecho: la cola vuelve a como estaba",
+  redone: (label?: string) =>
+    label === "insert"
+      ? "↪️ Rehecho: canción añadida otra vez"
+      : label === "playNow"
+        ? "↪️ Rehecho: suena otra vez la elegida"
+        : "↪️ Rehecho: cambio de la cola aplicado otra vez",
+  nothingToUndo: "No hay nada que deshacer en la cola, nya~",
+  nothingToRedo: "No hay nada que rehacer en la cola, nya~",
 } as const;
 
 /** Texts of the "dropped on top of the current track" flow (docs/ARCHITECTURE.md). */

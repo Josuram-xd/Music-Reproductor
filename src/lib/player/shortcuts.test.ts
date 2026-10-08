@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { shortcutFor } from "./shortcuts";
+import { queueShortcutFor, shortcutFor } from "./shortcuts";
 
 const key = (k: string, extra: Partial<Parameters<typeof shortcutFor>[0]> = {}) =>
   shortcutFor({
@@ -72,5 +72,40 @@ describe("shortcutFor", () => {
     const slider = element('<input type="range" />');
     expect(key("ArrowLeft", { target: slider })).toBeNull();
     expect(key(" ", { target: slider })).toBe("toggle");
+  });
+});
+
+describe("queueShortcutFor", () => {
+  const combo = (k: string, extra: Partial<Parameters<typeof queueShortcutFor>[0]> = {}) =>
+    queueShortcutFor({
+      key: k,
+      shiftKey: false,
+      ctrlKey: true,
+      metaKey: false,
+      altKey: false,
+      target: document.body,
+      ...extra,
+    });
+
+  test("Ctrl/⌘+Z undoes, with Shift (or Ctrl+Y) redoes", () => {
+    expect(combo("z")).toBe("undo");
+    expect(combo("z", { ctrlKey: false, metaKey: true })).toBe("undo");
+    expect(combo("Z", { shiftKey: true })).toBe("redo");
+    expect(combo("y")).toBe("redo");
+  });
+
+  test("needs Ctrl or ⌘ and ignores Alt and other keys", () => {
+    expect(combo("z", { ctrlKey: false })).toBeNull();
+    expect(combo("z", { altKey: true })).toBeNull();
+    expect(combo("x")).toBeNull();
+  });
+
+  test("text fields keep their own undo", () => {
+    expect(combo("z", { target: element("<input type='text'>") })).toBeNull();
+    expect(combo("z", { target: element("<textarea></textarea>") })).toBeNull();
+  });
+
+  test("the player shortcuts ignore Ctrl+Z", () => {
+    expect(key("z", { ctrlKey: true })).toBeNull();
   });
 });

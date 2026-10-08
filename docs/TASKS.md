@@ -54,8 +54,8 @@ Cada épica puede ser uno o varios commits (los hace el humano). `[ ]` pendiente
 - [x] Modal de 3 opciones al soltar encima de la que suena (reproducir ahora / revertir / a continuación)
 - [x] "No volver a preguntar en esta sesión" (sessionStorage) + toast "Deshacer" 5 s + reactivar en Ajustes
 - [x] Botón "Añadir a la cola" en cada canción (alternativa al arrastre en móvil, tablet y teclado)
-- [ ] Undo/redo de la cola (Ctrl+Z)
-- [ ] Persistir `queue_state`
+- [x] Undo/redo de la cola (Ctrl+Z)
+- [x] Persistir `queue_state`
 
 ## E5.1 · Listas de reproducción
 

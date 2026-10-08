@@ -28,11 +28,15 @@ interface QueueState {
   pendingDrop: PendingDrop | null;
   /** "Don't ask again this session" choice, mirrored from sessionStorage. */
   dropPreference: DropChoice | null;
+  canUndo: boolean;
+  canRedo: boolean;
 }
 
 export const useQueueStore = create<QueueState>()(() => ({
   pendingDrop: null,
   dropPreference: null,
+  canUndo: false,
+  canRedo: false,
 }));
 
 /** Undo/redo stack of queue edits (moves, inserts, play now). */
@@ -40,12 +44,29 @@ const history = new UndoManager();
 
 const UNDO_TOAST_MS = 5000;
 
+/** Mirrors the undo/redo availability into the store (for the queue buttons). */
+function syncHistory(): void {
+  useQueueStore.setState({ canUndo: history.canUndo, canRedo: history.canRedo });
+}
+
 function run(command: Command): void {
   history.execute(command);
+  syncHistory();
+}
+
+function undoLast(): Command | undefined {
+  const command = history.undo();
+  syncHistory();
+  return command;
+}
+
+function forgetHistory(): void {
+  history.clear();
+  syncHistory();
 }
 
 function undoAction() {
-  return { label: DROP_MESSAGES.undo, run: () => void history.undo() };
+  return { label: DROP_MESSAGES.undo, run: () => void undoLast() };
 }
 
 /** Queue edits from the queue panel and drags from the library. */
@@ -57,7 +78,7 @@ export const queue = {
 
   /** Replaces the queue with a list (clicking a library track) and forgets old edits. */
   playList(tracks: readonly Track[], startId: string) {
-    history.clear();
+    forgetHistory();
     void getPlayer().setQueue(tracks, { startId });
   },
 
@@ -127,7 +148,7 @@ export const queue = {
     useQueueStore.setState({ pendingDrop: null });
 
     // Revert the provisional move only if nothing was done on top of it.
-    if (history.peekUndo() === pending.provisional) history.undo();
+    if (history.peekUndo() === pending.provisional) undoLast();
     if (choice === "revert") return;
 
     run(dropChoiceCommand(getPlayer(), pending.track, choice));
@@ -142,5 +163,37 @@ export const queue = {
   resetDropPreference() {
     clearDropPreference();
     useQueueStore.setState({ dropPreference: null });
+  },
+
+  /** Ctrl+Z: undoes the last queue edit (or answers "Fue un error" to an open drop dialog). */
+  undo() {
+    if (useQueueStore.getState().pendingDrop) return queue.resolveDrop("revert");
+    const command = undoLast();
+    toast(command ? QUEUE_MESSAGES.undone(command.label) : QUEUE_MESSAGES.nothingToUndo, {
+      durationMs: 2500,
+    });
+  },
+
+  /** Ctrl+Shift+Z / Ctrl+Y: redoes the last undone edit. */
+  redo() {
+    if (useQueueStore.getState().pendingDrop) return;
+    const command = history.redo();
+    syncHistory();
+    toast(command ? QUEUE_MESSAGES.redone(command.label) : QUEUE_MESSAGES.nothingToRedo, {
+      durationMs: 2500,
+    });
+  },
+
+  /**
+   * Puts back the queue saved in `queue_state` (paused, at the saved second),
+   * unless the user already started something else meanwhile.
+   */
+  async restore(tracks: readonly Track[], currentId: string | null, positionS: number) {
+    const engine = getPlayer();
+    if (tracks.length === 0 || engine.getSnapshot().queue.length > 0) return false;
+    forgetHistory();
+    await engine.setQueue(tracks, { startId: currentId ?? undefined, autoplay: false });
+    if (positionS > 0) engine.seek(positionS);
+    return true;
   },
 };

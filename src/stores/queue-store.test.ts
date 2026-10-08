@@ -68,6 +68,82 @@ describe("queue store", () => {
     expect(order()).toEqual(["b", "c", "d", "x", "a"]);
   });
 
+  describe("undo / redo", () => {
+    const history = () => {
+      const { canUndo, canRedo } = useQueueStore.getState();
+      return { canUndo, canRedo };
+    };
+
+    test("undoes and redoes edits, keeping the buttons in sync", () => {
+      expect(history()).toEqual({ canUndo: false, canRedo: false });
+      queue.place(track("d"), "b");
+      queue.add(track("x"));
+      expect(history()).toEqual({ canUndo: true, canRedo: false });
+
+      queue.undo();
+      expect(order()).toEqual(["a", "b", "d", "c"]);
+      queue.undo();
+      expect(order()).toEqual(["a", "b", "c", "d"]);
+      expect(history()).toEqual({ canUndo: false, canRedo: true });
+
+      queue.redo();
+      expect(order()).toEqual(["a", "b", "d", "c"]);
+      expect(history()).toEqual({ canUndo: true, canRedo: true });
+    });
+
+    test("says what was undone or that there is nothing to undo", () => {
+      queue.undo();
+      queue.redo();
+      queue.add(track("x"));
+      useToastStore.setState({ toasts: [] });
+      queue.undo();
+      expect(toasts().map((t) => t.message)).toEqual([QUEUE_MESSAGES.undone("insert")]);
+      useToastStore.setState({ toasts: [] });
+      queue.redo();
+      expect(toasts().map((t) => t.message)).toEqual([QUEUE_MESSAGES.redone("insert")]);
+    });
+
+    test("nothing to undo or redo shows a hint", () => {
+      queue.undo();
+      queue.redo();
+      expect(toasts().map((t) => t.message)).toEqual([
+        QUEUE_MESSAGES.nothingToUndo,
+        QUEUE_MESSAGES.nothingToRedo,
+      ]);
+    });
+
+    test("undo while the drop dialog is open answers 'Fue un error'", () => {
+      queue.dropOnCurrent(track("d"));
+      queue.undo();
+      expect(pending()).toBeNull();
+      expect(order()).toEqual(["a", "b", "c", "d"]);
+    });
+
+    test("playing another list forgets the old edits", () => {
+      queue.add(track("x"));
+      queue.playList(["a", "b"].map(track), "a");
+      expect(history()).toEqual({ canUndo: false, canRedo: false });
+    });
+  });
+
+  describe("restore", () => {
+    test("loads the saved queue paused at the saved second", async () => {
+      engine.current = new PlayerEngine({ sources: [new FakeSource("audio")] });
+      queue.add(track("z"));
+      engine.current = new PlayerEngine({ sources: [new FakeSource("audio")] });
+      expect(await queue.restore(["a", "b", "c"].map(track), "b", 42)).toBe(true);
+      expect(order()).toEqual(["a", "b", "c"]);
+      expect(current()).toBe("b");
+      expect(engine.current.getSnapshot()).toMatchObject({ state: "paused", time: 42 });
+      expect(useQueueStore.getState().canUndo).toBe(false);
+    });
+
+    test("does not replace something the user already started", async () => {
+      expect(await queue.restore(["x"].map(track), "x", 10)).toBe(false);
+      expect(order()).toEqual(["a", "b", "c", "d"]);
+    });
+  });
+
   describe("drop on the current track", () => {
     test("moves the track to position 0 and asks", () => {
       queue.dropOnCurrent(track("d"));
