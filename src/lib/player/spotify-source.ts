@@ -154,8 +154,10 @@ export class SpotifySource implements PlaybackSource {
 
   async play(): Promise<void> {
     if (!this.uri) return;
+    // Spotify requires this to be invoked synchronously from the user's gesture.
+    const activation = this.player?.activateElement?.();
     const { player, deviceId } = await this.ensureDevice();
-    await player.activateElement?.().catch(() => undefined);
+    await activation?.catch(() => undefined);
     if (this.started) {
       await player.resume();
       return;

@@ -17,6 +17,8 @@ export interface YTPlayer {
   getIframe(): HTMLIFrameElement;
   getCurrentTime(): number;
   getDuration(): number;
+  mute(): void;
+  unMute(): void;
   setVolume(volume: number): void;
   destroy(): void;
 }
@@ -175,8 +177,10 @@ export class YouTubeSource implements PlaybackSource {
   }
 
   async play(): Promise<void> {
-    // Mobile browsers may block it without a tap: the state then stays "paused".
-    this.player?.playVideo();
+    const player = this.player;
+    if (!player) return;
+    this.applyVolume(player);
+    player.playVideo();
   }
 
   pause(): void {
@@ -206,7 +210,7 @@ export class YouTubeSource implements PlaybackSource {
 
   setVolume(volume: number): void {
     this.volume = volume;
-    this.player?.setVolume(Math.round(volume * 100));
+    if (this.player) this.applyVolume(this.player);
   }
 
   on<E extends keyof PlaybackEvents>(
@@ -242,7 +246,7 @@ export class YouTubeSource implements PlaybackSource {
               onReady: ({ target }) => {
                 this.player = target;
                 target.getIframe().allow = "autoplay; encrypted-media; picture-in-picture";
-                target.setVolume(Math.round(this.volume * 100));
+                this.applyVolume(target);
                 resolve(target);
               },
               onStateChange: ({ data }) => this.handleState(data),
@@ -318,6 +322,12 @@ export class YouTubeSource implements PlaybackSource {
   private emitTime(): void {
     if (this.player) this.time = this.player.getCurrentTime();
     this.events.emit("time", { current: this.time, duration: this.duration });
+  }
+
+  private applyVolume(player: YTPlayer): void {
+    player.setVolume(Math.round(this.volume * 100));
+    if (this.volume === 0) player.mute();
+    else player.unMute();
   }
 
   private setState(state: PlaybackState): void {

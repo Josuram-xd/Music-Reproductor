@@ -20,6 +20,7 @@ class FakePlayer implements SpotifyPlayer {
     payload: { device_id: "dev1" },
   };
   resume = vi.fn(async () => {});
+  activateElement = vi.fn(async () => {});
   pause = vi.fn(async () => {});
   seek = vi.fn(async () => {});
   setVolume = vi.fn(async () => {});
@@ -116,6 +117,14 @@ describe("SpotifySource", () => {
     await source.play();
     expect(player().resume).toHaveBeenCalledOnce();
     expect(fetcher).toHaveBeenCalledOnce();
+  });
+
+  test("activates Spotify audio synchronously before waiting for playback", async () => {
+    const { source, player } = setup();
+    await source.load(track());
+    const playback = source.play();
+    expect(player().activateElement).toHaveBeenCalledOnce();
+    await playback;
   });
 
   test("a 403 means Premium is required", async () => {

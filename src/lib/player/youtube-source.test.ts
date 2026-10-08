@@ -8,9 +8,16 @@ class FakePlayer implements YTPlayer {
   time = 0;
   duration = 200;
   volume = 100;
+  muted = false;
   cued: string | null = null;
   playVideo = vi.fn(() => this.emitState(1));
   pauseVideo = vi.fn(() => this.emitState(2));
+  mute = vi.fn(() => {
+    this.muted = true;
+  });
+  unMute = vi.fn(() => {
+    this.muted = false;
+  });
   destroy = vi.fn();
   iframe = document.createElement("iframe");
   /** Cue answers with CUED (5) right away unless set to false. */
@@ -150,11 +157,26 @@ describe("YouTubeSource", () => {
     source.setVolume(0.3);
     await source.load(video("aaaaaaaaaaa"));
     expect(player().volume).toBe(30);
+    expect(player().muted).toBe(false);
     source.seek(500);
     expect(player().time).toBe(200);
     source.seek(42);
     expect(source.getTime()).toBe(42);
+    source.setVolume(0);
+    expect(player().volume).toBe(0);
+    expect(player().muted).toBe(true);
     source.setVolume(1);
+    expect(player().volume).toBe(100);
+    expect(player().muted).toBe(false);
+  });
+
+  test("play explicitly unmutes the YouTube iframe at the selected volume", async () => {
+    const { source, player } = setup();
+    await source.load(video("aaaaaaaaaaa"));
+    player().muted = true;
+    await source.play();
+    expect(player().unMute).toHaveBeenCalled();
+    expect(player().muted).toBe(false);
     expect(player().volume).toBe(100);
   });
 
