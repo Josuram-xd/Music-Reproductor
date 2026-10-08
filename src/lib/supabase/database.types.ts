@@ -31,6 +31,14 @@ export type TrackRow = {
   created_at: string;
 };
 
+export type QueueStateRow = {
+  owner_id: string;
+  track_ids: string[];
+  current_index: number | null;
+  position_s: number;
+  updated_at: string;
+};
+
 export interface Database {
   public: {
     Tables: {
@@ -62,6 +70,12 @@ export interface Database {
         Update: Partial<
           Pick<TrackRow, "folder_id" | "title" | "artist" | "duration_s" | "cover_path">
         >;
+        Relationships: [];
+      };
+      queue_state: {
+        Row: QueueStateRow;
+        Insert: Pick<QueueStateRow, "owner_id"> & Partial<Omit<QueueStateRow, "owner_id">>;
+        Update: Partial<Omit<QueueStateRow, "owner_id">>;
         Relationships: [];
       };
     };

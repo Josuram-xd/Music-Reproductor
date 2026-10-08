@@ -133,7 +133,7 @@ tracks(id, owner_id, folder_id, source 'audio'|'youtube'|'spotify', origin 'file
        title, artist, duration_s, storage_path, external_id, mime, cover_path)
 playlists(id, owner_id, name, cover_path)
 playlist_items(playlist_id, track_id, rank text)   -- rank fraccional (lexorank) para reordenar sin reescribir
-queue_state(owner_id PK, track_ids uuid[], current_index, updated_at)
+queue_state(owner_id PK, track_ids uuid[], current_index, position_s, updated_at)
 user_integrations(owner_id, provider 'spotify'|'youtube', client_id, secret_enc, refresh_token_enc, expires_at)
 yt_search_cache(query PK, results jsonb, fetched_at)
 user_settings(owner_id PK, floating_player bool default true, floating_pos jsonb,
