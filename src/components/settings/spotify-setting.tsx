@@ -15,18 +15,19 @@ import {
   SPOTIFY_CALLBACK_PATH,
   SPOTIFY_CONNECT_STATUSES,
   SPOTIFY_LOGIN_PATH,
+  spotifyOAuthOrigin,
 } from "@/lib/spotify/config";
 import { CONNECT_MESSAGES, isPremium, spotifySettingErrorMessage } from "@/lib/spotify/messages";
 import { toast } from "@/stores/toast-store";
 
 const noop = () => () => {};
 
-/** `https://<this site>/api/spotify/callback`, known only in the browser. */
-function useRedirectUri(): string {
+/** Site origin, known only in the browser. */
+function useOrigin(): string {
   return useSyncExternalStore(
     noop,
-    () => `${window.location.origin}${SPOTIFY_CALLBACK_PATH}`,
-    () => SPOTIFY_CALLBACK_PATH,
+    () => window.location.origin,
+    () => "",
   );
 }
 
@@ -41,6 +42,10 @@ export function SpotifySetting({ integration }: { integration: SpotifyIntegratio
   const [pending, startTransition] = useTransition();
   const [editing, setEditing] = useState(false);
   const canConnect = Boolean(integration.clientId) || integration.hasServerClientId;
+  const origin = useOrigin();
+  const spotifyOrigin = origin ? spotifyOAuthOrigin(origin) : "";
+  const requiresLoopback = Boolean(origin) && spotifyOrigin !== origin;
+  const redirectUri = `${spotifyOrigin || origin}${SPOTIFY_CALLBACK_PATH}`;
 
   // Back from Spotify: say how it went and clean the URL.
   const status = searchParams.get("spotify");
@@ -115,6 +120,8 @@ export function SpotifySetting({ integration }: { integration: SpotifyIntegratio
           {!integration.clientId || editing ? (
             <SpotifyGuide
               hasServerClientId={integration.hasServerClientId}
+              redirectUri={redirectUri}
+              requiresLoopback={requiresLoopback}
               onSaved={() => setEditing(false)}
             />
           ) : (
@@ -130,15 +137,28 @@ export function SpotifySetting({ integration }: { integration: SpotifyIntegratio
             </p>
           )}
           {canConnect ? (
-            <div>
-              {/* A full navigation: the OAuth flow leaves the app and comes back. */}
-              <a
-                href={SPOTIFY_LOGIN_PATH}
-                className="inline-flex h-11 items-center justify-center gap-2 rounded-2xl bg-accent px-5 font-display font-semibold text-bg transition hover:brightness-110 focus-visible:ring-2 focus-visible:ring-secondary focus-visible:outline-none"
-              >
-                Conectar con Spotify
-              </a>
-            </div>
+            requiresLoopback ? (
+              <p role="status" className="text-sm text-warn">
+                Spotify no acepta «localhost» para OAuth local.{" "}
+                <a
+                  href={`${spotifyOrigin}/settings`}
+                  className="font-semibold text-secondary underline-offset-4 hover:underline"
+                >
+                  Abre Purrlist en 127.0.0.1
+                </a>{" "}
+                e inicia sesión allí antes de conectar.
+              </p>
+            ) : (
+              <div>
+                {/* A full navigation: the OAuth flow leaves the app and comes back. */}
+                <a
+                  href={SPOTIFY_LOGIN_PATH}
+                  className="inline-flex h-11 items-center justify-center gap-2 rounded-2xl bg-accent px-5 font-display font-semibold text-bg transition hover:brightness-110 focus-visible:ring-2 focus-visible:ring-secondary focus-visible:outline-none"
+                >
+                  Conectar con Spotify
+                </a>
+              </div>
+            )
           ) : null}
         </>
       )}
@@ -148,12 +168,15 @@ export function SpotifySetting({ integration }: { integration: SpotifyIntegratio
 
 function SpotifyGuide({
   hasServerClientId,
+  redirectUri,
+  requiresLoopback,
   onSaved,
 }: {
   hasServerClientId: boolean;
+  redirectUri: string;
+  requiresLoopback: boolean;
   onSaved: () => void;
 }) {
-  const redirectUri = useRedirectUri();
   const [value, setValue] = useState("");
   const [error, setError] = useState<string>();
   const [copied, setCopied] = useState(false);
@@ -208,6 +231,11 @@ function SpotifyGuide({
           <span>
             En <strong>Redirect URIs</strong> pega exactamente esta dirección:
           </span>
+          {requiresLoopback ? (
+            <span className="text-warn">
+              Abre primero Purrlist en 127.0.0.1; Spotify no permite «localhost» en OAuth local.
+            </span>
+          ) : null}
           <span className="flex items-center gap-2">
             <code className="min-w-0 flex-1 truncate rounded-xl bg-bg/60 px-3 py-2 text-xs">
               {redirectUri}

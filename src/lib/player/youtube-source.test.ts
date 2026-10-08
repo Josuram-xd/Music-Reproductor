@@ -12,6 +12,7 @@ class FakePlayer implements YTPlayer {
   playVideo = vi.fn(() => this.emitState(1));
   pauseVideo = vi.fn(() => this.emitState(2));
   destroy = vi.fn();
+  iframe = document.createElement("iframe");
   /** Cue answers with CUED (5) right away unless set to false. */
   autoCue = true;
 
@@ -32,6 +33,9 @@ class FakePlayer implements YTPlayer {
   }
   getCurrentTime() {
     return this.time;
+  }
+  getIframe() {
+    return this.iframe;
   }
   getDuration() {
     return this.duration;
@@ -83,6 +87,7 @@ describe("YouTubeSource", () => {
     await source.load(video("aaaaaaaaaaa"));
     const first = player();
     expect(host.contains(first.element)).toBe(true);
+    expect(first.iframe.allow).toBe("autoplay; encrypted-media; picture-in-picture");
     expect(first.cued).toBe("aaaaaaaaaaa");
     await source.load(video("bbbbbbbbbbb"));
     expect(player()).toBe(first);

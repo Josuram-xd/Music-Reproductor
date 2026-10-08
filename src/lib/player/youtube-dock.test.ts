@@ -17,6 +17,17 @@ describe("chooseDockPlacement", () => {
     });
   });
 
+  test("copies geometry from DOMRects whose properties are not enumerable", () => {
+    const domRect = new DOMRect(980, 120, 280, 158);
+    expect(chooseDockPlacement([{ rect: domRect, clip: null }], viewport)).toEqual({
+      mode: "docked",
+      left: 980,
+      top: 120,
+      width: 280,
+      height: 158,
+    });
+  });
+
   test("floats when there is no slot or it is hidden (zero size)", () => {
     expect(chooseDockPlacement([], viewport)).toEqual({ mode: "floating" });
     expect(chooseDockPlacement([{ rect: rect(0, 0, 0, 0), clip: null }], viewport)).toEqual({

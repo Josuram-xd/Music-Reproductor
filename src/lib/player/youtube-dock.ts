@@ -30,7 +30,13 @@ export function chooseDockPlacement(
     const right = Math.min(rect.left + rect.width, bounds.left + bounds.width, viewport.width);
     const visible = Math.max(0, bottom - top) * Math.max(0, right - left);
     if (visible >= rect.width * rect.height * MIN_VISIBLE) {
-      return { mode: "docked", ...rect };
+      return {
+        mode: "docked",
+        left: rect.left,
+        top: rect.top,
+        width: rect.width,
+        height: rect.height,
+      };
     }
   }
   return { mode: "floating" };

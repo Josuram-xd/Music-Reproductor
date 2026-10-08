@@ -14,6 +14,7 @@ export interface YTPlayer {
   playVideo(): void;
   pauseVideo(): void;
   seekTo(seconds: number, allowSeekAhead: boolean): void;
+  getIframe(): HTMLIFrameElement;
   getCurrentTime(): number;
   getDuration(): number;
   setVolume(volume: number): void;
@@ -240,6 +241,7 @@ export class YouTubeSource implements PlaybackSource {
             events: {
               onReady: ({ target }) => {
                 this.player = target;
+                target.getIframe().allow = "autoplay; encrypted-media; picture-in-picture";
                 target.setVolume(Math.round(this.volume * 100));
                 resolve(target);
               },

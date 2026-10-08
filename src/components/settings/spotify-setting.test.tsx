@@ -1,6 +1,7 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import type { SpotifyIntegration } from "@/lib/integrations/queries";
+import { spotifyOAuthOrigin } from "@/lib/spotify/config";
 import { useToastStore } from "@/stores/toast-store";
 import { SpotifySetting } from "./spotify-setting";
 
@@ -52,18 +53,23 @@ describe("SpotifySetting", () => {
     expect(actions.saveSpotifyClientId).toHaveBeenCalledWith("a".repeat(32));
   });
 
-  test("with a Client ID it offers to connect (OAuth starts on the server)", () => {
+  test("with a Client ID and localhost it guides to the supported loopback host", () => {
     render(<SpotifySetting integration={integration({ clientId: "a".repeat(32) })} />);
-    expect(screen.getByRole("link", { name: "Conectar con Spotify" })).toHaveAttribute(
+    const loopbackOrigin = spotifyOAuthOrigin(window.location.origin);
+    expect(screen.getByRole("status")).toHaveTextContent(/Spotify no acepta «localhost»/);
+    expect(screen.getByRole("link", { name: "Abre Purrlist en 127.0.0.1" })).toHaveAttribute(
       "href",
-      "/api/spotify/login",
+      `${loopbackOrigin}/settings`,
     );
     expect(screen.getByText(/…aaaa/)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Cambiarlo" }));
+    expect(screen.getByText(/127\.0\.0\.1.*\/api\/spotify\/callback$/)).toBeInTheDocument();
   });
 
-  test("the owner can connect with the server's Client ID", () => {
+  test("the owner is also guided to the supported host when using localhost", () => {
     render(<SpotifySetting integration={integration({ hasServerClientId: true })} />);
-    expect(screen.getByRole("link", { name: "Conectar con Spotify" })).toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent(/Spotify no acepta «localhost»/);
+    expect(screen.queryByRole("link", { name: "Conectar con Spotify" })).toBeNull();
   });
 
   test("connected without Premium shows a warning", () => {

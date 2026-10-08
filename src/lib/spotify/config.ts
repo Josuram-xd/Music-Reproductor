@@ -7,6 +7,15 @@ export function cleanClientId(value: unknown): string | null {
   return SPOTIFY_CLIENT_ID.test(id) ? id.toLowerCase() : null;
 }
 
+/** Spotify requires the IP loopback host instead of `localhost` for local OAuth. */
+export function spotifyOAuthOrigin(origin: string): string {
+  const url = new URL(origin);
+  if (url.protocol === "http:" && url.hostname === "localhost") {
+    url.hostname = "127.0.0.1";
+  }
+  return url.origin;
+}
+
 /** Path of the OAuth callback; the user registers `<origin>` + this in their Spotify app. */
 export const SPOTIFY_CALLBACK_PATH = "/api/spotify/callback";
 export const SPOTIFY_LOGIN_PATH = "/api/spotify/login";
