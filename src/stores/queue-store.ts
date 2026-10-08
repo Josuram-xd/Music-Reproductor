@@ -13,6 +13,7 @@ import {
   dropChoiceCommand,
   placeCommand,
   playNowCommand,
+  removeCommand,
 } from "@/lib/player/queue-commands";
 import type { Track } from "@/lib/player/types";
 import { getPlayer } from "./player-store";
@@ -119,6 +120,13 @@ export const queue = {
     const count = tracks.filter((track) => !engine.has(track.id)).length;
     if (count > 0) run(appendManyCommand(engine, tracks));
     return count;
+  },
+
+  /** Takes tracks out of the queue (not the one loaded). Undoable as one step. */
+  remove(ids: readonly string[]) {
+    const engine = getPlayer();
+    const present = ids.filter((id) => engine.has(id) && id !== engine.getSnapshot().current?.id);
+    if (present.length > 0) run(removeCommand(engine, present));
   },
 
   /** Drop at the end of the queue. */

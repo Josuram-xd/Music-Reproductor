@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { DropPreferenceSetting } from "@/components/queue/drop-preference-setting";
 import { FloatingPlayerSetting } from "@/components/settings/floating-player-setting";
+import { RadioSetting } from "@/components/settings/radio-setting";
 import { SpotifySetting } from "@/components/settings/spotify-setting";
 import { YouTubeKeySetting } from "@/components/settings/youtube-key-setting";
 import { PageHeader } from "@/components/ui/page-header";
@@ -19,6 +20,7 @@ export default function SettingsPage() {
             Reproductor
           </h2>
           <FloatingPlayerSetting />
+          <RadioSetting />
         </section>
 
         <section aria-labelledby="settings-queue" className="flex max-w-xl flex-col gap-3">

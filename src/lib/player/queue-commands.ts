@@ -54,6 +54,30 @@ export function appendManyCommand(engine: PlayerEngine, tracks: readonly Track[]
   };
 }
 
+/**
+ * Removes queued tracks (not the one loaded) as one undoable step;
+ * undo puts each back after the track that preceded it.
+ */
+export function removeCommand(engine: PlayerEngine, ids: readonly string[]): Command {
+  let removed: { track: Track; afterId: string | null }[] = [];
+  return {
+    label: "remove",
+    execute() {
+      removed = [];
+      for (const id of ids) {
+        const track = engine.getSnapshot().queue.find((t) => t.id === id);
+        const afterId = engine.previousIdOf(id);
+        if (track && engine.remove(id)) removed.push({ track, afterId });
+      }
+    },
+    undo() {
+      for (const { track, afterId } of [...removed].reverse()) {
+        if (!engine.insert(track, afterId)) engine.insert(track, null);
+      }
+    },
+  };
+}
+
 /** Puts `track` right after `afterId`: a move if it is already queued, an insert otherwise. */
 export function placeCommand(engine: PlayerEngine, track: Track, afterId: string | null): Command {
   return engine.has(track.id)

@@ -95,12 +95,12 @@ Cada épica puede ser uno o varios commits (los hace el humano). `[ ]` pendiente
 
 ## E9 · Radio neko (recomendaciones)
 
-- [ ] Migraciones `play_events`, `search_history`, `radio_feedback`
-- [ ] Registrar eventos de reproducción (completada / saltada / tiempo escuchado)
-- [ ] Generador de candidatos (biblioteca → YouTube cacheado → Spotify search)
-- [ ] Puntuación + Max‑Heap + exclusión de lo reciente + tests
-- [ ] Auto‑rellenar la cola al quedar ≤ 1 canción; etiqueta 🐾, quitar y "No me gusta"
-- [ ] Toggle en Ajustes y en la cola
+- [x] Migraciones `play_events`, `search_history`, `radio_feedback`
+- [x] Registrar eventos de reproducción (completada / saltada / tiempo escuchado)
+- [x] Generador de candidatos (biblioteca → YouTube cacheado → Spotify search)
+- [x] Puntuación + Max‑Heap + exclusión de lo reciente + tests
+- [x] Auto‑rellenar la cola al quedar ≤ 1 canción; etiqueta 🐾, quitar y "No me gusta"
+- [x] Toggle en Ajustes y en la cola
 
 ## E10 · Estadísticas
 

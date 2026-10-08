@@ -1,6 +1,7 @@
 import { SaveQueueButton } from "@/components/playlists/save-queue-button";
 import { QueueBoard } from "@/components/queue/queue-board";
 import { QueueHistoryButtons } from "@/components/queue/queue-history-buttons";
+import { RadioToggle } from "@/components/queue/radio-toggle";
 
 /** "Now playing" + up next, sortable, accepting drops from the library. */
 export function QueuePanel() {
@@ -11,6 +12,7 @@ export function QueuePanel() {
           Cola
         </h2>
         <div className="flex items-center">
+          <RadioToggle />
           <QueueHistoryButtons />
           <SaveQueueButton />
         </div>

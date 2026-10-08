@@ -5,6 +5,7 @@ import { usePlayerStore } from "@/stores/player-store";
 import { queue } from "@/stores/queue-store";
 import { QueueBoard, upNextOf } from "./queue-board";
 
+vi.mock("@/lib/settings/actions", () => ({ updateUserSettings: vi.fn() }));
 vi.mock("@/stores/player-store", async () => {
   const { create } = await import("zustand");
   return { usePlayerStore: create(() => ({ current: null, queue: [] })) };

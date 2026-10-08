@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { UserMenu } from "@/components/auth/user-menu";
 import { SidebarPlaylists } from "@/components/playlists/sidebar-playlists";
+import { RadioFiller } from "@/components/queue/radio-filler";
 import { SessionKeeper } from "@/components/session/session-keeper";
 import { SettingsHydrator } from "@/components/settings/settings-hydrator";
 import { AppShell } from "@/components/shell/app-shell";
@@ -30,6 +31,7 @@ export default function AppLayout({ children }: LayoutProps<"/">) {
       <Suspense fallback={null}>
         <Settings />
       </Suspense>
+      <RadioFiller />
       <SessionKeeper graceSeconds={parseGraceSeconds(process.env.SESSION_GRACE_SECONDS)} />
     </>
   );

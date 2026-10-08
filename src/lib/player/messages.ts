@@ -35,17 +35,21 @@ export const QUEUE_MESSAGES = {
       ? "↩️ Deshecho: canción quitada de la cola"
       : label === "insertMany"
         ? "↩️ Deshecho: canciones quitadas de la cola"
-        : label === "playNow"
-          ? "↩️ Deshecho: vuelve la canción de antes"
-          : "↩️ Deshecho: la cola vuelve a como estaba",
+        : label === "remove"
+          ? "↩️ Deshecho: vuelven a la cola"
+          : label === "playNow"
+            ? "↩️ Deshecho: vuelve la canción de antes"
+            : "↩️ Deshecho: la cola vuelve a como estaba",
   redone: (label?: string) =>
     label === "insert"
       ? "↪️ Rehecho: canción añadida otra vez"
       : label === "insertMany"
         ? "↪️ Rehecho: canciones añadidas otra vez"
-        : label === "playNow"
-          ? "↪️ Rehecho: suena otra vez la elegida"
-          : "↪️ Rehecho: cambio de la cola aplicado otra vez",
+        : label === "remove"
+          ? "↪️ Rehecho: quitadas otra vez"
+          : label === "playNow"
+            ? "↪️ Rehecho: suena otra vez la elegida"
+            : "↪️ Rehecho: cambio de la cola aplicado otra vez",
   nothingToUndo: "No hay nada que deshacer en la cola, nya~",
   nothingToRedo: "No hay nada que rehacer en la cola, nya~",
 } as const;
@@ -63,4 +67,15 @@ export const DROP_MESSAGES = {
 export const FLOATING_MESSAGES = {
   closed: "Mini-reproductor oculto. Puedes volver a activarlo en Ajustes 🐾",
   pipFailed: "No se pudo sacar el reproductor de la ventana",
+} as const;
+
+/** Neko radio texts. */
+export const RADIO_MESSAGES = {
+  badge: "Recomendada",
+  added: (count: number) =>
+    `🐾 La radio neko añadió ${count === 1 ? "una canción" : `${count} canciones`}`,
+  disliked: (artist: string) => `Vale, menos ${artist} en la radio 🐾`,
+  dislikeFailed: "No se pudo guardar tu «No me gusta». Inténtalo otra vez",
+  on: "Radio neko activada: cuando se acabe la cola, sigo yo 🐾",
+  off: "Radio neko desactivada",
 } as const;

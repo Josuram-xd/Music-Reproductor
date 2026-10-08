@@ -24,14 +24,16 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { GripVertical } from "lucide-react";
+import { GripVertical, ThumbsDown, X } from "lucide-react";
 import { type ReactNode, useId, useMemo } from "react";
 import { NowPlayingCard } from "@/components/player/now-playing-card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { formatTime } from "@/lib/player/format";
+import { RADIO_MESSAGES } from "@/lib/player/messages";
 import type { Track } from "@/lib/player/types";
 import { usePlayerStore } from "@/stores/player-store";
 import { queue } from "@/stores/queue-store";
+import { radio } from "@/stores/radio";
 import { type DropEdge, useTrackDrop } from "./track-drop";
 
 /** Droppable id of the "Ahora suena" card: position 0 of the queue. */
@@ -229,8 +231,13 @@ function QueueRow({
       >
         <span className="min-w-0 flex-1">
           <span className="block truncate text-sm font-semibold">{track.title}</span>
-          <span className="block truncate text-xs text-muted">
-            {track.artist ?? "Artista desconocido"}
+          <span className="flex items-center gap-1.5 truncate text-xs text-muted">
+            {track.radio ? (
+              <span className="shrink-0 rounded-full bg-accent/15 px-1.5 text-[0.65rem] font-semibold text-accent">
+                🐾 {RADIO_MESSAGES.badge}
+              </span>
+            ) : null}
+            <span className="truncate">{track.artist ?? "Artista desconocido"}</span>
           </span>
         </span>
         {track.durationS ? (
@@ -239,6 +246,28 @@ function QueueRow({
           </span>
         ) : null}
       </button>
+      {track.radio ? (
+        <>
+          <button
+            type="button"
+            onClick={() => void radio.dislike(track)}
+            aria-label={`No me gusta: ${track.artist ?? track.title}`}
+            title="No me gusta (menos de este artista)"
+            className="flex size-9 shrink-0 items-center justify-center rounded-xl text-muted hover:bg-surface-2 hover:text-danger focus-visible:ring-2 focus-visible:ring-secondary focus-visible:outline-none"
+          >
+            <ThumbsDown aria-hidden className="size-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => queue.remove([track.id])}
+            aria-label={`Quitar ${track.title} de la cola`}
+            title="Quitar de la cola"
+            className="mr-1 flex size-9 shrink-0 items-center justify-center rounded-xl text-muted hover:bg-surface-2 hover:text-text focus-visible:ring-2 focus-visible:ring-secondary focus-visible:outline-none"
+          >
+            <X aria-hidden className="size-4" />
+          </button>
+        </>
+      ) : null}
     </li>
   );
 }
