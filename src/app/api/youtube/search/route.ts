@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { apiError, authenticate } from "@/lib/auth/api";
+import { recordSearch } from "@/lib/radio/server";
 import { searchYouTube } from "@/lib/youtube/search";
 import { youtubeSearchDeps } from "@/lib/youtube/server";
 
@@ -16,5 +17,7 @@ export async function GET(request: Request) {
   const query = new URL(request.url).searchParams.get("q");
   const result = await searchYouTube(query, youtubeSearchDeps(auth.supabase));
   if (!result.ok) return apiError(result.error, STATUS[result.error]);
+  // Recent searches are a neko radio signal.
+  await recordSearch(auth.supabase, query ?? "", "youtube");
   return NextResponse.json(result.response, { headers: { "Cache-Control": "no-store" } });
 }

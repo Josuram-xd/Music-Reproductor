@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { apiError, authenticate } from "@/lib/auth/api";
+import { recordSearch } from "@/lib/radio/server";
 import { SpotifyApiError, searchTracks } from "@/lib/spotify/api";
 import { spotifyAccessToken } from "@/lib/spotify/server";
 import { normalizeQuery } from "@/lib/youtube/search";
@@ -17,6 +18,8 @@ export async function GET(request: Request) {
 
   try {
     const results = await searchTracks(raw!.trim(), token.accessToken);
+    // Recent searches are a neko radio signal.
+    await recordSearch(auth.supabase, raw!, "spotify");
     return NextResponse.json({ results }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
     const status = error instanceof SpotifyApiError ? error.status : 0;
