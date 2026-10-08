@@ -5,6 +5,7 @@ describe("routeAccess", () => {
   test.each([
     ["/login", "guest"],
     ["/register", "guest"],
+    ["/forgot-password", "guest"],
     ["/login/extra", "guest"],
     ["/auth/confirm", "public"],
     ["/api/session/heartbeat", "api"],
@@ -36,6 +37,7 @@ describe("safeNextPath", () => {
   test("never sends a signed-in user back to a guest page", () => {
     expect(safeNextPath("/login")).toBe("/library");
     expect(safeNextPath("/register?x=1")).toBe("/library");
+    expect(safeNextPath("/forgot-password")).toBe("/library");
   });
 });
 

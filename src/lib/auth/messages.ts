@@ -33,6 +33,8 @@ export function loginReasonMessage(reason: string | undefined): string | undefin
       return "El enlace de confirmación no es válido o ya caducó";
     case "oauth-failed":
       return "No se pudo entrar con Google. Inténtalo otra vez";
+    case "recovery-failed":
+      return "El enlace para cambiar la contraseña no es válido o ya caducó. Solicita uno nuevo";
     default:
       return undefined;
   }

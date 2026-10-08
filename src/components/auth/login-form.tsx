@@ -5,7 +5,7 @@ import { useActionState } from "react";
 import { type AuthFormState, signIn } from "@/app/(auth)/actions";
 import { Button } from "@/components/ui/button";
 import { TextField } from "@/components/ui/text-field";
-import { REGISTER_PATH } from "@/lib/auth/routes";
+import { FORGOT_PASSWORD_PATH, REGISTER_PATH } from "@/lib/auth/routes";
 import { FormMessage } from "./form-message";
 import { GoogleButton, OrDivider } from "./google-button";
 
@@ -49,6 +49,12 @@ export function LoginForm({ next = "", notice }: LoginFormProps) {
           required
           error={state.fieldErrors?.password}
         />
+        <Link
+          href={`${FORGOT_PASSWORD_PATH}${next ? `?next=${encodeURIComponent(next)}` : ""}`}
+          className="-mt-2 self-end text-sm font-semibold text-secondary hover:underline"
+        >
+          ¿Olvidaste tu contraseña?
+        </Link>
 
         <Button type="submit" pending={pending} className="mt-2">
           {pending ? "Entrando…" : "Entrar"}

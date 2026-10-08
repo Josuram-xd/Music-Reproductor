@@ -4,7 +4,13 @@ import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { authErrorMessage } from "@/lib/auth/messages";
 import { HOME_PATH, LOGIN_PATH, safeNextPath } from "@/lib/auth/routes";
-import { type FieldErrors, parseCredentials, parseRegistration } from "@/lib/auth/validation";
+import {
+  type FieldErrors,
+  parseCredentials,
+  parseEmail,
+  parseNewPassword,
+  parseRegistration,
+} from "@/lib/auth/validation";
 import { lastSeenCookie } from "@/lib/session/config";
 import { LAST_SEEN_COOKIE } from "@/lib/session/grace";
 import { createClient } from "@/lib/supabase/server";
@@ -71,6 +77,52 @@ export async function signUp(_prev: AuthFormState, form: FormData): Promise<Auth
   return {
     notice: `¡Casi listo! Te enviamos un correo a ${email} para confirmar tu cuenta, nya~`,
   };
+}
+
+export async function requestPasswordReset(
+  _prev: AuthFormState,
+  form: FormData,
+): Promise<AuthFormState> {
+  const values = { email: field(form, "email") };
+  const parsed = parseEmail(form);
+  if (!parsed.ok) return { fieldErrors: parsed.errors, values };
+
+  const next = safeNextPath(field(form, "next"));
+  const origin = await requestOrigin();
+  if (!origin) {
+    console.error("[auth] Password reset requested without an origin header");
+    return { error: "No se pudo iniciar la recuperación. Inténtalo de nuevo", values };
+  }
+
+  const supabase = await createClient();
+  const redirectTo = new URL("/auth/confirm", origin);
+  redirectTo.searchParams.set("flow", "recovery");
+  redirectTo.searchParams.set("next", next);
+  const { error } = await supabase.auth.resetPasswordForEmail(parsed.data.email, {
+    redirectTo: redirectTo.toString(),
+  });
+  if (error) return { error: authErrorMessage(error.code), values };
+
+  return {
+    notice:
+      "Si existe una cuenta con ese correo, recibirás un enlace para cambiar la contraseña, nya~",
+  };
+}
+
+export async function updatePassword(_prev: AuthFormState, form: FormData): Promise<AuthFormState> {
+  const parsed = parseNewPassword(form);
+  if (!parsed.ok) return { fieldErrors: parsed.errors };
+
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.updateUser({ password: parsed.data.password });
+  if (error) return { error: authErrorMessage(error.code) };
+  if (!data.user) {
+    console.error("[auth] Password update succeeded without a user in the response");
+    return { error: "No se pudo verificar tu cuenta. Vuelve a solicitar el enlace" };
+  }
+
+  await startGraceWindow(data.user.id);
+  redirect(safeNextPath(field(form, "next")));
 }
 
 /** Starts Google OAuth; Google sends the user back to /auth/confirm. */

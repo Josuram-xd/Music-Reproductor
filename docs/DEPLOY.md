@@ -40,6 +40,7 @@ Y en **Authentication → URL Configuration**:
 
 - Site URL: `https://purrlist-ten.vercel.app`
 - Redirect URLs: `https://purrlist-ten.vercel.app/**`, `https://*-josuram.vercel.app/**` (previews), `http://localhost:3000/**` y `http://127.0.0.1:3000/**` (desarrollo local; para Spotify abre la app con `127.0.0.1`).
+- La recuperación de contraseña usa Supabase Auth y redirige a `/auth/confirm?flow=recovery`; conserva la plantilla de correo de recuperación de Supabase o asegúrate de que use el `redirect_to` solicitado por la app.
 
 ## 3. Integraciones
 

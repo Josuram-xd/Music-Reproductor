@@ -20,6 +20,7 @@ describe("loginReasonMessage", () => {
     expect(loginReasonMessage("expired")).toMatch(/caducó/);
     expect(loginReasonMessage("signed-out")).toMatch(/cerrada/);
     expect(loginReasonMessage("confirm-failed")).toMatch(/enlace/);
+    expect(loginReasonMessage("recovery-failed")).toMatch(/contraseña/);
   });
 
   test("ignores unknown or missing reasons", () => {

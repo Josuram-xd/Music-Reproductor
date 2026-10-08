@@ -28,11 +28,20 @@ export async function GET(request: NextRequest) {
 
   if (!userId) {
     const oauth = params.get("flow") === "oauth" || params.has("error");
-    const reason = oauth ? "oauth-failed" : "confirm-failed";
+    const reason =
+      params.get("flow") === "recovery"
+        ? "recovery-failed"
+        : oauth
+          ? "oauth-failed"
+          : "confirm-failed";
     return NextResponse.redirect(new URL(`${LOGIN_PATH}?reason=${reason}`, request.url));
   }
 
-  const response = NextResponse.redirect(new URL(safeNextPath(params.get("next")), request.url));
+  const recovery = params.get("flow") === "recovery";
+  const destination = recovery
+    ? `/reset-password?next=${encodeURIComponent(safeNextPath(params.get("next")))}`
+    : safeNextPath(params.get("next"));
+  const response = NextResponse.redirect(new URL(destination, request.url));
   response.cookies.set(await lastSeenCookie(userId));
   return response;
 }

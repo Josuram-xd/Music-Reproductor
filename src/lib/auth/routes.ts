@@ -1,5 +1,6 @@
 export const LOGIN_PATH = "/login";
 export const REGISTER_PATH = "/register";
+export const FORGOT_PASSWORD_PATH = "/forgot-password";
 /** Home screen; `/` redirects here (next.config.ts). */
 export const HOME_PATH = "/library";
 /** Where the browser lands after "Cerrar sesión" (a full page load). */
@@ -14,7 +15,7 @@ export const SIGNED_OUT_PATH = `${LOGIN_PATH}?reason=signed-out`;
  */
 export type RouteAccess = "guest" | "public" | "api" | "protected";
 
-const GUEST_PATHS = [LOGIN_PATH, REGISTER_PATH];
+const GUEST_PATHS = [LOGIN_PATH, REGISTER_PATH, FORGOT_PASSWORD_PATH];
 const PUBLIC_PREFIXES = ["/auth/"];
 
 const matches = (pathname: string, path: string) =>

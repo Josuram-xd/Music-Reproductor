@@ -4,7 +4,7 @@ export const PASSWORD_MIN_LENGTH = 8;
 export const USERNAME_MIN_LENGTH = 3;
 export const USERNAME_MAX_LENGTH = 30;
 
-export type Field = "email" | "password" | "username";
+export type Field = "email" | "password" | "confirmPassword" | "username";
 export type FieldErrors = Partial<Record<Field, string>>;
 
 export interface Credentials {
@@ -14,6 +14,10 @@ export interface Credentials {
 
 export interface Registration extends Credentials {
   username: string;
+}
+
+export interface NewPassword {
+  password: string;
 }
 
 export type ValidationResult<T> = { ok: true; data: T } | { ok: false; errors: FieldErrors };
@@ -43,6 +47,31 @@ export function parseCredentials(form: FormData): ValidationResult<Credentials> 
   return Object.keys(errors).length > 0
     ? { ok: false, errors }
     : { ok: true, data: { email, password } };
+}
+
+export function parseEmail(form: FormData): ValidationResult<{ email: string }> {
+  const email = text(form, "email").trim().toLowerCase();
+  const error = emailError(email);
+  return error ? { ok: false, errors: { email: error } } : { ok: true, data: { email } };
+}
+
+export function parseNewPassword(form: FormData): ValidationResult<NewPassword> {
+  const password = text(form, "password");
+  const confirmPassword = text(form, "confirmPassword");
+  const errors: FieldErrors = {};
+
+  if (password.length < PASSWORD_MIN_LENGTH) {
+    errors.password = `La contraseña necesita al menos ${PASSWORD_MIN_LENGTH} caracteres`;
+  } else if (!/[A-Za-z]/.test(password) || !/\d/.test(password)) {
+    errors.password = "Usa letras y números en la contraseña";
+  }
+  if (!confirmPassword) {
+    errors.confirmPassword = "Confirma tu nueva contraseña";
+  } else if (password !== confirmPassword) {
+    errors.confirmPassword = "Las contraseñas no coinciden";
+  }
+
+  return Object.keys(errors).length > 0 ? { ok: false, errors } : { ok: true, data: { password } };
 }
 
 export function parseRegistration(form: FormData): ValidationResult<Registration> {

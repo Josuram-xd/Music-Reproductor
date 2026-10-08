@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { parseCredentials, parseRegistration } from "./validation";
+import { parseCredentials, parseEmail, parseNewPassword, parseRegistration } from "./validation";
 
 const form = (fields: Record<string, string>) => {
   const data = new FormData();
@@ -71,5 +71,44 @@ describe("parseRegistration", () => {
       "password",
       "username",
     ]);
+  });
+});
+
+describe("parseEmail", () => {
+  test("accepts and normalizes a valid email", () => {
+    expect(parseEmail(form({ email: "  Neko@Mail.COM " }))).toEqual({
+      ok: true,
+      data: { email: "neko@mail.com" },
+    });
+  });
+
+  test("rejects missing and invalid email addresses", () => {
+    expect(parseEmail(form({}))).toMatchObject({
+      ok: false,
+      errors: { email: expect.any(String) },
+    });
+    expect(parseEmail(form({ email: "not-an-email" }))).toMatchObject({
+      ok: false,
+      errors: { email: expect.any(String) },
+    });
+  });
+});
+
+describe("parseNewPassword", () => {
+  test("accepts a matching password that meets the account policy", () => {
+    expect(parseNewPassword(form({ password: "purr1234", confirmPassword: "purr1234" }))).toEqual({
+      ok: true,
+      data: { password: "purr1234" },
+    });
+  });
+
+  test("rejects weak passwords and mismatches", () => {
+    expect(parseNewPassword(form({ password: "short", confirmPassword: "short" }))).toMatchObject({
+      ok: false,
+      errors: { password: expect.any(String) },
+    });
+    expect(
+      parseNewPassword(form({ password: "purr1234", confirmPassword: "purr1235" })),
+    ).toMatchObject({ ok: false, errors: { confirmPassword: expect.any(String) } });
   });
 });
