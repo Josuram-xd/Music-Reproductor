@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { DropPreferenceSetting } from "@/components/queue/drop-preference-setting";
+import { FloatingPlayerSetting } from "@/components/settings/floating-player-setting";
 import { SpotifySetting } from "@/components/settings/spotify-setting";
 import { YouTubeKeySetting } from "@/components/settings/youtube-key-setting";
 import { PageHeader } from "@/components/ui/page-header";
@@ -13,6 +14,13 @@ export default function SettingsPage() {
     <>
       <PageHeader title="Ajustes">Tu cola, tus integraciones y tus preferencias 🐾</PageHeader>
       <div className="flex flex-col gap-8 px-4 py-4 @tablet:px-8">
+        <section aria-labelledby="settings-player" className="flex max-w-xl flex-col gap-3">
+          <h2 id="settings-player" className="font-display text-xl font-semibold">
+            Reproductor
+          </h2>
+          <FloatingPlayerSetting />
+        </section>
+
         <section aria-labelledby="settings-queue" className="flex max-w-xl flex-col gap-3">
           <h2 id="settings-queue" className="font-display text-xl font-semibold">
             Cola

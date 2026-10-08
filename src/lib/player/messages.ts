@@ -59,3 +59,8 @@ export const DROP_MESSAGES = {
   },
   remembered: "Vale, no volveré a preguntar en esta sesión. Puedes reactivarlo en Ajustes 🐾",
 } as const;
+
+export const FLOATING_MESSAGES = {
+  closed: "Mini-reproductor oculto. Puedes volver a activarlo en Ajustes 🐾",
+  pipFailed: "No se pudo sacar el reproductor de la ventana",
+} as const;

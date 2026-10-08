@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { PlayerBar } from "@/components/player/player-bar";
+import { PlayerChrome } from "@/components/player/player-chrome";
 import { PlayerHost } from "@/components/player/player-host";
 import { QueueSync } from "@/components/player/queue-sync";
 import { YouTubeDock } from "@/components/player/youtube-dock";
@@ -64,7 +64,10 @@ export function AppShell({ children, userMenu, playlists }: AppShellProps) {
           </aside>
 
           <div className="flex min-w-0 flex-1 flex-col">
-            <header className="box-content flex h-14 shrink-0 items-center justify-between gap-2 border-b border-surface-2 px-4 pt-[env(safe-area-inset-top)]">
+            <header
+              data-floating-avoid="top"
+              className="box-content flex h-14 shrink-0 items-center justify-between gap-2 border-b border-surface-2 px-4 pt-[env(safe-area-inset-top)]"
+            >
               <div className="@tablet:hidden">
                 <Logo />
               </div>
@@ -80,10 +83,11 @@ export function AppShell({ children, userMenu, playlists }: AppShellProps) {
               {children}
             </main>
 
-            <PlayerBar />
+            <PlayerChrome />
 
             <nav
               aria-label="Principal"
+              data-floating-avoid="bottom"
               className="flex shrink-0 border-t border-surface-2 bg-surface pb-[env(safe-area-inset-bottom)] @tablet:hidden"
             >
               <NavLink href="/library" variant="tab" />
@@ -98,6 +102,7 @@ export function AppShell({ children, userMenu, playlists }: AppShellProps) {
             aria-label="Cola"
             // Clips the docked YouTube video when the queue column scrolls.
             data-youtube-clip=""
+            data-floating-avoid="right"
             className="hidden w-80 shrink-0 overflow-y-auto border-l border-surface-2 bg-surface @desktop:block"
           >
             <QueuePanel />
