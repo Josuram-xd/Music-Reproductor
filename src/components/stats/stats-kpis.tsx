@@ -132,9 +132,7 @@ export function StatsKpis() {
         label="Racha"
         value={formatDays(summary.streakDays)}
         detail={
-          summary.streakDays > 0
-            ? "Seguidos escuchando música 🐾"
-            : "Escucha algo hoy y empieza una"
+          summary.streakDays > 0 ? "Seguidos escuchando música" : "Escucha algo hoy y empieza una"
         }
       />
     </ul>

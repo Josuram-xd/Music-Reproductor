@@ -160,7 +160,7 @@ export function LibraryView({
             list={suggestionsId}
             placeholder="Buscar canciones, artistas o carpetas…"
             autoComplete="off"
-            className="h-11 w-full rounded-2xl border border-transparent bg-surface-2 pr-4 pl-10 text-text outline-none placeholder:text-muted/70 focus:border-secondary focus:ring-2 focus:ring-secondary/40"
+            className="h-11 w-full rounded-2xl border border-transparent bg-surface-2 pr-4 pl-10 text-text outline-none placeholder:text-muted focus:border-secondary focus:ring-2 focus:ring-secondary/40"
           />
           <datalist id={suggestionsId}>
             {suggestions.map((s) => (

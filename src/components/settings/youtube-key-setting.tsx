@@ -88,7 +88,7 @@ export function YouTubeKeySetting({ integration }: { integration: YouTubeIntegra
               <ExternalLink aria-hidden className="size-3.5" />
             </a>
           </div>
-          <p className="text-xs text-muted/80">
+          <p className="text-xs text-muted">
             Se comprueba con Google y se guarda cifrada; nunca vuelve a tu navegador.
           </p>
         </form>

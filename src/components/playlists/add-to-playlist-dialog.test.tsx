@@ -40,7 +40,7 @@ describe("AddToPlaylistDialog", () => {
     fireEvent.click(screen.getByRole("button", { name: "Siesta" }));
     await waitFor(() => expect(onClose).toHaveBeenCalled());
     expect(actions.addToPlaylist).toHaveBeenCalledWith("p2", ["t1"]);
-    expect(messages()).toEqual(["Canción añadida a «Siesta» 🐾"]);
+    expect(messages()).toEqual(["Canción añadida a «Siesta»"]);
   });
 
   test("says when the track was already there", async () => {

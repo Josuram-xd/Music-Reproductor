@@ -1,6 +1,6 @@
-# Purrlist — Diseño "Dark Kawaii Neko"
+# Purrlist — Diseño "Pixel Neko"
 
-Solo tema oscuro. Tierno pero no infantil: noche violeta, acentos pastel, detalles de gato pequeños.
+Solo tema oscuro. Tierno pero no infantil: noche violeta, acentos pastel y **pixel art**: gatitos, huellitas, destellos y notas dibujados píxel a píxel. **Sin emojis** en la interfaz: todo lo decorativo son sprites propios.
 
 ## Paleta (tokens CSS)
 
@@ -18,16 +18,32 @@ Solo tema oscuro. Tierno pero no infantil: noche violeta, acentos pastel, detall
 
 ## Tipografía
 
-- Títulos: **Fredoka** (redondeada). Texto: **Nunito**. Ambas de Google Fonts.
+- Títulos, botones y etiquetas: **Pixelify Sans** (pixel). Texto corrido: **Nunito**, para que se lea bien. Ambas de Google Fonts (`next/font`).
 
-## Motivos neko
+## Estilo pixel
 
-- Orejitas de gato sobre la carátula de "Ahora suena"; parpadean al pausar.
-- Thumb de la barra de progreso = huellita 🐾; la barra es la "cola" del gato.
-- Estados vacíos con gato dormido (SVG); al cargar, gato persiguiendo un ovillo.
-- Toasts con microcopy: "¡Nya~! Canción añadida", "Es la primera canción, no hay vuelta atrás 🐾".
-- Bordes muy redondeados (16–24 px), sombras con glow rosa suave.
-- `prefers-reduced-motion` desactiva animaciones.
+- **Esquinas rectas**: todos los `rounded-*` valen 0 (tokens en `globals.css`).
+- **Sombras duras** sin desenfoque: `shadow-pixel` (4 px), `shadow-pixel-sm` (2 px) y `shadow-pixel-primary` (botón principal). Los botones se "hunden" al pulsarlos (se mueven y pierden la sombra).
+- Marcos de 2 px (`border-2 border-surface-2`) en modales, toasts y tarjetas elevadas.
+- Fondo con estrellitas de 2 px repetidas (`--starfield`).
+- Animaciones con `steps()` (a saltos, como un sprite), nunca suaves.
+
+## Sprites (`src/components/ui/pixel`)
+
+- Cada sprite es una cuadrícula de caracteres; cada carácter es un píxel de un color del tema (`PIXEL_PALETTE`). `PixelSprite` lo dibuja como SVG nítido (`shape-rendering: crispEdges`).
+- Gatos: cara (logo), dormido (estados vacíos, con "z" flotando), triste (sesión caducada), corriendo tras un ovillo (cargando) y orejitas sobre "Ahora suena" y el mini‑reproductor.
+- Decoración: huellita, corazón, destello que titila y nota musical. Iconos de los toasts: huellita (info), corazón (éxito), "!" (aviso) y "x" (error).
+- Slider de progreso y volumen = pista pixel rellena hasta el valor (`--progress`) con thumb de **huellita pixel** (`.paw-slider`).
+- Microcopy con tono neko ("¡Nya~! Canción añadida"), sin emojis.
+
+## Accesibilidad
+
+- Contraste AA (≥ 4,5:1) en todos los pares de texto/fondo; sin textos atenuados por opacidad.
+- Foco visible siempre: anillo de los componentes o, si falta, contorno discontinuo menta.
+- `prefers-reduced-motion`: sin animaciones ni transiciones.
+- Táctil: cada botón tiene un área de toque de al menos 44 × 44 px (un `::after` invisible que no cambia el layout).
+- Los sprites decorativos llevan `aria-hidden`; los que informan tienen nombre accesible. El mapa de calor tiene tabla alternativa.
+- QA en Playwright en 3 tamaños (móvil 390 px, pantalla dividida 800 px, escritorio 1440 px).
 
 ## Layout responsive (por ancho de ventana, vía container queries)
 
@@ -38,12 +54,12 @@ Solo tema oscuro. Tierno pero no infantil: noche violeta, acentos pastel, detall
 
 ## Mini‑reproductor flotante
 
-- Tarjeta redondeada (radio 20 px) con orejitas de gato en la esquina, carátula, título, tiempo y ⏮ ⏯ ⏭.
+- Tarjeta pixel (marco de 2 px y sombra dura) con orejitas pixel en la esquina, carátula, título, tiempo y anterior / reproducir / siguiente.
 - 50 % de opacidad en reposo → 100 % con hover / foco / toque; `backdrop-filter: blur` para que se lea encima de cualquier fondo.
 - En móvil se reduce a una "píldora" con carátula + ⏯ que se expande al tocarla.
-- Asa de arrastre con huellita; ✕ para ocultarlo; ⧉ para sacarlo de la ventana (Document PiP).
+- Asa de arrastre con huellita; botón de cerrar para ocultarlo; botón para sacarlo de la ventana (Document PiP).
 
 ## Estadísticas
 
 - Tarjetas de KPI (tiempo escuchado, tiempo de uso, sesión actual, racha) con iconos de gato.
-- Top canciones / artistas como lista con barras rosas; mapa de calor día × hora en la escala lavanda → rosa.
+- Top canciones / artistas como lista con barras rosas; mapa de calor día × hora en la escala lavanda → rosa, con celdas cuadradas.

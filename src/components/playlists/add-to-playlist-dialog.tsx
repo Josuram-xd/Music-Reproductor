@@ -50,7 +50,7 @@ export function AddToPlaylistDialog({ track, playlists, onClose }: AddToPlaylist
         onClick={(event) => {
           if (event.target === event.currentTarget) close();
         }}
-        className="m-auto w-[min(26rem,calc(100vw-2rem))] rounded-3xl bg-surface p-0 text-text shadow-[0_0_40px_-12px_var(--primary)] backdrop:bg-bg/60 backdrop:backdrop-blur-sm"
+        className="m-auto w-[min(26rem,calc(100vw-2rem))] rounded-3xl border-2 border-surface-2 bg-surface p-0 text-text shadow-pixel backdrop:bg-bg/60 backdrop:backdrop-blur-sm"
       >
         {track ? (
           <div className="flex flex-col gap-4 p-5">

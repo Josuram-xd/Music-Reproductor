@@ -163,7 +163,7 @@ export function PlaylistView({ playlist: initial }: { playlist: PlaylistDetail }
       {tracks.length === 0 ? (
         <EmptyState title="Esta playlist está vacía">
           Ve a tu biblioteca y usa «Añadir a…» en una canción, o arrástrala a esta playlist en la
-          barra lateral 🐾
+          barra lateral
         </EmptyState>
       ) : (
         <DndContext
@@ -238,7 +238,7 @@ function PlaylistRow({
       ref={setNodeRef}
       style={{ transform: CSS.Translate.toString(transform), transition }}
       className={`group relative flex items-center gap-1 rounded-2xl transition-colors hover:bg-surface ${
-        isDragging ? "z-10 bg-surface-2 shadow-[0_0_24px_-6px_var(--primary)]" : ""
+        isDragging ? "z-10 bg-surface-2 shadow-pixel-primary" : ""
       } ${isCurrent ? "bg-primary/10" : ""}`}
     >
       <button

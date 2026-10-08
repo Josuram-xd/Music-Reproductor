@@ -8,7 +8,7 @@ export function youtubeSearchErrorMessage(code: string): string {
     case "quota_exhausted":
       return "Se acabó la cuota de búsquedas de YouTube de hoy. Añade tu propia API key en Ajustes y sigue buscando, nya~";
     case "no_key":
-      return "YouTube no está configurado. Añade tu propia API key en Ajustes 🐾";
+      return "YouTube no está configurado. Añade tu propia API key en Ajustes";
     case "unauthorized":
       return "Tu sesión caducó. Vuelve a entrar";
     default:

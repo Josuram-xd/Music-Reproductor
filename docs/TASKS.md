@@ -110,12 +110,12 @@ Cada épica puede ser uno o varios commits (los hace el humano). `[ ]` pendiente
 - [x] Mapa de calor día × hora, más saltadas, tiempo por fuente
 - [x] "Borrar mi historial"
 
-## E11 · Diseño kawaii
+## E11 · Diseño kawaii (pixel art)
 
-- [ ] Tokens, fuentes, componentes base (Button, Modal, Toast, Slider huellita)
-- [ ] Ilustraciones SVG de gatos (vacíos, carga, orejitas)
-- [ ] QA responsive (móvil, pantalla dividida, escritorio) con Playwright en 3 viewports
-- [ ] Accesibilidad (foco, contraste, reduced motion, táctil ≥ 44 px)
+- [x] Tokens, fuentes, componentes base (Button, Modal, Toast, Slider huellita)
+- [x] Ilustraciones SVG de gatos (vacíos, carga, orejitas)
+- [x] QA responsive (móvil, pantalla dividida, escritorio) con Playwright en 3 viewports
+- [x] Accesibilidad (foco, contraste, reduced motion, táctil ≥ 44 px)
 
 ## E12 · Deploy
 

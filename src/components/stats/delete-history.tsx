@@ -28,7 +28,7 @@ export function DeleteHistory({ onDeleted }: { onDeleted: () => void }) {
         toast("No se pudo borrar tu historial. Inténtalo otra vez", { tone: "error" });
         return;
       }
-      toast("Historial borrado. Empezamos de cero, nya~ 🐾", { tone: "success" });
+      toast("Historial borrado. Empezamos de cero, nya~", { tone: "success" });
       onDeleted();
     });
   };
@@ -51,7 +51,7 @@ export function DeleteHistory({ onDeleted }: { onDeleted: () => void }) {
         onClick={(event) => {
           if (event.target === event.currentTarget) setOpen(false);
         }}
-        className="m-auto w-[min(26rem,calc(100vw-2rem))] rounded-3xl bg-surface p-0 text-text shadow-[0_0_40px_-12px_var(--primary)] backdrop:bg-bg/60 backdrop:backdrop-blur-sm"
+        className="m-auto w-[min(26rem,calc(100vw-2rem))] rounded-3xl border-2 border-surface-2 bg-surface p-0 text-text shadow-pixel backdrop:bg-bg/60 backdrop:backdrop-blur-sm"
       >
         {open ? (
           <div className="flex flex-col gap-4 p-5">

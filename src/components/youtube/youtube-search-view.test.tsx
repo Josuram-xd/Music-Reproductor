@@ -88,7 +88,7 @@ describe("YouTubeSearchView", () => {
     });
     expect(actions.saveYouTubeVideo).toHaveBeenCalledWith(result, "f1");
     await waitFor(() =>
-      expect(useToastStore.getState().toasts[0]?.message).toBe("¡Nya~! Guardado en «Gatitos» 🐾"),
+      expect(useToastStore.getState().toasts[0]?.message).toBe("¡Nya~! Guardado en «Gatitos»"),
     );
   });
 

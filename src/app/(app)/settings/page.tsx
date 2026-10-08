@@ -13,7 +13,7 @@ export const metadata: Metadata = { title: "Ajustes · Purrlist" };
 export default function SettingsPage() {
   return (
     <>
-      <PageHeader title="Ajustes">Tu cola, tus integraciones y tus preferencias 🐾</PageHeader>
+      <PageHeader title="Ajustes">Tu cola, tus integraciones y tus preferencias</PageHeader>
       <div className="flex flex-col gap-8 px-4 py-4 @tablet:px-8">
         <section aria-labelledby="settings-player" className="flex max-w-xl flex-col gap-3">
           <h2 id="settings-player" className="font-display text-xl font-semibold">

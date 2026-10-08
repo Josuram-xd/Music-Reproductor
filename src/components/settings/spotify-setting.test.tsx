@@ -93,7 +93,7 @@ describe("SpotifySetting", () => {
   test("tells how the OAuth round trip went and cleans the URL", () => {
     navigation.params = new URLSearchParams("spotify=connected");
     render(<SpotifySetting integration={integration({ connected: true })} />);
-    expect(messages()).toEqual(["¡Nya~! Spotify conectado 🎧"]);
+    expect(messages()).toEqual(["¡Nya~! Spotify conectado"]);
     expect(navigation.replace).toHaveBeenCalledWith("/settings", { scroll: false });
   });
 });

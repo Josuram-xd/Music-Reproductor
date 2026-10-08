@@ -39,11 +39,13 @@ import {
 } from "@/lib/player/floating-position";
 import { formatTime } from "@/lib/player/format";
 import { FLOATING_MESSAGES } from "@/lib/player/messages";
+import { progressStyle } from "@/lib/player/progress";
 import { player, usePlayerStore } from "@/stores/player-store";
 import { settings, useSettingsStore } from "@/stores/settings-store";
 import { toast } from "@/stores/toast-store";
 import { MiniPlayerPill, useNarrow } from "./floating-pill";
 import { useTouchAwake } from "./use-touch-awake";
+import { PixelEars } from "@/components/ui/pixel/pixel";
 
 function RoundButton({
   label,
@@ -67,22 +69,12 @@ function RoundButton({
       disabled={disabled}
       className={`flex shrink-0 items-center justify-center rounded-full transition focus-visible:ring-2 focus-visible:ring-secondary focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-40 ${
         big
-          ? "size-11 bg-primary text-bg shadow-[0_0_20px_-6px_var(--primary)] hover:brightness-110"
+          ? "size-11 bg-primary text-bg shadow-pixel-primary hover:brightness-110"
           : "size-10 text-muted hover:bg-surface-2 hover:text-text"
       }`}
     >
       {children}
     </button>
-  );
-}
-
-/** Two little triangles on the top-left corner (docs/DESIGN.md). */
-function CatEars() {
-  return (
-    <span aria-hidden className="pointer-events-none absolute -top-2 left-4 flex gap-5">
-      <span className="size-0 border-x-[7px] border-b-[10px] border-x-transparent border-b-primary/80" />
-      <span className="size-0 border-x-[7px] border-b-[10px] border-x-transparent border-b-primary/80" />
-    </span>
   );
 }
 
@@ -116,7 +108,7 @@ export function MiniPlayerContent() {
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm font-semibold">{current?.title ?? "Nada sonando, nya~"}</p>
           <p className="truncate text-xs text-muted">
-            {current ? (current.artist ?? "Artista desconocido") : "Elige una canción 🐾"}
+            {current ? (current.artist ?? "Artista desconocido") : "Elige una canción"}
           </p>
         </div>
       </div>
@@ -130,9 +122,10 @@ export function MiniPlayerContent() {
           max={duration || 1}
           step={0.1}
           value={Math.min(time, duration || 1)}
+          style={progressStyle(time, duration)}
           disabled={!current || duration === 0}
           onChange={(event) => player.seek(Number(event.target.value))}
-          className="h-1 flex-1 cursor-pointer accent-primary disabled:cursor-not-allowed"
+          className="paw-slider flex-1"
         />
         <span>
           {formatTime(time)} / {formatTime(duration)}
@@ -320,9 +313,9 @@ export function FloatingPlayer() {
       style={
         point ? { left: point.x, top: point.y } : { right: 16, bottom: 16, visibility: "hidden" }
       }
-      className="fixed z-30 w-72 rounded-[20px] border border-surface-2 bg-surface/80 p-3 opacity-50 shadow-[0_8px_32px_-8px_rgb(0_0_0/0.6)] backdrop-blur-md transition-[opacity,left,top] duration-300 focus-within:opacity-100 hover:opacity-100 data-awake:opacity-100 data-compact:w-auto data-compact:rounded-full data-compact:p-1.5 data-dragging:opacity-100 data-dragging:transition-none motion-reduce:transition-none"
+      className="fixed z-30 w-72 border-2 border-surface-2 bg-surface/90 p-3 opacity-50 shadow-pixel backdrop-blur-md transition-[opacity,left,top] duration-300 focus-within:opacity-100 hover:opacity-100 data-awake:opacity-100 data-compact:w-auto data-compact:rounded-full data-compact:p-1.5 data-dragging:opacity-100 data-dragging:transition-none motion-reduce:transition-none"
     >
-      <CatEars />
+      <PixelEars className="absolute -top-3 left-4" />
       <div className={compact ? "flex items-center gap-1" : "-mt-1 mb-1 flex items-center gap-1"}>
         <button
           type="button"

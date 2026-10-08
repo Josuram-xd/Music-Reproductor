@@ -5,6 +5,7 @@ import { PlayerHost } from "@/components/player/player-host";
 import { QueueSync } from "@/components/player/queue-sync";
 import { YouTubeDock } from "@/components/player/youtube-dock";
 import { DropChoiceDialog } from "@/components/queue/drop-choice-dialog";
+import { PixelCat } from "@/components/ui/pixel/pixel";
 import { Toaster } from "@/components/ui/toaster";
 import { NAV_ITEMS } from "./nav-items";
 import { NavLink } from "./nav-link";
@@ -22,7 +23,7 @@ interface AppShellProps {
 function Logo({ compact = false }: { compact?: boolean }) {
   return (
     <span className="flex items-center gap-2 font-display text-2xl font-semibold text-primary">
-      <span aria-hidden>🐱</span>
+      <PixelCat className="w-7 shrink-0" />
       <span className={compact ? "sr-only @desktop:not-sr-only" : ""}>Purrlist</span>
     </span>
   );
@@ -51,7 +52,7 @@ export function AppShell({ children, userMenu, playlists }: AppShellProps) {
             </nav>
             <section aria-label="Carpetas" className="hidden flex-col gap-2 px-2 @desktop:flex">
               <h2 className="text-xs font-semibold tracking-wide text-muted uppercase">Carpetas</h2>
-              <p className="text-sm text-muted/80">Tus carpetas aparecerán aquí 🐾</p>
+              <p className="text-sm text-muted">Tus carpetas aparecerán aquí</p>
             </section>
             <section
               aria-label="Tus playlists"

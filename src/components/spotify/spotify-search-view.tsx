@@ -11,6 +11,7 @@ import { spotifySearchErrorMessage } from "@/lib/spotify/messages";
 import { spotifyResultToTrack } from "@/lib/spotify/tracks";
 import { usePlayerStore } from "@/stores/player-store";
 import { queue } from "@/stores/queue-store";
+import { LoadingCat } from "@/components/ui/pixel/pixel";
 
 type Status =
   | { kind: "idle" }
@@ -81,7 +82,7 @@ export function SpotifySearchView({ premium }: { premium: boolean }) {
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Canciones, artistas, álbumes…"
             autoComplete="off"
-            className="h-11 w-full rounded-2xl border border-transparent bg-surface-2 pr-4 pl-10 text-text outline-none placeholder:text-muted/70 focus:border-secondary focus:ring-2 focus:ring-secondary/40"
+            className="h-11 w-full rounded-2xl border border-transparent bg-surface-2 pr-4 pl-10 text-text outline-none placeholder:text-muted focus:border-secondary focus:ring-2 focus:ring-secondary/40"
           />
         </label>
         <button
@@ -96,14 +97,10 @@ export function SpotifySearchView({ premium }: { premium: boolean }) {
       <div aria-live="polite">
         {status.kind === "idle" ? (
           <EmptyState title="Busca en tu Spotify">
-            Reproduce una canción o añádela a la cola, junto a tus archivos y vídeos 🐾
+            Reproduce una canción o añádela a la cola, junto a tus archivos y vídeos
           </EmptyState>
         ) : status.kind === "loading" ? (
-          <ul className="flex flex-col gap-2" aria-label="Buscando…">
-            {[0, 1, 2, 3].map((i) => (
-              <li key={i} className="h-16 animate-pulse rounded-2xl bg-surface" />
-            ))}
-          </ul>
+          <LoadingCat label="Buscando en Spotify…" />
         ) : status.kind === "error" ? (
           <p role="alert" className="rounded-2xl border border-danger/50 bg-surface p-4 text-sm">
             {status.message}

@@ -58,7 +58,7 @@ export function FolderDialog(props: FolderDialogProps) {
       onClick={(event) => {
         if (event.target === event.currentTarget) onClose();
       }}
-      className="m-auto w-[min(28rem,calc(100vw-2rem))] rounded-3xl bg-surface p-0 text-text shadow-[0_0_40px_-12px_var(--primary)] backdrop:bg-bg/60 backdrop:backdrop-blur-sm"
+      className="m-auto w-[min(28rem,calc(100vw-2rem))] rounded-3xl border-2 border-surface-2 bg-surface p-0 text-text shadow-pixel backdrop:bg-bg/60 backdrop:backdrop-blur-sm"
     >
       {state ? (
         <div className="flex flex-col gap-4 p-5">
@@ -145,7 +145,7 @@ function NameForm({
         maxLength={MAX_FOLDER_NAME}
         autoFocus
         autoComplete="off"
-        placeholder="Mis favoritas 🐾"
+        placeholder="Mis favoritas"
         error={error}
         onChange={(event) => {
           setName(event.target.value);
@@ -262,7 +262,7 @@ function DeleteConfirm({
           : ""}
         ?{" "}
         {tracks > 0
-          ? `${tracks === 1 ? "La canción que tiene vuelve" : `Las ${tracks} canciones que tiene vuelven`} a la biblioteca, no se borra${tracks === 1 ? "" : "n"} 🐾`
+          ? `${tracks === 1 ? "La canción que tiene vuelve" : `Las ${tracks} canciones que tiene vuelven`} a la biblioteca, no se borra${tracks === 1 ? "" : "n"}`
           : "Está vacía."}
       </p>
       <div className="flex justify-end gap-2">

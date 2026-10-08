@@ -33,7 +33,7 @@ function SubmitButton() {
       type="submit"
       disabled={pending}
       aria-busy={pending || undefined}
-      className="inline-flex h-11 w-full items-center justify-center gap-3 rounded-2xl bg-text font-semibold text-bg transition hover:brightness-95 focus-visible:ring-2 focus-visible:ring-secondary focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60"
+      className="inline-flex h-11 w-full items-center justify-center gap-3 border-2 border-bg bg-text font-semibold text-bg shadow-pixel-sm transition-[filter,translate,box-shadow] hover:brightness-95 focus-visible:ring-2 focus-visible:ring-secondary focus-visible:outline-none active:translate-x-[2px] active:translate-y-[2px] active:shadow-none disabled:cursor-not-allowed disabled:opacity-60"
     >
       <GoogleLogo />
       {pending ? "Abriendo Google…" : "Continuar con Google"}
@@ -54,7 +54,10 @@ export function GoogleButton({ next = "" }: { next?: string }) {
 export function OrDivider() {
   return (
     <div className="flex items-center gap-3 text-xs text-muted" role="separator">
-      <span className="h-px flex-1 bg-surface-2" />o<span className="h-px flex-1 bg-surface-2" />
+      {/* A dotted pixel line on each side of the "o". */}
+      <span className="h-0.5 flex-1 bg-[repeating-linear-gradient(90deg,var(--surface-2)_0_4px,transparent_4px_8px)]" />
+      o
+      <span className="h-0.5 flex-1 bg-[repeating-linear-gradient(90deg,var(--surface-2)_0_4px,transparent_4px_8px)]" />
     </div>
   );
 }

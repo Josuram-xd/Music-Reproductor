@@ -19,7 +19,7 @@ export function TextField({ name, label, error, hint, id = name, ...input }: Tex
         name={name}
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy}
-        className="h-11 rounded-2xl border border-transparent bg-surface-2 px-4 text-text transition outline-none placeholder:text-muted/70 focus:border-secondary focus:ring-2 focus:ring-secondary/40 aria-invalid:border-danger"
+        className="h-11 rounded-2xl border border-transparent bg-surface-2 px-4 text-text transition outline-none placeholder:text-muted focus:border-secondary focus:ring-2 focus:ring-secondary/40 aria-invalid:border-danger"
         {...input}
       />
       {error ? (

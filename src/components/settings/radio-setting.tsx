@@ -10,7 +10,7 @@ export function RadioSetting() {
   return (
     <label className="flex cursor-pointer items-center gap-4 rounded-3xl bg-surface p-4 has-disabled:cursor-wait has-disabled:opacity-60">
       <span className="min-w-0 flex-1">
-        <span className="block font-semibold">Radio neko 🐾</span>
+        <span className="block font-semibold">Radio neko</span>
         <span className="block text-sm text-muted">
           {enabled
             ? "Cuando quede una canción en la cola, añado 5 recomendaciones según lo que escuchas."

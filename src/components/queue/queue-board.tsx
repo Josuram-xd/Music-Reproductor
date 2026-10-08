@@ -28,6 +28,7 @@ import { GripVertical, ThumbsDown, X } from "lucide-react";
 import { type ReactNode, useId, useMemo } from "react";
 import { NowPlayingCard } from "@/components/player/now-playing-card";
 import { EmptyState } from "@/components/ui/empty-state";
+import { PixelPaw } from "@/components/ui/pixel/pixel";
 import { formatTime } from "@/lib/player/format";
 import { RADIO_MESSAGES } from "@/lib/player/messages";
 import type { Track } from "@/lib/player/types";
@@ -201,7 +202,7 @@ function QueueRow({
       style={{ transform: CSS.Translate.toString(transform), transition }}
       {...native.props}
       className={`relative flex items-center gap-1 rounded-2xl bg-surface transition-colors hover:bg-surface-2/60 ${
-        isDragging ? "z-10 bg-surface-2 shadow-[0_0_24px_-6px_var(--primary)]" : ""
+        isDragging ? "z-10 bg-surface-2 shadow-pixel-primary" : ""
       }`}
     >
       {native.edge ? (
@@ -234,7 +235,8 @@ function QueueRow({
           <span className="flex items-center gap-1.5 truncate text-xs text-muted">
             {track.radio ? (
               <span className="shrink-0 rounded-full bg-accent/15 px-1.5 text-[0.65rem] font-semibold text-accent">
-                🐾 {RADIO_MESSAGES.badge}
+                <PixelPaw className="mr-1 inline-block w-2.5 align-[-1px]" color="var(--accent)" />
+                {RADIO_MESSAGES.badge}
               </span>
             ) : null}
             <span className="truncate">{track.artist ?? "Artista desconocido"}</span>
@@ -284,11 +286,11 @@ function EmptyQueueDropZone({ hasCurrent }: { hasCurrent: boolean }) {
     >
       {hasCurrent ? (
         <p className="px-4 py-8 text-center text-sm text-muted">
-          No hay nada a continuación. Arrastra canciones de tu biblioteca aquí 🐾
+          No hay nada a continuación. Arrastra canciones de tu biblioteca aquí
         </p>
       ) : (
         <EmptyState title="La cola está vacía">
-          Arrastra canciones de tu biblioteca aquí y aparecerán en la cola 🐾
+          Arrastra canciones de tu biblioteca aquí y aparecerán en la cola
         </EmptyState>
       )}
     </div>

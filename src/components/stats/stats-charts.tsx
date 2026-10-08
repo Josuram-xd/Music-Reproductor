@@ -129,7 +129,7 @@ export function Heatmap({ grid }: { grid: readonly number[][] }) {
                 <span
                   key={hour}
                   title={`${WEEKDAYS[weekday]} ${hourLabel(hour)} · ${formatDuration(value)}`}
-                  className="h-5 rounded-[3px] transition-transform hover:scale-125"
+                  className="h-5 transition-transform hover:scale-125"
                   style={{ background: cellColor(value / max) }}
                 />
               ))}
@@ -145,11 +145,7 @@ export function Heatmap({ grid }: { grid: readonly number[][] }) {
         <span aria-hidden className="flex items-center gap-1">
           menos
           {[0.1, 0.4, 0.7, 1].map((ratio) => (
-            <span
-              key={ratio}
-              className="size-3 rounded-[3px]"
-              style={{ background: cellColor(ratio) }}
-            />
+            <span key={ratio} className="size-3" style={{ background: cellColor(ratio) }} />
           ))}
           más
         </span>

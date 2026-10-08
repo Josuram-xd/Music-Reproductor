@@ -13,6 +13,6 @@ export function saveVideoErrorMessage(code: string): string {
 }
 
 export const SAVE_VIDEO_MESSAGES = {
-  saved: (folder: string) => `¡Nya~! Guardado en ${folder} 🐾`,
+  saved: (folder: string) => `¡Nya~! Guardado en ${folder}`,
   moved: (folder: string) => `Ya lo tenías: ahora está en ${folder}`,
 } as const;

@@ -19,8 +19,8 @@ export const PLAYLIST_MESSAGES = {
   added: (count: number, name: string) =>
     count === 0
       ? `Ya estaba en «${name}», nya~`
-      : `${count === 1 ? "Canción añadida" : `${count} canciones añadidas`} a «${name}» 🐾`,
-  savedQueue: (name: string) => `Cola guardada como «${name}» 🐾`,
+      : `${count === 1 ? "Canción añadida" : `${count} canciones añadidas`} a «${name}»`,
+  savedQueue: (name: string) => `Cola guardada como «${name}»`,
   emptyQueue: "La cola está vacía: no hay nada que guardar, nya~",
   queued: (count: number) =>
     count === 0

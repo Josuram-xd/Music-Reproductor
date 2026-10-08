@@ -53,7 +53,7 @@ export function PlaylistDialog({ state, onClose, ...actions }: PlaylistDialogPro
       onClick={(event) => {
         if (event.target === event.currentTarget) onClose();
       }}
-      className="m-auto w-[min(28rem,calc(100vw-2rem))] rounded-3xl bg-surface p-0 text-text shadow-[0_0_40px_-12px_var(--primary)] backdrop:bg-bg/60 backdrop:backdrop-blur-sm"
+      className="m-auto w-[min(28rem,calc(100vw-2rem))] rounded-3xl border-2 border-surface-2 bg-surface p-0 text-text shadow-pixel backdrop:bg-bg/60 backdrop:backdrop-blur-sm"
     >
       {state ? (
         <div className="flex flex-col gap-4 p-5">
@@ -74,7 +74,7 @@ export function PlaylistDialog({ state, onClose, ...actions }: PlaylistDialogPro
             <div className="flex flex-col gap-4">
               <p className="text-sm text-muted">
                 ¿Borrar <strong className="text-text">{state.playlist.name}</strong>? Sus canciones
-                se quedan en tu biblioteca, solo desaparece la lista 🐾
+                se quedan en tu biblioteca, solo desaparece la lista
               </p>
               <div className="flex justify-end gap-2">
                 <Button type="button" variant="ghost" onClick={onClose}>
@@ -148,7 +148,7 @@ function NameForm({
         maxLength={MAX_PLAYLIST_NAME}
         autoFocus
         autoComplete="off"
-        placeholder="Para estudiar 🐾"
+        placeholder="Para estudiar"
         error={error}
         onChange={(event) => {
           setName(event.target.value);

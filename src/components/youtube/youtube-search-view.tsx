@@ -16,6 +16,7 @@ import { usePlayerStore } from "@/stores/player-store";
 import { queue } from "@/stores/queue-store";
 import { toast } from "@/stores/toast-store";
 import { SaveToFolderDialog } from "./save-to-folder-dialog";
+import { LoadingCat } from "@/components/ui/pixel/pixel";
 
 export const SEARCH_URL = "/api/youtube/search";
 
@@ -105,7 +106,7 @@ export function YouTubeSearchView({ folders }: { folders: LibraryFolder[] }) {
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Canciones, artistas, directos…"
             autoComplete="off"
-            className="h-11 w-full rounded-2xl border border-transparent bg-surface-2 pr-4 pl-10 text-text outline-none placeholder:text-muted/70 focus:border-secondary focus:ring-2 focus:ring-secondary/40"
+            className="h-11 w-full rounded-2xl border border-transparent bg-surface-2 pr-4 pl-10 text-text outline-none placeholder:text-muted focus:border-secondary focus:ring-2 focus:ring-secondary/40"
           />
         </label>
         <button
@@ -121,14 +122,10 @@ export function YouTubeSearchView({ folders }: { folders: LibraryFolder[] }) {
         {status.kind === "idle" ? (
           <EmptyState title="Busca algo para escuchar">
             Los vídeos se ven en «Ahora suena». Puedes añadirlos a la cola o guardarlos en tus
-            carpetas 🐾
+            carpetas
           </EmptyState>
         ) : status.kind === "loading" ? (
-          <ul className="flex flex-col gap-2" aria-label="Buscando…">
-            {[0, 1, 2, 3].map((i) => (
-              <li key={i} className="h-20 animate-pulse rounded-2xl bg-surface" />
-            ))}
-          </ul>
+          <LoadingCat label="Buscando en YouTube…" />
         ) : status.kind === "error" ? (
           <p role="alert" className="rounded-2xl border border-danger/50 bg-surface p-4 text-sm">
             {status.message}

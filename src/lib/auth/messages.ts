@@ -6,7 +6,7 @@ export function authErrorMessage(code: string | undefined): string {
     case "invalid_credentials":
       return "Correo o contraseña incorrectos, nya~";
     case "email_not_confirmed":
-      return "Aún no confirmas tu correo. Revisa tu bandeja de entrada 📬";
+      return "Aún no confirmas tu correo. Revisa tu bandeja de entrada";
     case "user_already_exists":
     case "email_exists":
       return "Ya existe una cuenta con ese correo. ¿Quieres iniciar sesión?";
@@ -14,7 +14,7 @@ export function authErrorMessage(code: string | undefined): string {
       return "Esa contraseña es muy débil, prueba con una más larga";
     case "over_email_send_rate_limit":
     case "over_request_rate_limit":
-      return "Demasiados intentos. Espera un momento y vuelve a probar 🐾";
+      return "Demasiados intentos. Espera un momento y vuelve a probar";
     case "signup_disabled":
       return "El registro está desactivado ahora mismo";
     default:
@@ -28,11 +28,11 @@ export function loginReasonMessage(reason: string | undefined): string | undefin
     case "expired":
       return "Tu sesión caducó. Vuelve a entrar, nya~";
     case "signed-out":
-      return "Sesión cerrada. ¡Hasta pronto! 🐾";
+      return "Sesión cerrada. ¡Hasta pronto!";
     case "confirm-failed":
       return "El enlace de confirmación no es válido o ya caducó";
     case "oauth-failed":
-      return "No se pudo entrar con Google. Inténtalo otra vez 🐾";
+      return "No se pudo entrar con Google. Inténtalo otra vez";
     default:
       return undefined;
   }

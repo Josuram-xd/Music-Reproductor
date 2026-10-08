@@ -13,7 +13,7 @@ export interface Track {
   externalId?: string | null;
   /** Image to show (signed cover, YouTube thumbnail, album art). */
   coverUrl?: string | null;
-  /** Added by the neko radio (shown with 🐾 "Recomendada"). */
+  /** Added by the neko radio (shown with a pixel paw and "Recomendada"). */
   radio?: boolean;
 }
 

@@ -1,16 +1,19 @@
 "use client";
 
 import { X } from "lucide-react";
+import type { ReactNode } from "react";
 import { type ToastTone, useToastStore } from "@/stores/toast-store";
+import { PixelHeart, PixelPaw, PixelSprite } from "./pixel/pixel";
+import { BANG, CROSS } from "./pixel/sprites";
 
-const TONES: Record<ToastTone, string> = {
-  info: "border-secondary/40",
-  success: "border-accent/50",
-  warn: "border-warn/60",
-  error: "border-danger/60",
+const TONES: Record<ToastTone, { border: string; icon: ReactNode }> = {
+  info: { border: "border-secondary", icon: <PixelPaw className="w-4" color="var(--secondary)" /> },
+  success: { border: "border-accent", icon: <PixelHeart className="w-4" color="var(--accent)" /> },
+  warn: { border: "border-warn", icon: <PixelSprite sprite={BANG} className="w-3" /> },
+  error: { border: "border-danger", icon: <PixelSprite sprite={CROSS} className="w-3" /> },
 };
 
-/** Toast stack, above the player bar and the mobile tab bar. */
+/** Toast stack, above the player bar and the mobile tab bar. Pixel boxes with a tone icon. */
 export function Toaster() {
   const toasts = useToastStore((s) => s.toasts);
   const dismiss = useToastStore((s) => s.dismiss);
@@ -24,8 +27,11 @@ export function Toaster() {
         <div
           key={t.id}
           role={t.tone === "error" ? "alert" : "status"}
-          className={`pointer-events-auto flex max-w-sm items-center gap-2 rounded-2xl border bg-surface py-2 pr-1 pl-4 text-sm shadow-[0_8px_32px_-8px_rgb(0_0_0/0.6)] transition motion-reduce:transition-none starting:translate-y-2 starting:opacity-0 ${TONES[t.tone]}`}
+          className={`pointer-events-auto flex max-w-sm items-center gap-3 border-2 bg-surface py-2 pr-1 pl-3 text-sm shadow-pixel transition motion-reduce:transition-none starting:translate-y-2 starting:opacity-0 ${TONES[t.tone].border}`}
         >
+          <span aria-hidden className="flex w-4 shrink-0 justify-center">
+            {TONES[t.tone].icon}
+          </span>
           <span className="flex-1">{t.message}</span>
           {t.action ? (
             <button
@@ -34,7 +40,7 @@ export function Toaster() {
                 dismiss(t.id);
                 t.action!.run();
               }}
-              className="h-9 shrink-0 rounded-xl px-3 font-semibold text-secondary hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-secondary focus-visible:outline-none"
+              className="h-9 shrink-0 px-3 font-display font-semibold text-secondary hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-secondary focus-visible:outline-none"
             >
               {t.action.label}
             </button>
@@ -43,7 +49,7 @@ export function Toaster() {
             type="button"
             aria-label="Cerrar aviso"
             onClick={() => dismiss(t.id)}
-            className="flex size-9 shrink-0 items-center justify-center rounded-xl text-muted hover:bg-surface-2 hover:text-text"
+            className="flex size-9 shrink-0 items-center justify-center text-muted hover:bg-surface-2 hover:text-text"
           >
             <X aria-hidden className="size-4" />
           </button>

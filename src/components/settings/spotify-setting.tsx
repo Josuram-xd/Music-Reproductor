@@ -176,7 +176,7 @@ function SpotifyGuide({
       if (!result.ok) return setError(spotifySettingErrorMessage(result.error));
       setValue("");
       onSaved();
-      toast("Client ID guardado. Ahora pulsa «Conectar con Spotify» 🐾", { tone: "success" });
+      toast("Client ID guardado. Ahora pulsa «Conectar con Spotify»", { tone: "success" });
     });
   };
 

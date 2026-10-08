@@ -244,7 +244,7 @@ export class SpotifySource implements PlaybackSource {
       (Spotify) =>
         new Promise((resolve, reject) => {
           const player = new Spotify.Player({
-            name: "Purrlist 🐾",
+            name: "Purrlist",
             volume: this.volume,
             getOAuthToken: (cb) => {
               this.options

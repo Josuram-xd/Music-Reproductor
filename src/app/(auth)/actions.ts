@@ -69,7 +69,7 @@ export async function signUp(_prev: AuthFormState, form: FormData): Promise<Auth
   }
 
   return {
-    notice: `¡Casi listo! Te enviamos un correo a ${email} para confirmar tu cuenta, nya~ 📬`,
+    notice: `¡Casi listo! Te enviamos un correo a ${email} para confirmar tu cuenta, nya~`,
   };
 }
 

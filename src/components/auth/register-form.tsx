@@ -71,7 +71,7 @@ export function RegisterForm() {
         />
 
         <Button type="submit" pending={pending} className="mt-2">
-          {pending ? "Creando cuenta…" : "Crear cuenta 🐾"}
+          {pending ? "Creando cuenta…" : "Crear cuenta"}
         </Button>
       </form>
 

@@ -70,7 +70,7 @@ export function PlaylistsView({ playlists: initial }: { playlists: PlaylistSumma
 
       {playlists.length === 0 ? (
         <EmptyState title="Aún no tienes playlists">
-          Crea una y llénala desde tu biblioteca con «Añadir a…» o arrastrando canciones 🐾
+          Crea una y llénala desde tu biblioteca con «Añadir a…» o arrastrando canciones
         </EmptyState>
       ) : (
         <ul className="grid grid-cols-2 gap-4 @tablet:grid-cols-3 @desktop:grid-cols-4">

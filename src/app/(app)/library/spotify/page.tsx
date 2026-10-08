@@ -39,7 +39,7 @@ async function SpotifySearch() {
     return (
       <EmptyState title="Spotify no está conectado">
         <span className="flex flex-col items-center gap-3">
-          Conecta tu cuenta en Ajustes (te guiamos paso a paso) y vuelve aquí 🐾
+          Conecta tu cuenta en Ajustes (te guiamos paso a paso) y vuelve aquí
           <Link
             href="/settings"
             className="inline-flex h-11 items-center rounded-2xl bg-accent px-5 font-display font-semibold text-bg transition hover:brightness-110"

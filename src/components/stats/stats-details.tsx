@@ -13,6 +13,7 @@ import {
 import { browserTimeZone } from "@/lib/stats/format";
 import { DeleteHistory } from "./delete-history";
 import { Heatmap, RankList, SourceBars } from "./stats-charts";
+import { LoadingCat } from "@/components/ui/pixel/pixel";
 
 type Status = { kind: "loading" } | { kind: "error" } | { kind: "done"; details: Details };
 
@@ -105,11 +106,7 @@ export function StatsDetails() {
       </div>
 
       {status.kind === "loading" ? (
-        <div aria-label="Cargando estadísticas" className="grid gap-4 @desktop:grid-cols-3">
-          {[0, 1, 2].map((i) => (
-            <div key={i} className="h-56 animate-pulse rounded-3xl bg-surface" />
-          ))}
-        </div>
+        <LoadingCat label="Contando tus canciones…" />
       ) : status.kind === "error" ? (
         <p role="alert" className="rounded-2xl border border-danger/50 bg-surface p-4 text-sm">
           No se pudieron cargar tus estadísticas. Recarga la página, nya~
@@ -118,10 +115,10 @@ export function StatsDetails() {
         <div aria-live="polite" className="flex flex-col gap-4">
           <div className="grid gap-4 @desktop:grid-cols-3">
             <Panel title="Canciones">
-              <RankList items={status.details.tracks} unit="time" empty="Aún nada por aquí 🐾" />
+              <RankList items={status.details.tracks} unit="time" empty="Aún nada por aquí" />
             </Panel>
             <Panel title="Artistas">
-              <RankList items={status.details.artists} unit="time" empty="Aún nada por aquí 🐾" />
+              <RankList items={status.details.artists} unit="time" empty="Aún nada por aquí" />
             </Panel>
             <Panel title="Carpetas">
               <RankList
@@ -142,7 +139,7 @@ export function StatsDetails() {
               <RankList
                 items={status.details.skipped}
                 unit="skips"
-                empty="No has saltado ninguna, qué buen gusto 🐾"
+                empty="No has saltado ninguna, qué buen gusto"
               />
             </Panel>
           </div>

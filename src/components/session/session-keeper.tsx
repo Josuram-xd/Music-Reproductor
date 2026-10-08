@@ -6,6 +6,7 @@ import { LOGIN_PATH } from "@/lib/auth/routes";
 import { hardNavigate } from "@/lib/browser/navigation";
 import { formatCountdown, graceRemaining, HEARTBEAT_INTERVAL_MS } from "@/lib/session/grace";
 import { createClient } from "@/lib/supabase/client";
+import { PixelCat } from "@/components/ui/pixel/pixel";
 
 export const HEARTBEAT_URL = "/api/session/heartbeat";
 const RETRY_INTERVAL_MS = 5_000;
@@ -109,11 +110,12 @@ export function SessionKeeper({ graceSeconds }: SessionKeeperProps) {
       <div
         role="status"
         aria-live="polite"
-        className="w-full max-w-xs rounded-3xl bg-surface p-6 text-center shadow-[0_0_40px_-12px_var(--secondary)]"
+        className="w-full max-w-xs rounded-3xl border-2 border-surface-2 bg-surface p-6 text-center shadow-pixel"
       >
-        <p aria-hidden className="text-4xl motion-safe:animate-pulse">
-          {status === "expired" ? "😿" : "🐱"}
-        </p>
+        <PixelCat
+          mood={status === "expired" ? "sad" : "sleepy"}
+          className="mx-auto w-16 motion-safe:animate-pulse"
+        />
         {status === "expired" ? (
           <p className="mt-3 font-display text-xl font-semibold">Cerrando sesión…</p>
         ) : (

@@ -42,7 +42,7 @@ export function DropChoiceDialog() {
       onClick={(event) => {
         if (event.target === event.currentTarget) revert();
       }}
-      className="m-auto w-[min(26rem,calc(100vw-2rem))] rounded-3xl bg-surface p-0 text-text shadow-[0_0_40px_-12px_var(--primary)] backdrop:bg-bg/60 backdrop:backdrop-blur-sm"
+      className="m-auto w-[min(26rem,calc(100vw-2rem))] rounded-3xl border-2 border-surface-2 bg-surface p-0 text-text shadow-pixel backdrop:bg-bg/60 backdrop:backdrop-blur-sm"
     >
       {pending ? (
         <div className="flex flex-col gap-4 p-5">
@@ -60,7 +60,7 @@ export function DropChoiceDialog() {
             <ChoiceButton
               onClick={() => choose("playNow")}
               icon={<Play aria-hidden className="size-5" />}
-              title="⚠️ Reproducir ahora"
+              title="Reproducir ahora"
               tone="warn"
             >
               Se corta «{currentTitle}» y empieza la que has soltado.
@@ -68,7 +68,7 @@ export function DropChoiceDialog() {
             <ChoiceButton
               onClick={revert}
               icon={<Undo2 aria-hidden className="size-5" />}
-              title="↩️ Fue un error"
+              title="Fue un error"
               autoFocus
             >
               Vuelve a donde estaba, sin cambios.
@@ -76,7 +76,7 @@ export function DropChoiceDialog() {
             <ChoiceButton
               onClick={() => choose("playNext")}
               icon={<ListStart aria-hidden className="size-5" />}
-              title="⏭️ Ponerla a continuación"
+              title="Ponerla a continuación"
             >
               Sonará justo después de la actual.
             </ChoiceButton>
@@ -91,7 +91,7 @@ export function DropChoiceDialog() {
             />
             <span>
               No volver a preguntar en esta sesión
-              <span className="block text-xs text-muted/80">
+              <span className="block text-xs text-muted">
                 Se aplica a «Reproducir ahora» y «A continuación». Puedes reactivarlo en Ajustes.
               </span>
             </span>

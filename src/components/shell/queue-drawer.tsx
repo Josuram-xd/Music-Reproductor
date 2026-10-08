@@ -76,7 +76,7 @@ export function QueueDrawerProvider({
         onClick={(event) => {
           if (event.target === event.currentTarget) close();
         }}
-        className="fixed inset-x-0 top-auto bottom-0 m-0 max-h-[85dvh] w-full max-w-none rounded-t-3xl bg-surface p-0 text-text shadow-[0_0_40px_-12px_var(--primary)] transition-transform duration-300 backdrop:bg-bg/60 backdrop:backdrop-blur-sm motion-reduce:transition-none @tablet:top-0 @tablet:right-0 @tablet:left-auto @tablet:h-dvh @tablet:max-h-none @tablet:w-96 @tablet:rounded-none @tablet:rounded-l-3xl starting:open:translate-y-full @tablet:starting:open:translate-x-full @tablet:starting:open:translate-y-0"
+        className="fixed inset-x-0 top-auto bottom-0 m-0 max-h-[85dvh] w-full max-w-none rounded-t-3xl border-2 border-surface-2 bg-surface p-0 text-text shadow-pixel transition-transform duration-300 backdrop:bg-bg/60 backdrop:backdrop-blur-sm motion-reduce:transition-none @tablet:top-0 @tablet:right-0 @tablet:left-auto @tablet:h-dvh @tablet:max-h-none @tablet:w-96 @tablet:rounded-none @tablet:rounded-l-3xl starting:open:translate-y-full @tablet:starting:open:translate-x-full @tablet:starting:open:translate-y-0"
       >
         <div className="flex h-full max-h-[85dvh] flex-col pb-[env(safe-area-inset-bottom)] @tablet:max-h-none">
           <div

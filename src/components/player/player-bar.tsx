@@ -16,6 +16,7 @@ import type { ReactNode } from "react";
 import { formatTime } from "@/lib/player/format";
 import { REPEAT_LABELS } from "@/lib/player/messages";
 import { SEEK_STEP_S } from "@/lib/player/player-engine";
+import { progressStyle } from "@/lib/player/progress";
 import { player, usePlayerStore } from "@/stores/player-store";
 
 function IconButton({
@@ -45,7 +46,7 @@ function IconButton({
       disabled={disabled}
       className={`flex shrink-0 items-center justify-center rounded-full transition focus-visible:ring-2 focus-visible:ring-secondary focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-40 ${
         big
-          ? "size-12 bg-primary text-bg shadow-[0_0_24px_-6px_var(--primary)] hover:brightness-110"
+          ? "size-12 bg-primary text-bg shadow-pixel-primary hover:brightness-110"
           : "size-11 text-muted hover:bg-surface-2 hover:text-text aria-pressed:text-primary"
       } ${className}`}
     >
@@ -84,7 +85,7 @@ export function PlayerBar() {
         <div className="min-w-0 flex-1 @desktop:w-60 @desktop:flex-none">
           <p className="truncate text-sm font-semibold">{current?.title ?? "Nada sonando, nya~"}</p>
           <p className="truncate text-xs text-muted">
-            {current ? (current.artist ?? "Artista desconocido") : "Elige una canción 🐾"}
+            {current ? (current.artist ?? "Artista desconocido") : "Elige una canción"}
           </p>
         </div>
 
@@ -149,9 +150,10 @@ export function PlayerBar() {
               max={duration || 1}
               step={0.1}
               value={Math.min(time, duration || 1)}
+              style={progressStyle(time, duration)}
               disabled={!current || duration === 0}
               onChange={(event) => player.seek(Number(event.target.value))}
-              className="h-1.5 flex-1 cursor-pointer accent-primary disabled:cursor-not-allowed"
+              className="paw-slider flex-1"
             />
             <span className="w-10">{formatTime(duration)}</span>
           </div>
@@ -172,8 +174,9 @@ export function PlayerBar() {
             max={1}
             step={0.01}
             value={muted ? 0 : volume}
+            style={progressStyle(muted ? 0 : volume, 1)}
             onChange={(event) => player.setVolume(Number(event.target.value))}
-            className="h-1.5 w-28 cursor-pointer accent-primary"
+            className="paw-slider w-28"
           />
         </div>
       </div>

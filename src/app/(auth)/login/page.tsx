@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "Iniciar sesión · Purrlist" };
 export default function LoginPage({ searchParams }: PageProps<"/login">) {
   return (
     <>
-      <h2 className="mb-5 font-display text-2xl font-semibold">¡Hola de nuevo! 🐾</h2>
+      <h2 className="mb-5 font-display text-2xl font-semibold">¡Hola de nuevo!</h2>
       {/* searchParams is request data, so it streams in (Cache Components). */}
       <Suspense fallback={<LoginForm />}>
         <LoginWithParams searchParams={searchParams} />

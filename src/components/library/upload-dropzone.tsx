@@ -3,6 +3,7 @@
 import { Upload } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useUploadStore } from "@/stores/upload-store";
+import { PixelCat } from "@/components/ui/pixel/pixel";
 
 const hasFiles = (event: DragEvent) => event.dataTransfer?.types.includes("Files") ?? false;
 
@@ -65,7 +66,7 @@ export function UploadDropzone({ folderId = null }: { folderId?: string | null }
         <span className="font-display text-lg font-semibold">Subir música</span>
         <span className="text-sm text-muted">
           Arrastra archivos de audio o vídeo aquí, o pulsa para elegirlos. De los vídeos solo se
-          sube el sonido 🐾
+          sube el sonido
         </span>
       </button>
       <input
@@ -87,8 +88,8 @@ export function UploadDropzone({ folderId = null }: { folderId?: string | null }
           aria-hidden
           className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center bg-bg/70 backdrop-blur-sm"
         >
-          <div className="rounded-3xl border-2 border-dashed border-primary bg-surface px-10 py-8 text-center shadow-[0_0_40px_-12px_var(--primary)]">
-            <p className="text-4xl">🐱</p>
+          <div className="rounded-3xl border-2 border-dashed border-primary border-surface-2 bg-surface px-10 py-8 text-center shadow-pixel">
+            <PixelCat className="mx-auto w-16" />
             <p className="mt-2 font-display text-xl font-semibold">Suelta para subir, nya~</p>
           </div>
         </div>

@@ -51,7 +51,7 @@ export function LoginForm({ next = "", notice }: LoginFormProps) {
         />
 
         <Button type="submit" pending={pending} className="mt-2">
-          {pending ? "Entrando…" : "Entrar 🐾"}
+          {pending ? "Entrando…" : "Entrar"}
         </Button>
       </form>
 

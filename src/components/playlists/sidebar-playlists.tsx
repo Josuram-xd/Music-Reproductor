@@ -11,9 +11,7 @@ import { addTracksToPlaylist } from "./playlist-client";
 /** Desktop sidebar list of playlists; library tracks can be dropped on them. */
 export function SidebarPlaylists({ playlists }: { playlists: PlaylistName[] }) {
   if (playlists.length === 0) {
-    return (
-      <p className="text-sm text-muted/80">Crea una en «Playlists» y arrastra canciones aquí 🐾</p>
-    );
+    return <p className="text-sm text-muted">Crea una en «Playlists» y arrastra canciones aquí</p>;
   }
   return (
     <ul className="flex flex-col gap-0.5">

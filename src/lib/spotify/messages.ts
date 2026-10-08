@@ -3,7 +3,7 @@ import type { SpotifyConnectStatus } from "./config";
 
 /** Result of the OAuth round trip (`/settings?spotify=…`). */
 export const CONNECT_MESSAGES: Record<SpotifyConnectStatus, { text: string; ok: boolean }> = {
-  connected: { text: "¡Nya~! Spotify conectado 🎧", ok: true },
+  connected: { text: "¡Nya~! Spotify conectado", ok: true },
   denied: { text: "Cancelaste la conexión con Spotify", ok: false },
   no_client_id: { text: "Primero pega el Client ID de tu app de Spotify", ok: false },
   state_mismatch: {
@@ -35,7 +35,7 @@ export function spotifySearchErrorMessage(code: string): string {
     case "invalid_query":
       return "Escribe algo para buscar (máximo 100 caracteres)";
     case "not_connected":
-      return "Conecta tu cuenta de Spotify en Ajustes para buscar aquí 🐾";
+      return "Conecta tu cuenta de Spotify en Ajustes para buscar aquí";
     case "reauth":
       return "Spotify pide que vuelvas a conectar tu cuenta en Ajustes";
     case "forbidden":
