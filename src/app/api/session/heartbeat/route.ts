@@ -9,7 +9,7 @@ export interface HeartbeatResponse {
 
 /**
  * Sign of life sent by the client every 30 s. Renews the signed
- * `pl_last_seen` cookie. The proxy has already rejected expired sessions
+ * `pl_last_seen` cookie and the usage session (`app_sessions`). The proxy has already rejected expired sessions
  * with a 401 before this runs.
  */
 export async function POST() {
@@ -19,6 +19,13 @@ export async function POST() {
   if (!userId) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
+
+  // Usage time for "Mis stats": extends the open app session (or opens one).
+  // A failure here must never end the user's session.
+  await supabase.rpc("touch_app_session").then(
+    () => undefined,
+    () => undefined,
+  );
 
   const now = Date.now();
   const body: HeartbeatResponse = { lastSeen: now, graceSeconds: sessionConfig().graceSeconds };
