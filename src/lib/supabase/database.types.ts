@@ -56,6 +56,27 @@ export type QueueStateRow = {
   updated_at: string;
 };
 
+export type YouTubeSearchCacheRow = {
+  query: string;
+  /** `YouTubeResult[]` (src/lib/youtube/types.ts). */
+  results: unknown;
+  fetched_at: string;
+};
+
+export type IntegrationProvider = "youtube" | "spotify";
+
+export type UserIntegrationRow = {
+  owner_id: string;
+  provider: IntegrationProvider;
+  client_id: string | null;
+  secret_enc: string | null;
+  refresh_token_enc: string | null;
+  expires_at: string | null;
+  secret_hint: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
 export interface Database {
   public: {
     Tables: {
@@ -99,6 +120,20 @@ export interface Database {
         Row: PlaylistItemRow;
         Insert: Pick<PlaylistItemRow, "playlist_id" | "track_id" | "rank">;
         Update: Partial<Pick<PlaylistItemRow, "rank">>;
+        Relationships: [];
+      };
+      yt_search_cache: {
+        Row: YouTubeSearchCacheRow;
+        Insert: Pick<YouTubeSearchCacheRow, "query" | "results"> &
+          Partial<Pick<YouTubeSearchCacheRow, "fetched_at">>;
+        Update: Partial<Pick<YouTubeSearchCacheRow, "results" | "fetched_at">>;
+        Relationships: [];
+      };
+      user_integrations: {
+        Row: UserIntegrationRow;
+        Insert: Pick<UserIntegrationRow, "provider"> &
+          Partial<Omit<UserIntegrationRow, "provider" | "created_at">>;
+        Update: Partial<Omit<UserIntegrationRow, "owner_id" | "provider" | "created_at">>;
         Relationships: [];
       };
       queue_state: {
