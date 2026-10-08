@@ -8,7 +8,9 @@ export function folderErrorMessage(code: string): string {
     case "cycle":
       return "Una carpeta no puede ir dentro de sí misma, nya~";
     case "not_found":
-      return "Esa carpeta ya no existe. Recarga la página";
+      return "Ese elemento ya no existe. Recarga la página";
+    case "storage_cleanup_failed":
+      return "La canción se borró de la biblioteca, pero no se pudo liberar su archivo guardado";
     case "unauthorized":
       return "Tu sesión caducó. Vuelve a entrar";
     default:

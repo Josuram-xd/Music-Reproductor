@@ -249,27 +249,25 @@ function QueueRow({
         ) : null}
       </button>
       {track.radio ? (
-        <>
-          <button
-            type="button"
-            onClick={() => void radio.dislike(track)}
-            aria-label={`No me gusta: ${track.artist ?? track.title}`}
-            title="No me gusta (menos de este artista)"
-            className="flex size-9 shrink-0 items-center justify-center rounded-xl text-muted hover:bg-surface-2 hover:text-danger focus-visible:ring-2 focus-visible:ring-secondary focus-visible:outline-none"
-          >
-            <ThumbsDown aria-hidden className="size-4" />
-          </button>
-          <button
-            type="button"
-            onClick={() => queue.remove([track.id])}
-            aria-label={`Quitar ${track.title} de la cola`}
-            title="Quitar de la cola"
-            className="mr-1 flex size-9 shrink-0 items-center justify-center rounded-xl text-muted hover:bg-surface-2 hover:text-text focus-visible:ring-2 focus-visible:ring-secondary focus-visible:outline-none"
-          >
-            <X aria-hidden className="size-4" />
-          </button>
-        </>
+        <button
+          type="button"
+          onClick={() => void radio.dislike(track)}
+          aria-label={`No me gusta: ${track.artist ?? track.title}`}
+          title="No me gusta (menos de este artista)"
+          className="flex size-9 shrink-0 items-center justify-center rounded-xl text-muted hover:bg-surface-2 hover:text-danger focus-visible:ring-2 focus-visible:ring-secondary focus-visible:outline-none"
+        >
+          <ThumbsDown aria-hidden className="size-4" />
+        </button>
       ) : null}
+      <button
+        type="button"
+        onClick={() => queue.remove([track.id])}
+        aria-label={`Quitar ${track.title} de la cola`}
+        title="Quitar de la cola"
+        className="mr-1 flex size-9 shrink-0 items-center justify-center rounded-xl text-muted hover:bg-surface-2 hover:text-text focus-visible:ring-2 focus-visible:ring-secondary focus-visible:outline-none"
+      >
+        <X aria-hidden className="size-4" />
+      </button>
     </li>
   );
 }

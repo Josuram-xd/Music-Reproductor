@@ -46,6 +46,8 @@ Cada épica puede ser uno o varios commits (los hace el humano). `[ ]` pendiente
 - [x] Subida directa a Storage (signed URL, drag & drop de archivos del PC, barra de progreso)
 - [x] Vídeo local → extraer audio con ffmpeg.wasm (carga diferida, `-c:a copy` con fallback a recodificar) y subir solo el audio
 - [x] Lectura de metadatos (duración, ID3/carátula) en el cliente
+- [x] Mostrar si las canciones guardadas vienen de YouTube o Spotify
+- [x] Borrar canciones de la biblioteca y limpiar sus archivos guardados
 - [x] Árbol de carpetas: crear, renombrar, mover (drag & drop), borrar
 - [x] Búsqueda con Trie
 
@@ -55,6 +57,7 @@ Cada épica puede ser uno o varios commits (los hace el humano). `[ ]` pendiente
 - [x] Modal de 3 opciones al soltar encima de la que suena (reproducir ahora / revertir / a continuación)
 - [x] "No volver a preguntar en esta sesión" (sessionStorage) + toast "Deshacer" 5 s + reactivar en Ajustes
 - [x] Botón "Añadir a la cola" en cada canción (alternativa al arrastre en móvil, tablet y teclado)
+- [x] Quitar de la cola cualquier canción, no solo las recomendaciones de radio
 - [x] Undo/redo de la cola (Ctrl+Z)
 - [x] Persistir `queue_state`
 

@@ -6,8 +6,10 @@ import {
   FolderInput,
   ListMusic,
   ListPlus,
+  Music2,
   MonitorPlay,
   Play,
+  Trash2,
 } from "lucide-react";
 import { type LibraryTrack, toPlayerTrack } from "@/lib/library/tracks";
 import { formatTime } from "@/lib/player/format";
@@ -21,13 +23,15 @@ interface TrackListProps {
   onMove?: (track: LibraryTrack) => void;
   /** Shows an "Añadir a…" (playlist) button. */
   onAddToPlaylist?: (track: LibraryTrack) => void;
+  /** Shows a button to permanently delete the track from the library. */
+  onDelete?: (track: LibraryTrack) => void;
 }
 
 /**
  * The library's tracks. Clicking one plays the whole list from there;
  * the ➕ button or dragging one onto the queue adds it (or onto a folder to move it).
  */
-export function TrackList({ tracks, onMove, onAddToPlaylist }: TrackListProps) {
+export function TrackList({ tracks, onMove, onAddToPlaylist, onDelete }: TrackListProps) {
   const currentId = usePlayerStore((s) => s.current?.id);
   const playing = usePlayerStore((s) => s.state === "playing");
 
@@ -89,6 +93,10 @@ export function TrackList({ tracks, onMove, onAddToPlaylist }: TrackListProps) {
                     <span className="inline-flex items-center gap-1 rounded-full bg-danger/15 px-2 text-xs text-danger">
                       <MonitorPlay aria-hidden className="size-3" /> YouTube
                     </span>
+                  ) : track.source === "spotify" ? (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-accent/15 px-2 text-xs text-accent">
+                      <Music2 aria-hidden className="size-3" /> Spotify
+                    </span>
                   ) : track.origin === "video" ? (
                     <span className="inline-flex items-center gap-1 rounded-full bg-secondary/15 px-2 text-xs text-secondary">
                       <Film aria-hidden className="size-3" /> de vídeo
@@ -130,6 +138,17 @@ export function TrackList({ tracks, onMove, onAddToPlaylist }: TrackListProps) {
                 className="mr-1 flex size-9 shrink-0 items-center justify-center rounded-xl text-muted opacity-60 transition group-hover:opacity-100 hover:bg-surface-2 hover:text-text focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-secondary focus-visible:outline-none"
               >
                 <FolderInput aria-hidden className="size-4" />
+              </button>
+            ) : null}
+            {onDelete ? (
+              <button
+                type="button"
+                onClick={() => onDelete(track)}
+                aria-label={`Borrar ${track.title} de la biblioteca`}
+                title="Borrar de la biblioteca"
+                className="mr-1 flex size-9 shrink-0 items-center justify-center rounded-xl text-muted opacity-60 transition group-hover:opacity-100 hover:bg-surface-2 hover:text-danger focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-secondary focus-visible:outline-none"
+              >
+                <Trash2 aria-hidden className="size-4" />
               </button>
             ) : null}
           </li>

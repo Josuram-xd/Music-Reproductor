@@ -47,11 +47,14 @@ describe("radio in the queue", () => {
     expect(dislike).toHaveBeenCalledWith(picks[1]);
   });
 
-  test("your own tracks have no radio buttons", () => {
+  test("your own tracks can be removed but have no radio buttons", () => {
+    const remove = vi.spyOn(queue, "remove").mockImplementation(() => {});
     act(() => usePlayerStore.setState({ current: track("a"), queue: [track("a"), track("b")] }));
     render(<QueueBoard />);
     expect(screen.queryByText(/Recomendada/)).toBeNull();
     expect(screen.queryByRole("button", { name: /No me gusta/ })).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Quitar Song b de la cola" }));
+    expect(remove).toHaveBeenCalledWith(["b"]);
   });
 });
 

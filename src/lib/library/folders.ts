@@ -42,6 +42,7 @@ export type LibraryChange =
   | { type: "rename-folder"; id: string; name: string }
   | { type: "move-folder"; id: string; parentId: string | null }
   | { type: "delete-folder"; id: string }
+  | { type: "delete-track"; id: string }
   | { type: "move-track"; id: string; folderId: string | null };
 
 /**
@@ -85,6 +86,8 @@ export function applyLibraryChange(state: LibraryState, change: LibraryChange): 
           t.id === change.id ? { ...t, folder_id: change.folderId } : t,
         ),
       };
+    case "delete-track":
+      return { ...state, tracks: state.tracks.filter((track) => track.id !== change.id) };
   }
 }
 

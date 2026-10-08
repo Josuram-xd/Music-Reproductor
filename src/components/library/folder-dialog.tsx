@@ -13,6 +13,7 @@ export type FolderDialogState =
   | { mode: "rename"; folder: Folder }
   | { mode: "move-folder"; folder: Folder }
   | { mode: "move-track"; track: LibraryTrack }
+  | { mode: "delete-track"; track: LibraryTrack }
   | { mode: "delete"; folder: Folder };
 
 interface FolderDialogProps {
@@ -26,6 +27,7 @@ interface FolderDialogProps {
   onMoveFolder: (id: string, parentId: string | null) => void;
   onMoveTrack: (id: string, folderId: string | null) => void;
   onDelete: (id: string) => void;
+  onDeleteTrack: (id: string) => void;
 }
 
 const ROOT = "root";
@@ -35,6 +37,7 @@ const TITLES: Record<FolderDialogState["mode"], string> = {
   rename: "Renombrar carpeta",
   "move-folder": "Mover carpeta",
   "move-track": "Mover canción",
+  "delete-track": "Borrar canción",
   delete: "Borrar carpeta",
 };
 
@@ -107,9 +110,40 @@ function DialogBody(props: FolderDialogProps & { state: FolderDialogState }) {
     case "move-folder":
     case "move-track":
       return <MoveForm {...props} state={state} />;
+    case "delete-track":
+      return <DeleteTrackConfirm {...props} track={state.track} />;
     case "delete":
       return <DeleteConfirm {...props} folder={state.folder} />;
   }
+}
+
+function DeleteTrackConfirm({
+  track,
+  onClose,
+  onDeleteTrack,
+}: FolderDialogProps & { track: LibraryTrack }) {
+  return (
+    <div className="flex flex-col gap-4">
+      <p className="text-sm text-muted">
+        ¿Borrar <strong className="text-text">{track.title}</strong> de la biblioteca? También se
+        quitará de tus playlists. No se puede deshacer.
+        {track.storage_path ? " Se eliminará el archivo de audio guardado." : ""}
+      </p>
+      <div className="flex justify-end gap-2">
+        <Button type="button" variant="ghost" onClick={onClose}>
+          Cancelar
+        </Button>
+        <Button
+          type="button"
+          autoFocus
+          onClick={() => onDeleteTrack(track.id)}
+          className="bg-danger! shadow-none!"
+        >
+          Borrar
+        </Button>
+      </div>
+    </div>
+  );
 }
 
 function NameForm({

@@ -109,4 +109,11 @@ describe("applyLibraryChange", () => {
     const next = applyLibraryChange(state, { type: "move-track", id: "t3", folderId: "podcasts" });
     expect(next.tracks.find((t) => t.id === "t3")?.folder_id).toBe("podcasts");
   });
+
+  test("delete a track without changing its folders or the original state", () => {
+    const next = applyLibraryChange(state, { type: "delete-track", id: "t2" });
+    expect(next.tracks.map((t) => t.id)).toEqual(["t1", "t3"]);
+    expect(next.folders).toEqual(state.folders);
+    expect(state.tracks.map((t) => t.id)).toEqual(["t1", "t2", "t3"]);
+  });
 });

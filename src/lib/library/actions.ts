@@ -92,3 +92,31 @@ export async function moveTrack(
     supabase.from("tracks").update({ folder_id: folderId }).eq("id", trackId).select("id"),
   );
 }
+
+/** Deletes a library track, its saved media, and its saved cover if present. */
+export async function deleteTrack(id: string): Promise<LibraryActionResult> {
+  if (!isId(id)) return fail("invalid_request");
+  const auth = await authenticate();
+  if (!auth) return fail("unauthorized");
+  const { supabase } = auth;
+
+  const { data: track, error: findError } = await supabase
+    .from("tracks")
+    .select("storage_path, cover_path")
+    .eq("id", id)
+    .maybeSingle();
+  if (findError) return fail("failed");
+  if (!track) return fail("not_found");
+
+  const { data, error } = await supabase.from("tracks").delete().eq("id", id).select("id");
+  if (error) return dbError(error);
+  if (!data?.length) return fail("not_found");
+
+  refresh();
+  const cleanup = await Promise.all([
+    ...(track.storage_path ? [supabase.storage.from("media").remove([track.storage_path])] : []),
+    ...(track.cover_path ? [supabase.storage.from("covers").remove([track.cover_path])] : []),
+  ]);
+  if (cleanup.some((result) => result.error)) return fail("storage_cleanup_failed");
+  return { ok: true };
+}

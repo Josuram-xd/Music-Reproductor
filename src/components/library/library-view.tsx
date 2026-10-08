@@ -18,6 +18,7 @@ import type { Folder, FolderTree } from "@/lib/ds/folder-tree";
 import {
   createFolder,
   deleteFolder,
+  deleteTrack as deleteLibraryTrack,
   type LibraryActionResult,
   moveFolder,
   moveTrack,
@@ -106,6 +107,12 @@ export function LibraryView({
       // Leaving a folder that is about to disappear: go to its parent.
       if (currentId && tree.isDescendantOf(currentId, id)) open(tree.get(id)!.parentId);
       run({ type: "delete-folder", id }, () => deleteFolder(id));
+    },
+    requestTrackDeletion(track: LibraryTrack) {
+      setDialog({ mode: "delete-track", track });
+    },
+    confirmDeleteTrack(id: string) {
+      run({ type: "delete-track", id }, () => deleteLibraryTrack(id));
     },
   };
 
@@ -219,6 +226,7 @@ export function LibraryView({
             tracks={tracks}
             onMove={(track) => setDialog({ mode: "move-track", track })}
             onAddToPlaylist={setAddingToPlaylist}
+            onDelete={handlers.requestTrackDeletion}
           />
         </section>
       ) : !searching && subfolders.length === 0 ? (
@@ -248,6 +256,7 @@ export function LibraryView({
         onMoveFolder={handlers.moveFolder}
         onMoveTrack={handlers.moveTrack}
         onDelete={handlers.delete}
+        onDeleteTrack={handlers.confirmDeleteTrack}
       />
     </div>
   );
