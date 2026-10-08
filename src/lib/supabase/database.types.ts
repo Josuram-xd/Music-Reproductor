@@ -88,6 +88,38 @@ export type UserSettingsRow = {
   updated_at: string;
 };
 
+export type PlayEventRow = {
+  id: string;
+  owner_id: string;
+  track_id: string | null;
+  source: TrackSourceColumn;
+  external_id: string | null;
+  title: string;
+  artist: string | null;
+  started_at: string;
+  listened_s: number;
+  completed: boolean;
+  skipped: boolean;
+  from_radio: boolean;
+};
+
+export type SearchSource = "library" | "youtube" | "spotify";
+
+export type SearchHistoryRow = {
+  id: string;
+  owner_id: string;
+  query: string;
+  source: SearchSource;
+  created_at: string;
+};
+
+export type RadioFeedbackRow = {
+  owner_id: string;
+  artist: string;
+  score: number;
+  updated_at: string;
+};
+
 export interface Database {
   public: {
     Tables: {
@@ -151,6 +183,26 @@ export interface Database {
         Row: UserSettingsRow;
         Insert: Pick<UserSettingsRow, "owner_id"> & Partial<Omit<UserSettingsRow, "owner_id">>;
         Update: Partial<Omit<UserSettingsRow, "owner_id">>;
+        Relationships: [];
+      };
+      play_events: {
+        Row: PlayEventRow;
+        Insert: Pick<PlayEventRow, "source" | "title"> &
+          Partial<Omit<PlayEventRow, "id" | "owner_id" | "source" | "title">>;
+        Update: never;
+        Relationships: [];
+      };
+      search_history: {
+        Row: SearchHistoryRow;
+        Insert: Pick<SearchHistoryRow, "query" | "source">;
+        Update: never;
+        Relationships: [];
+      };
+      radio_feedback: {
+        Row: RadioFeedbackRow;
+        Insert: Pick<RadioFeedbackRow, "owner_id" | "artist"> &
+          Partial<Pick<RadioFeedbackRow, "score" | "updated_at">>;
+        Update: Partial<Pick<RadioFeedbackRow, "score" | "updated_at">>;
         Relationships: [];
       };
       queue_state: {

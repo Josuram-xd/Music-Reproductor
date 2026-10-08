@@ -139,8 +139,8 @@ user_integrations(owner_id, provider 'spotify'|'youtube', client_id, secret_enc,
 yt_search_cache(query PK, results jsonb, fetched_at)
 user_settings(owner_id PK, floating_player bool default true, floating_pos jsonb,
               radio_enabled bool default true)
-play_events(id, owner_id, track_id, source, started_at, listened_s, completed bool, skipped bool,
-            from_radio bool)
+play_events(id, owner_id, track_id, source, external_id, title, artist, started_at, listened_s,
+            completed bool, skipped bool, from_radio bool)
 search_history(id, owner_id, query, source, created_at)
 app_sessions(id, owner_id, started_at, last_seen_at)       -- tiempo de uso, alimentado por el heartbeat
 radio_feedback(owner_id, artist, score)                     -- "No me gusta" penaliza

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { PlayEventLogger } from "@/components/player/play-event-logger";
 import { PlayerChrome } from "@/components/player/player-chrome";
 import { PlayerHost } from "@/components/player/player-host";
 import { QueueSync } from "@/components/player/queue-sync";
@@ -112,6 +113,7 @@ export function AppShell({ children, userMenu, playlists }: AppShellProps) {
         <DropChoiceDialog />
         <PlayerHost />
         <QueueSync />
+        <PlayEventLogger />
         <YouTubeDock />
       </QueueDrawerProvider>
     </div>
