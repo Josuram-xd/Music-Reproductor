@@ -177,9 +177,14 @@ export class YouTubeSource implements PlaybackSource {
   }
 
   async play(): Promise<void> {
+    this.activateAudio();
+  }
+
+  activateAudio(): void {
     const player = this.player;
     if (!player) return;
     this.applyVolume(player);
+    player.unMute();
     player.playVideo();
   }
 

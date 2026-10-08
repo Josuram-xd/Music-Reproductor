@@ -270,6 +270,14 @@ export class PlayerEngine {
     this.applyVolume();
   }
 
+  activateAudio(): void {
+    if (!this.source?.activateAudio) return;
+    this.muted = false;
+    if (this.volume === 0) this.volume = 0.5;
+    this.applyVolume();
+    this.source.activateAudio();
+  }
+
   toggleMute(): void {
     this.muted = !this.muted;
     if (!this.muted && this.volume === 0) this.volume = 0.5;

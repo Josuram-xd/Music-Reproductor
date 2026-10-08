@@ -88,6 +88,17 @@ describe("PlayerEngine", () => {
     expect(engine.getSnapshot().state).toBe("playing");
   });
 
+  test("activateAudio restores audible volume and delegates to the active source", async () => {
+    const { engine, youtube } = setup();
+    await engine.setQueue([track("yt", "youtube")], { autoplay: false });
+    engine.setVolume(0);
+
+    engine.activateAudio();
+
+    expect(engine.getSnapshot()).toMatchObject({ volume: 0.5, muted: false });
+    expect(youtube.activateAudio).toHaveBeenCalledOnce();
+  });
+
   test("enqueue appends and ignores duplicates", async () => {
     const { engine, tracks } = setup();
     await engine.setQueue([tracks[0]!]);

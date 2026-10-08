@@ -58,6 +58,7 @@ export const player = {
   seek: (seconds: number) => getPlayer().seek(seconds),
   seekBy: (delta: number) => getPlayer().seekBy(delta),
   setVolume: (volume: number) => getPlayer().setVolume(volume),
+  activateAudio: () => getPlayer().activateAudio(),
   toggleMute: () => getPlayer().toggleMute(),
   cycleRepeat() {
     toast(REPEAT_LABELS[getPlayer().cycleRepeat()], { durationMs: 2000 });

@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
+import { Volume2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { chooseDockPlacement } from "@/lib/player/youtube-dock";
 import { findYouTubeHost } from "@/lib/player/youtube-host";
-import { usePlayerStore } from "@/stores/player-store";
+import { player, usePlayerStore } from "@/stores/player-store";
 
 /** Marks where the video goes in "Ahora suena". */
 export const YOUTUBE_SLOT_ATTR = "data-youtube-slot";
@@ -25,6 +27,7 @@ const SHARED =
  */
 export function YouTubeDock() {
   const isYouTube = usePlayerStore((s) => s.current?.source === "youtube");
+  const [hostElement, setHostElement] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
     if (!isYouTube) {
@@ -38,6 +41,7 @@ export function YouTubeDock() {
       frame = requestAnimationFrame(place);
       const host = findYouTubeHost();
       if (!host) return;
+      setHostElement(host);
       const slots = [...document.querySelectorAll<HTMLElement>(`[${YOUTUBE_SLOT_ATTR}]`)]
         .filter((slot) => !slot.closest("dialog"))
         .map((slot) => ({
@@ -61,5 +65,18 @@ export function YouTubeDock() {
     return () => cancelAnimationFrame(frame);
   }, [isYouTube]);
 
-  return null;
+  if (!isYouTube || !hostElement) return null;
+  return createPortal(
+    <button
+      type="button"
+      onClick={player.activateAudio}
+      aria-label="Activar sonido de YouTube"
+      title="Activar sonido"
+      className="absolute bottom-2 left-2 z-10 flex min-h-11 items-center gap-2 border-2 border-surface-2 bg-surface px-3 text-sm font-semibold text-text shadow-pixel-sm hover:bg-surface-2 focus-visible:ring-2 focus-visible:ring-secondary focus-visible:outline-none"
+    >
+      <Volume2 aria-hidden className="size-4" />
+      Activar sonido
+    </button>,
+    hostElement,
+  );
 }

@@ -44,9 +44,31 @@ export function spotifySearchErrorMessage(code: string): string {
       return "Demasiadas búsquedas seguidas. Espera un momento, nya~";
     case "unauthorized":
       return "Tu sesión caducó. Vuelve a entrar";
+    case "spotify_token_failed":
+      return "Spotify no pudo renovar el acceso. Vuelve a conectar la cuenta en Ajustes";
+    case "spotify_connection_failed":
+      return "No se pudo consultar la conexión con Spotify. Inténtalo de nuevo";
+    case "spotify_api_error_400":
+      return "Spotify rechazó la búsqueda. Comprueba que la app esté configurada para Web API";
+    case "spotify_api_error_404":
+      return "Spotify no encontró el servicio de búsqueda. Revisa la configuración de la app";
+    case "spotify_api_error_5xx":
+      return "El servicio de Spotify está teniendo problemas. Inténtalo más tarde";
+    case "spotify_api_network_error":
+      return "No se pudo conectar con la API de Spotify. Comprueba la conexión e inténtalo otra vez";
+    case "spotify_api_error_other":
+      return "Spotify rechazó la búsqueda. Revisa el acceso de tu cuenta en Ajustes";
     default:
       return "No se pudo buscar en Spotify. ¿Hay internet?";
   }
+}
+
+export function spotifyApiErrorCode(status: number): string {
+  if (status === 0) return "spotify_api_network_error";
+  if (status === 400) return "spotify_api_error_400";
+  if (status === 404) return "spotify_api_error_404";
+  if (status >= 500) return "spotify_api_error_5xx";
+  return "spotify_api_error_other";
 }
 
 /** Whether a Spotify account can play in the browser. */

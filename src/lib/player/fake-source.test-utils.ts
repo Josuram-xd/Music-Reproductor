@@ -67,6 +67,7 @@ export class FakeSource implements PlaybackSource {
   setVolume(volume: number) {
     this.volume = volume;
   }
+  activateAudio = vi.fn();
   on<E extends keyof PlaybackEvents>(event: E, listener: (p: PlaybackEvents[E]) => void) {
     return this.events.on(event, listener);
   }

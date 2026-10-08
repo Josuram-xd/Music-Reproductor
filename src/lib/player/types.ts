@@ -67,6 +67,8 @@ export interface PlaybackSource {
   getState(): PlaybackState;
   /** Volume from 0 to 1. */
   setVolume(volume: number): void;
+  /** Activates audio after an explicit user gesture, when the source supports it. */
+  activateAudio?(): void;
   /** Subscribes to an event; returns the unsubscribe function. */
   on<E extends keyof PlaybackEvents>(
     event: E,

@@ -63,4 +63,18 @@ describe("SpotifySearchView", () => {
     await searchFor("gatito");
     expect(await screen.findByRole("alert")).toHaveTextContent(/User Management/);
   });
+
+  test("explains a Spotify Web API configuration error", async () => {
+    reply({ error: "spotify_api_error_400" }, 502);
+    render(<SpotifySearchView premium />);
+    await searchFor("gatito");
+    expect(await screen.findByRole("alert")).toHaveTextContent(/Web API/);
+  });
+
+  test("distinguishes a network failure from a Spotify API rejection", async () => {
+    reply({ error: "spotify_api_network_error" }, 502);
+    render(<SpotifySearchView premium />);
+    await searchFor("gatito");
+    expect(await screen.findByRole("alert")).toHaveTextContent(/API de Spotify/);
+  });
 });
