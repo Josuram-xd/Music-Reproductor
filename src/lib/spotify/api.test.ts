@@ -46,6 +46,7 @@ describe("Spotify Web API", () => {
     ]);
     const [url, init] = fetcher.mock.calls[0]!;
     expect(new URL(url as string).searchParams.get("type")).toBe("track");
+    expect(new URL(url as string).searchParams.get("limit")).toBe("10");
     expect(init.headers).toEqual({ Authorization: "Bearer TOKEN" });
   });
 

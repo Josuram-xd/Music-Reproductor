@@ -1,5 +1,5 @@
 const API = "https://api.spotify.com/v1";
-export const MAX_RESULTS = 20;
+export const MAX_RESULTS = 10;
 
 /** A Spotify track found by search. */
 export interface SpotifyResult {
