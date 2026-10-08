@@ -3,9 +3,11 @@ import { LocalAudioSource } from "@/lib/player/local-audio-source";
 import { signedMediaUrl } from "@/lib/player/media-url";
 import { FIRST_TRACK_MESSAGE, playbackErrorMessage, REPEAT_LABELS } from "@/lib/player/messages";
 import { PlayerEngine, type PlayerSnapshot, SEEK_STEP_S } from "@/lib/player/player-engine";
+import { SpotifySource } from "@/lib/player/spotify-source";
 import { getYouTubeHost } from "@/lib/player/youtube-host";
 import { YouTubeSource } from "@/lib/player/youtube-source";
 import type { PlayerAction } from "@/lib/player/shortcuts";
+import { spotifyAccessToken } from "@/lib/spotify/client-token";
 import { toast } from "./toast-store";
 
 const EMPTY: PlayerSnapshot = {
@@ -34,6 +36,8 @@ export function getPlayer(): PlayerEngine {
         new LocalAudioSource({ resolveUrl: signedMediaUrl }),
         // The IFrame API script only loads with the first YouTube track.
         new YouTubeSource({ getHost: getYouTubeHost }),
+        // The Web Playback SDK only loads with the first Spotify track.
+        new SpotifySource({ getToken: () => spotifyAccessToken() }),
       ],
     });
     engine.subscribe((snapshot) => usePlayerStore.setState(snapshot, true));

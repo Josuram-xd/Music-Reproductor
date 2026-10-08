@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { DropPreferenceSetting } from "@/components/queue/drop-preference-setting";
+import { SpotifySetting } from "@/components/settings/spotify-setting";
 import { YouTubeKeySetting } from "@/components/settings/youtube-key-setting";
 import { PageHeader } from "@/components/ui/page-header";
-import { getYouTubeIntegration } from "@/lib/integrations/queries";
+import { getSpotifyIntegration, getYouTubeIntegration } from "@/lib/integrations/queries";
 
 export const metadata: Metadata = { title: "Ajustes · Purrlist" };
 
@@ -28,6 +29,15 @@ export default function SettingsPage() {
             <YouTube />
           </Suspense>
         </section>
+
+        <section aria-labelledby="settings-spotify" className="flex max-w-xl flex-col gap-3">
+          <h2 id="settings-spotify" className="font-display text-xl font-semibold">
+            Spotify
+          </h2>
+          <Suspense fallback={<div className="h-64 animate-pulse rounded-3xl bg-surface" />}>
+            <Spotify />
+          </Suspense>
+        </section>
       </div>
     </>
   );
@@ -35,4 +45,8 @@ export default function SettingsPage() {
 
 async function YouTube() {
   return <YouTubeKeySetting integration={await getYouTubeIntegration()} />;
+}
+
+async function Spotify() {
+  return <SpotifySetting integration={await getSpotifyIntegration()} />;
 }

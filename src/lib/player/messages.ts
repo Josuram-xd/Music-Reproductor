@@ -20,6 +20,8 @@ export function playbackErrorMessage(error: PlaybackError): string {
       return "Ese archivo parece dañado, nya~";
     case "unsupported":
       return "Esta canción no se puede reproducir aquí";
+    case "account":
+      return "Spotify necesita una cuenta Premium (y estar conectado en Ajustes) para sonar aquí 🐾";
     default:
       return "Algo falló al reproducir. Inténtalo otra vez";
   }

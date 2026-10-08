@@ -29,6 +29,7 @@ export type PlaybackErrorCode =
   | "not-allowed" // the browser blocked playback (autoplay policy)
   | "network"
   | "decode"
+  | "account" // the service account cannot play here (e.g. Spotify without Premium)
   | "unknown";
 
 export class PlaybackError extends Error {

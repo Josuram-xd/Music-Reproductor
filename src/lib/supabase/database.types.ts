@@ -73,6 +73,8 @@ export type UserIntegrationRow = {
   refresh_token_enc: string | null;
   expires_at: string | null;
   secret_hint: string | null;
+  account_name: string | null;
+  account_product: string | null;
   created_at: string;
   updated_at: string;
 };

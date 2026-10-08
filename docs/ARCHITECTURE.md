@@ -135,7 +135,7 @@ playlists(id, owner_id, name, cover_path)
 playlist_items(playlist_id, track_id, rank text)   -- rank fraccional (lexorank) para reordenar sin reescribir
 queue_state(owner_id PK, track_ids uuid[], current_index, position_s, updated_at)
 user_integrations(owner_id, provider 'spotify'|'youtube', client_id, secret_enc, refresh_token_enc, expires_at,
-                  secret_hint)
+                  secret_hint, account_name, account_product)
 yt_search_cache(query PK, results jsonb, fetched_at)
 user_settings(owner_id PK, floating_player bool default true, floating_pos jsonb,
               radio_enabled bool default true)

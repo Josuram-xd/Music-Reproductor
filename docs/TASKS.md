@@ -78,10 +78,10 @@ Cada épica puede ser uno o varios commits (los hace el humano). `[ ]` pendiente
 
 ## E7 · Spotify
 
-- [ ] Pantalla de integraciones: el usuario pega su Client ID (guía paso a paso)
-- [ ] OAuth PKCE + refresh tokens cifrados
-- [ ] `SpotifySource` con Web Playback SDK (aviso si no es Premium)
-- [ ] Búsqueda y añadir a cola
+- [x] Pantalla de integraciones: el usuario pega su Client ID (guía paso a paso)
+- [x] OAuth PKCE + refresh tokens cifrados
+- [x] `SpotifySource` con Web Playback SDK (aviso si no es Premium)
+- [x] Búsqueda y añadir a cola
 
 ## E8 · Mini‑reproductor flotante
 
