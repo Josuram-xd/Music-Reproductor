@@ -1,3 +1,4 @@
+import { SaveQueueButton } from "@/components/playlists/save-queue-button";
 import { QueueBoard } from "@/components/queue/queue-board";
 import { QueueHistoryButtons } from "@/components/queue/queue-history-buttons";
 
@@ -9,7 +10,10 @@ export function QueuePanel() {
         <h2 id="queue-title" className="font-display text-xl font-semibold">
           Cola
         </h2>
-        <QueueHistoryButtons />
+        <div className="flex items-center">
+          <QueueHistoryButtons />
+          <SaveQueueButton />
+        </div>
       </div>
       <QueueBoard />
     </section>

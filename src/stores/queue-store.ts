@@ -7,6 +7,7 @@ import {
 } from "@/lib/player/drop-preference";
 import { DROP_MESSAGES, QUEUE_MESSAGES } from "@/lib/player/messages";
 import {
+  appendManyCommand,
   beforeCurrentId,
   type DropChoice,
   dropChoiceCommand,
@@ -103,6 +104,14 @@ export const queue = {
       return;
     }
     queue.append(track);
+  },
+
+  /** Appends a whole list (a playlist), skipping queued tracks. Returns how many were added. */
+  addMany(tracks: readonly Track[]): number {
+    const engine = getPlayer();
+    const count = tracks.filter((track) => !engine.has(track.id)).length;
+    if (count > 0) run(appendManyCommand(engine, tracks));
+    return count;
   },
 
   /** Drop at the end of the queue. */

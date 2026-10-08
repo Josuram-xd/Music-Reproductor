@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { LibraryView } from "@/components/library/library-view";
 import { PageHeader } from "@/components/ui/page-header";
 import { getLibrary } from "@/lib/library/queries";
+import { getPlaylistNames } from "@/lib/playlists/queries";
 
 export const metadata: Metadata = { title: "Biblioteca · Purrlist" };
 
@@ -21,8 +22,8 @@ export default function LibraryPage() {
 }
 
 async function Library() {
-  const { tracks, folders } = await getLibrary();
-  return <LibraryView tracks={tracks} folders={folders} />;
+  const [{ tracks, folders }, playlists] = await Promise.all([getLibrary(), getPlaylistNames()]);
+  return <LibraryView tracks={tracks} folders={folders} playlists={playlists} />;
 }
 
 function LibrarySkeleton() {

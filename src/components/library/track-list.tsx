@@ -1,6 +1,6 @@
 "use client";
 
-import { AudioLines, Film, FolderInput, ListPlus, Play } from "lucide-react";
+import { AudioLines, Film, FolderInput, ListMusic, ListPlus, Play } from "lucide-react";
 import { type LibraryTrack, toPlayerTrack } from "@/lib/library/tracks";
 import { formatTime } from "@/lib/player/format";
 import { usePlayerStore } from "@/stores/player-store";
@@ -11,13 +11,15 @@ interface TrackListProps {
   tracks: LibraryTrack[];
   /** Shows a "move to folder" button; tracks can also be dragged onto a folder. */
   onMove?: (track: LibraryTrack) => void;
+  /** Shows an "Añadir a…" (playlist) button. */
+  onAddToPlaylist?: (track: LibraryTrack) => void;
 }
 
 /**
  * The library's tracks. Clicking one plays the whole list from there;
  * the ➕ button or dragging one onto the queue adds it (or onto a folder to move it).
  */
-export function TrackList({ tracks, onMove }: TrackListProps) {
+export function TrackList({ tracks, onMove, onAddToPlaylist }: TrackListProps) {
   const currentId = usePlayerStore((s) => s.current?.id);
   const playing = usePlayerStore((s) => s.state === "playing");
 
@@ -96,6 +98,17 @@ export function TrackList({ tracks, onMove }: TrackListProps) {
             >
               <ListPlus aria-hidden className="size-4" />
             </button>
+            {onAddToPlaylist ? (
+              <button
+                type="button"
+                onClick={() => onAddToPlaylist(track)}
+                aria-label={`Añadir ${track.title} a una playlist`}
+                title="Añadir a una playlist"
+                className="flex size-9 shrink-0 items-center justify-center rounded-xl text-muted opacity-60 transition group-hover:opacity-100 hover:bg-surface-2 hover:text-text focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-secondary focus-visible:outline-none"
+              >
+                <ListMusic aria-hidden className="size-4" />
+              </button>
+            ) : null}
             {onMove ? (
               <button
                 type="button"

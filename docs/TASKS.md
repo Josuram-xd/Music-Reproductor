@@ -59,15 +59,15 @@ Cada épica puede ser uno o varios commits (los hace el humano). `[ ]` pendiente
 
 ## E5.1 · Listas de reproducción
 
-- [ ] Migraciones `playlists` y `playlist_items` (rank fraccional / lexorank) + RLS
-- [ ] Utilidad de rank fraccional (entre dos ranks, inicio, fin, rebalanceo) + tests
-- [ ] Página Playlists: crear varias listas, renombrar, borrar (con confirmación)
-- [ ] Vista de una playlist: canciones ordenables con dnd-kit (solo se reescribe el rank movido)
-- [ ] Añadir canciones a una playlist desde la biblioteca (menú "Añadir a…" + arrastrar)
-- [ ] Quitar canciones de una playlist (sin borrarlas de la biblioteca)
-- [ ] Reproducir una playlist (reemplaza la cola) / añadirla entera a la cola
-- [ ] Carátula de la playlist (subida o mosaico de las 4 primeras carátulas)
-- [ ] Guardar la cola actual como playlist
+- [x] Migraciones `playlists` y `playlist_items` (rank fraccional / lexorank) + RLS
+- [x] Utilidad de rank fraccional (entre dos ranks, inicio, fin, rebalanceo) + tests
+- [x] Página Playlists: crear varias listas, renombrar, borrar (con confirmación)
+- [x] Vista de una playlist: canciones ordenables con dnd-kit (solo se reescribe el rank movido)
+- [x] Añadir canciones a una playlist desde la biblioteca (menú "Añadir a…" + arrastrar)
+- [x] Quitar canciones de una playlist (sin borrarlas de la biblioteca)
+- [x] Reproducir una playlist (reemplaza la cola) / añadirla entera a la cola
+- [x] Carátula de la playlist (mosaico de las 4 primeras carátulas; subir una propia queda pendiente, la columna `cover_path` ya existe)
+- [x] Guardar la cola actual como playlist
 
 ## E6 · YouTube
 

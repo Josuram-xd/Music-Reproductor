@@ -33,6 +33,27 @@ export function insertCommand(engine: PlayerEngine, track: Track, afterId: strin
   };
 }
 
+/**
+ * Appends every track that is not queued yet, as one undoable step
+ * (e.g. "Añadir la playlist a la cola"). Undo removes exactly those.
+ */
+export function appendManyCommand(engine: PlayerEngine, tracks: readonly Track[]): Command {
+  let added: string[] = [];
+  return {
+    label: "insertMany",
+    execute() {
+      added = [];
+      for (const track of tracks) {
+        const last = engine.getSnapshot().queue.at(-1)?.id ?? null;
+        if (engine.insert(track, last)) added.push(track.id);
+      }
+    },
+    undo() {
+      for (const id of added) engine.remove(id);
+    },
+  };
+}
+
 /** Puts `track` right after `afterId`: a move if it is already queued, an insert otherwise. */
 export function placeCommand(engine: PlayerEngine, track: Track, afterId: string | null): Command {
   return engine.has(track.id)

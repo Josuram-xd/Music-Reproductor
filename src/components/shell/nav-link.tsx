@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Suspense } from "react";
 import { isActivePath, NAV_ITEMS } from "./nav-items";
 
 type Variant = "sidebar" | "tab";
@@ -19,12 +20,35 @@ const STYLES: Record<Variant, { link: string; label: string }> = {
   },
 };
 
-/** Takes only the `href`: icons are components, which cannot be passed from the server. */
-export function NavLink({ href, variant }: { href: string; variant: Variant }) {
+/**
+ * Takes only the `href`: icons are components, which cannot be passed from the server.
+ * The pathname is request-time data on pages with dynamic params (e.g. /playlists/[id]),
+ * so the active state streams in behind Suspense; the fallback is the inactive link.
+ */
+export function NavLink(props: { href: string; variant: Variant }) {
+  return (
+    <Suspense fallback={<NavLinkView {...props} active={false} />}>
+      <ActiveNavLink {...props} />
+    </Suspense>
+  );
+}
+
+function ActiveNavLink(props: { href: string; variant: Variant }) {
   const pathname = usePathname();
+  return <NavLinkView {...props} active={isActivePath(pathname, props.href)} />;
+}
+
+function NavLinkView({
+  href,
+  variant,
+  active,
+}: {
+  href: string;
+  variant: Variant;
+  active: boolean;
+}) {
   const item = NAV_ITEMS.find((candidate) => candidate.href === href);
   if (!item) throw new Error(`Unknown nav item "${href}"`);
-  const active = isActivePath(pathname, item.href);
   const Icon = item.icon;
   const styles = STYLES[variant];
 

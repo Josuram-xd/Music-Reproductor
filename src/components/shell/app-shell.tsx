@@ -13,6 +13,8 @@ interface AppShellProps {
   children: ReactNode;
   /** Account area in the header (streams in, it reads the session). */
   userMenu: ReactNode;
+  /** The user's playlists in the desktop sidebar (streams in too). */
+  playlists: ReactNode;
 }
 
 function Logo({ compact = false }: { compact?: boolean }) {
@@ -30,7 +32,7 @@ function Logo({ compact = false }: { compact?: boolean }) {
  * - 640–1024px: icon-only sidebar, queue as a slide-in side panel.
  * - ≥ 1024px: sidebar with labels · content · fixed queue column.
  */
-export function AppShell({ children, userMenu }: AppShellProps) {
+export function AppShell({ children, userMenu, playlists }: AppShellProps) {
   return (
     // The container wraps the drawer too, so the <dialog> can use @tablet: variants.
     <div className="@container/app flex h-dvh flex-col">
@@ -48,6 +50,15 @@ export function AppShell({ children, userMenu }: AppShellProps) {
             <section aria-label="Carpetas" className="hidden flex-col gap-2 px-2 @desktop:flex">
               <h2 className="text-xs font-semibold tracking-wide text-muted uppercase">Carpetas</h2>
               <p className="text-sm text-muted/80">Tus carpetas aparecerán aquí 🐾</p>
+            </section>
+            <section
+              aria-label="Tus playlists"
+              className="hidden min-h-0 flex-col gap-2 overflow-y-auto px-2 @desktop:flex"
+            >
+              <h2 className="text-xs font-semibold tracking-wide text-muted uppercase">
+                Playlists
+              </h2>
+              {playlists}
             </section>
           </aside>
 

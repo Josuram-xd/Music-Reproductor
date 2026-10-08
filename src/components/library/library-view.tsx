@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useId, useMemo, useOptimistic, useState, useTransition } from "react";
+import { AddToPlaylistDialog } from "@/components/playlists/add-to-playlist-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import type { Folder, FolderTree } from "@/lib/ds/folder-tree";
 import {
@@ -31,6 +32,8 @@ import {
 } from "@/lib/library/folders";
 import { folderErrorMessage } from "@/lib/library/messages";
 import { buildLibraryIndex, suggest } from "@/lib/library/search";
+import type { LibraryTrack } from "@/lib/library/tracks";
+import type { PlaylistName } from "@/lib/playlists/playlists";
 import { toast } from "@/stores/toast-store";
 import { type DragItem, draggableProps, useDropTarget } from "./dnd";
 import { FolderDialog, type FolderDialogState } from "./folder-dialog";
@@ -46,12 +49,16 @@ const SEARCH_LIMIT = 100;
  * folder or breadcrumb. Changes show at once (optimistic) and are saved with
  * Server Actions; on error the view goes back to the real data.
  */
-export function LibraryView(initial: LibraryState) {
+export function LibraryView({
+  playlists,
+  ...initial
+}: LibraryState & { playlists: PlaylistName[] }) {
   const [state, applyChange] = useOptimistic(initial, applyLibraryChange);
   const [, startTransition] = useTransition();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [dialog, setDialog] = useState<FolderDialogState | null>(null);
+  const [addingToPlaylist, setAddingToPlaylist] = useState<LibraryTrack | null>(null);
   const [query, setQuery] = useState("");
   const suggestionsId = useId();
 
@@ -208,7 +215,11 @@ export function LibraryView(initial: LibraryState) {
           <h2 className="mb-2 px-3 text-xs font-semibold tracking-wide text-muted uppercase">
             {tracks.length} {tracks.length === 1 ? "canción" : "canciones"}
           </h2>
-          <TrackList tracks={tracks} onMove={(track) => setDialog({ mode: "move-track", track })} />
+          <TrackList
+            tracks={tracks}
+            onMove={(track) => setDialog({ mode: "move-track", track })}
+            onAddToPlaylist={setAddingToPlaylist}
+          />
         </section>
       ) : !searching && subfolders.length === 0 ? (
         currentId ? (
@@ -222,6 +233,11 @@ export function LibraryView(initial: LibraryState) {
         )
       ) : null}
 
+      <AddToPlaylistDialog
+        track={addingToPlaylist}
+        playlists={playlists}
+        onClose={() => setAddingToPlaylist(null)}
+      />
       <FolderDialog
         state={dialog}
         tree={tree}

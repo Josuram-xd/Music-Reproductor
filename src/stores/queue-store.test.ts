@@ -62,6 +62,19 @@ describe("queue store", () => {
     expect(current()).toBeUndefined();
   });
 
+  test("addMany appends the new tracks as one undoable step", () => {
+    expect(queue.addMany(["a", "x", "y"].map(track))).toBe(2);
+    expect(order()).toEqual(["a", "b", "c", "d", "x", "y"]);
+    queue.undo();
+    expect(order()).toEqual(["a", "b", "c", "d"]);
+    expect(toasts().map((t) => t.message)).toEqual([QUEUE_MESSAGES.undone("insertMany")]);
+  });
+
+  test("addMany with everything queued does nothing", () => {
+    expect(queue.addMany(["a", "b"].map(track))).toBe(0);
+    expect(useQueueStore.getState().canUndo).toBe(false);
+  });
+
   test("append adds at the end", () => {
     queue.append(track("x"));
     queue.append(track("a"));
