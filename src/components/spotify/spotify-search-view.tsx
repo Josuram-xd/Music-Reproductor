@@ -1,16 +1,21 @@
 "use client";
 
-import { ListPlus, Play, Search, TriangleAlert } from "lucide-react";
-import { type FormEvent, useState } from "react";
+import { FolderPlus, ListPlus, Play, Search, TriangleAlert } from "lucide-react";
+import { type FormEvent, useState, useTransition } from "react";
 import { draggableProps } from "@/components/library/dnd";
 import { EmptyState } from "@/components/ui/empty-state";
+import type { LibraryFolder } from "@/lib/library/folders";
 import { formatTime } from "@/lib/player/format";
 import type { SpotifyResult } from "@/lib/spotify/api";
+import { saveSpotifyTrack } from "@/lib/spotify/actions";
 import { SPOTIFY_SEARCH_PATH } from "@/lib/spotify/config";
 import { spotifySearchErrorMessage } from "@/lib/spotify/messages";
 import { spotifyResultToTrack } from "@/lib/spotify/tracks";
 import { usePlayerStore } from "@/stores/player-store";
 import { queue } from "@/stores/queue-store";
+import { toast } from "@/stores/toast-store";
+import { SaveToFolderDialog } from "@/components/youtube/save-to-folder-dialog";
+import { SAVE_VIDEO_MESSAGES, saveVideoErrorMessage } from "@/lib/youtube/save-messages";
 import { LoadingCat } from "@/components/ui/pixel/pixel";
 
 type Status =
@@ -35,9 +40,17 @@ const ICON_BUTTON =
   "flex size-10 shrink-0 items-center justify-center rounded-xl text-muted transition hover:bg-surface-2 hover:text-text focus-visible:ring-2 focus-visible:ring-secondary focus-visible:outline-none";
 
 /** Searches the user's Spotify and plays or queues results (button or drag). */
-export function SpotifySearchView({ premium }: { premium: boolean }) {
+export function SpotifySearchView({
+  premium,
+  folders = [],
+}: {
+  premium: boolean;
+  folders?: LibraryFolder[];
+}) {
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState<Status>({ kind: "idle" });
+  const [saving, setSaving] = useState<SpotifyResult | null>(null);
+  const [pending, startTransition] = useTransition();
   const currentUri = usePlayerStore((s) => s.current?.externalId);
 
   const submit = async (event: FormEvent) => {
@@ -53,6 +66,25 @@ export function SpotifySearchView({ premium }: { premium: boolean }) {
         message: spotifySearchErrorMessage(error instanceof Error ? error.message : "failed"),
       });
     }
+  };
+
+  const save = (folderId: string | null, folderName: string) => {
+    const result = saving;
+    if (!result) return;
+    startTransition(async () => {
+      const response = await saveSpotifyTrack(result, folderId);
+      if (!response.ok) {
+        toast(saveVideoErrorMessage(response.error), { tone: "error" });
+        return;
+      }
+      setSaving(null);
+      toast(
+        response.alreadySaved
+          ? SAVE_VIDEO_MESSAGES.moved(folderName)
+          : SAVE_VIDEO_MESSAGES.saved(folderName),
+        { tone: "success", durationMs: 2500 },
+      );
+    });
   };
 
   return (
@@ -163,12 +195,28 @@ export function SpotifySearchView({ premium }: { premium: boolean }) {
                   >
                     <ListPlus aria-hidden className="size-4" />
                   </button>
+                  <button
+                    type="button"
+                    onClick={() => setSaving(result)}
+                    aria-label={`Guardar ${result.title} en la biblioteca`}
+                    title="Guardar en una carpeta"
+                    className={ICON_BUTTON}
+                  >
+                    <FolderPlus aria-hidden className="size-4" />
+                  </button>
                 </li>
               );
             })}
           </ol>
         )}
       </div>
+      <SaveToFolderDialog
+        title={saving?.title ?? null}
+        folders={folders}
+        pending={pending}
+        onClose={() => setSaving(null)}
+        onSave={save}
+      />
     </div>
   );
 }

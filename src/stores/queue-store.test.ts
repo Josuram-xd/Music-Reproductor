@@ -49,10 +49,21 @@ describe("queue store", () => {
     expect(toasts().map((t) => t.message)).toEqual([QUEUE_MESSAGES.added]);
   });
 
-  test("add leaves a queued track where it is and says so", () => {
+  test("add appends another occurrence when the track is already queued", () => {
     queue.add(track("a"));
-    expect(order()).toEqual(["a", "b", "c", "d"]);
-    expect(toasts().map((t) => t.message)).toEqual([QUEUE_MESSAGES.alreadyQueued]);
+    expect(order()).toHaveLength(5);
+    expect(order().slice(0, 4)).toEqual(["a", "b", "c", "d"]);
+    expect(order()[4]).toMatch(/^a:repeat:/);
+    expect(toasts().map((t) => t.message)).toEqual([QUEUE_MESSAGES.added]);
+  });
+
+  test("add can append the same track repeatedly with distinct queue ids", () => {
+    queue.add(track("a"));
+    queue.add(track("a"));
+    const repeatedIds = order().slice(4);
+    expect(repeatedIds).toHaveLength(2);
+    expect(new Set(repeatedIds).size).toBe(2);
+    expect(repeatedIds.every((id) => id.startsWith("a:repeat:"))).toBe(true);
   });
 
   test("add to an empty queue does not start playing", () => {

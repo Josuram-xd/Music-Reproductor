@@ -6,6 +6,7 @@ import { SpotifySearchView } from "@/components/spotify/spotify-search-view";
 import { EmptyState } from "@/components/ui/empty-state";
 import { PageHeader } from "@/components/ui/page-header";
 import { getSpotifyIntegration } from "@/lib/integrations/queries";
+import { getFolders } from "@/lib/library/queries";
 import { isPremium } from "@/lib/spotify/messages";
 
 export const metadata: Metadata = { title: "Spotify · Purrlist" };
@@ -34,7 +35,7 @@ export default function SpotifyPage() {
 }
 
 async function SpotifySearch() {
-  const integration = await getSpotifyIntegration();
+  const [integration, folders] = await Promise.all([getSpotifyIntegration(), getFolders()]);
   if (!integration.connected) {
     return (
       <EmptyState title="Spotify no está conectado">
@@ -51,5 +52,10 @@ async function SpotifySearch() {
     );
   }
   // Unknown account type: let them try (Spotify itself will say no if needed).
-  return <SpotifySearchView premium={!integration.product || isPremium(integration.product)} />;
+  return (
+    <SpotifySearchView
+      premium={!integration.product || isPremium(integration.product)}
+      folders={folders}
+    />
+  );
 }

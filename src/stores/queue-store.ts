@@ -105,13 +105,13 @@ export const queue = {
     run(playNowCommand(engine, track));
   },
 
-  /** "Añadir a la cola" button: to the end, unless it is already queued. */
+  /** "Añadir a la cola" button: every click creates a queue entry, including repeats. */
   add(track: Track) {
-    if (getPlayer().has(track.id)) {
-      toast(QUEUE_MESSAGES.alreadyQueued, { durationMs: 2500 });
-      return;
-    }
-    queue.append(track);
+    const engine = getPlayer();
+    const queuedTrack = engine.has(track.id)
+      ? { ...track, id: `${track.id}:repeat:${crypto.randomUUID()}` }
+      : track;
+    queue.append(queuedTrack);
   },
 
   /** Appends a whole list (a playlist), skipping queued tracks. Returns how many were added. */

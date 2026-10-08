@@ -1,11 +1,26 @@
-import { act, fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, test, vi } from "vitest";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import { afterEach, beforeAll, describe, expect, test, vi } from "vitest";
 import { queue } from "@/stores/queue-store";
+import { useToastStore } from "@/stores/toast-store";
 import { SpotifySearchView } from "./spotify-search-view";
 
+const actions = vi.hoisted(() => ({
+  saveSpotifyTrack: vi.fn(async () => ({ ok: true, trackId: "t1", alreadySaved: false })),
+}));
+vi.mock("@/lib/spotify/actions", () => actions);
 vi.mock("@/stores/player-store", async () => {
   const { create } = await import("zustand");
   return { usePlayerStore: create(() => ({ current: null })) };
+});
+
+beforeAll(() => {
+  HTMLDialogElement.prototype.showModal = vi.fn(function (this: HTMLDialogElement) {
+    this.setAttribute("open", "");
+  });
+  HTMLDialogElement.prototype.close = vi.fn(function (this: HTMLDialogElement) {
+    this.removeAttribute("open");
+    this.dispatchEvent(new Event("close"));
+  });
 });
 
 const result = {
@@ -50,6 +65,25 @@ describe("SpotifySearchView", () => {
     });
     expect(playNow).toHaveBeenCalledWith(track);
     expect(add).toHaveBeenCalledWith(track);
+  });
+
+  test("saves a result to the selected library folder", async () => {
+    useToastStore.setState({ toasts: [] });
+    reply({ results: [result] });
+    render(
+      <SpotifySearchView premium folders={[{ id: "f1", name: "Gatitos", parent_id: null }]} />,
+    );
+    await searchFor("gatito");
+    fireEvent.click(await screen.findByRole("button", { name: "Guardar Gatito en la biblioteca" }));
+    const dialog = screen.getByRole("dialog");
+    fireEvent.click(within(dialog).getByText("Gatitos"));
+    await act(async () => {
+      fireEvent.click(within(dialog).getByRole("button", { name: "Guardar" }));
+    });
+    expect(actions.saveSpotifyTrack).toHaveBeenCalledWith(result, "f1");
+    await waitFor(() =>
+      expect(useToastStore.getState().toasts[0]?.message).toBe("¡Nya~! Guardado en «Gatitos»"),
+    );
   });
 
   test("not Premium: warns that it will not play here", () => {
