@@ -119,6 +119,6 @@ Cada épica puede ser uno o varios commits (los hace el humano). `[ ]` pendiente
 
 ## E12 · Deploy
 
-- [ ] Variables de entorno en Vercel, dominio, redirect URIs de Spotify
-- [ ] GitHub Actions: lint + typecheck + tests en PRs
-- [ ] Protección de rama `main` en GitHub
+- [x] Variables de entorno en Vercel, dominio, redirect URIs de Spotify (runbook en `docs/DEPLOY.md`)
+- [x] GitHub Actions: lint + typecheck + tests en PRs
+- [ ] Protección de rama `main` en GitHub (pasos en `docs/DEPLOY.md` §6)
