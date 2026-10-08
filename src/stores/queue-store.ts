@@ -97,6 +97,13 @@ export const queue = {
     if (added) toast(QUEUE_MESSAGES.added, { tone: "success", durationMs: 2500 });
   },
 
+  /** "Reproducir" on a track outside the queue (e.g. a YouTube result). Undoable. */
+  playNow(track: Track) {
+    const engine = getPlayer();
+    if (track.id === engine.getSnapshot().current?.id) return void engine.play();
+    run(playNowCommand(engine, track));
+  },
+
   /** "Añadir a la cola" button: to the end, unless it is already queued. */
   add(track: Track) {
     if (getPlayer().has(track.id)) {

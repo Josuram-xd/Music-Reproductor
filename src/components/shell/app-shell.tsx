@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { PlayerBar } from "@/components/player/player-bar";
 import { PlayerHost } from "@/components/player/player-host";
 import { QueueSync } from "@/components/player/queue-sync";
+import { YouTubeDock } from "@/components/player/youtube-dock";
 import { DropChoiceDialog } from "@/components/queue/drop-choice-dialog";
 import { Toaster } from "@/components/ui/toaster";
 import { NAV_ITEMS } from "./nav-items";
@@ -95,6 +96,8 @@ export function AppShell({ children, userMenu, playlists }: AppShellProps) {
 
           <aside
             aria-label="Cola"
+            // Clips the docked YouTube video when the queue column scrolls.
+            data-youtube-clip=""
             className="hidden w-80 shrink-0 overflow-y-auto border-l border-surface-2 bg-surface @desktop:block"
           >
             <QueuePanel />
@@ -104,6 +107,7 @@ export function AppShell({ children, userMenu, playlists }: AppShellProps) {
         <DropChoiceDialog />
         <PlayerHost />
         <QueueSync />
+        <YouTubeDock />
       </QueueDrawerProvider>
     </div>
   );

@@ -2,6 +2,7 @@ import "server-only";
 import { requireUser } from "@/lib/auth/dal";
 import { createClient } from "@/lib/supabase/server";
 import { FOLDER_COLUMNS, type LibraryFolder } from "./folders";
+import { addYouTubeThumbnails } from "@/lib/youtube/tracks";
 import { type LibraryTrack, TRACK_COLUMNS } from "./tracks";
 
 /** Signed cover URLs last this long; the page re-signs them on every render. */
@@ -55,6 +56,16 @@ export async function getLibrary(): Promise<Library> {
   }
   const tracks = tracksResult.data ?? [];
   await signCoverUrls(supabase, tracks);
+  addYouTubeThumbnails(tracks);
 
   return { tracks, folders: foldersResult.data ?? [] };
+}
+
+/** Only the folders (for pages that do not list the tracks, e.g. YouTube search). */
+export async function getFolders(): Promise<LibraryFolder[]> {
+  await requireUser();
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("folders").select(FOLDER_COLUMNS);
+  if (error) throw new Error(`Could not load the folders: ${error.message}`);
+  return (data ?? []) as LibraryFolder[];
 }

@@ -1,6 +1,14 @@
 "use client";
 
-import { AudioLines, Film, FolderInput, ListMusic, ListPlus, Play } from "lucide-react";
+import {
+  AudioLines,
+  Film,
+  FolderInput,
+  ListMusic,
+  ListPlus,
+  MonitorPlay,
+  Play,
+} from "lucide-react";
 import { type LibraryTrack, toPlayerTrack } from "@/lib/library/tracks";
 import { formatTime } from "@/lib/player/format";
 import { usePlayerStore } from "@/stores/player-store";
@@ -77,7 +85,11 @@ export function TrackList({ tracks, onMove, onAddToPlaylist }: TrackListProps) {
                   {track.title}
                 </span>
                 <span className="flex items-center gap-1.5 truncate text-sm text-muted">
-                  {track.origin === "video" ? (
+                  {track.source === "youtube" ? (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-danger/15 px-2 text-xs text-danger">
+                      <MonitorPlay aria-hidden className="size-3" /> YouTube
+                    </span>
+                  ) : track.origin === "video" ? (
                     <span className="inline-flex items-center gap-1 rounded-full bg-secondary/15 px-2 text-xs text-secondary">
                       <Film aria-hidden className="size-3" /> de vídeo
                     </span>

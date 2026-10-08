@@ -3,6 +3,7 @@ import { requireUser } from "@/lib/auth/dal";
 import { signCoverUrls } from "@/lib/library/queries";
 import { type LibraryTrack, TRACK_COLUMNS } from "@/lib/library/tracks";
 import { createClient } from "@/lib/supabase/server";
+import { addYouTubeThumbnails } from "@/lib/youtube/tracks";
 import { isId, type PlaylistDetail, type PlaylistName, type PlaylistSummary } from "./playlists";
 
 const MOSAIC_SIZE = 4;
@@ -11,7 +12,10 @@ interface SummaryRow {
   id: string;
   name: string;
   items: { count: number }[];
-  preview: { rank: string; track: { cover_path: string | null } | null }[];
+  preview: {
+    rank: string;
+    track: { cover_path: string | null; source: string; external_id: string | null } | null;
+  }[];
 }
 
 /** The user's playlists (last changed first) with track count and mosaic covers. */
@@ -21,7 +25,7 @@ export async function getPlaylistSummaries(): Promise<PlaylistSummary[]> {
   const { data, error } = await supabase
     .from("playlists")
     .select(
-      "id, name, items:playlist_items(count), preview:playlist_items(rank, track:tracks(cover_path))",
+      "id, name, items:playlist_items(count), preview:playlist_items(rank, track:tracks(cover_path, source, external_id))",
     )
     .order("updated_at", { ascending: false })
     .order("rank", { referencedTable: "preview" })
@@ -34,10 +38,13 @@ export async function getPlaylistSummaries(): Promise<PlaylistSummary[]> {
     row.preview.map((item) => ({
       playlistId: row.id,
       cover_path: item.track?.cover_path ?? null,
+      source: item.track?.source ?? "audio",
+      external_id: item.track?.external_id ?? null,
       cover_url: null as string | null,
     })),
   );
   await signCoverUrls(supabase, covers);
+  addYouTubeThumbnails(covers);
 
   return rows.map((row) => ({
     id: row.id,
@@ -71,6 +78,7 @@ export async function getPlaylist(id: string): Promise<PlaylistDetail | null> {
 
   const tracks = (itemsResult.data ?? []).flatMap((item) => (item.track ? [item.track] : []));
   await signCoverUrls(supabase, tracks);
+  addYouTubeThumbnails(tracks);
   return { ...playlistResult.data, tracks };
 }
 

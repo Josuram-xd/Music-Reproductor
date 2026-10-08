@@ -75,6 +75,15 @@ describe("queue store", () => {
     expect(useQueueStore.getState().canUndo).toBe(false);
   });
 
+  test("playNow plays a track from outside the queue, undoable", () => {
+    queue.playNow(track("x"));
+    expect(current()).toBe("x");
+    expect(order()).toEqual(["a", "x", "b", "c", "d"]);
+    queue.undo();
+    expect(current()).toBe("b");
+    expect(order()).toEqual(["a", "b", "c", "d"]);
+  });
+
   test("append adds at the end", () => {
     queue.append(track("x"));
     queue.append(track("a"));

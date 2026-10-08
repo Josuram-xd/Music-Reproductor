@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTransition } from "react";
 import { useDropTarget } from "@/components/library/dnd";
-import type { PlaylistName } from "@/lib/playlists/playlists";
+import { isId, type PlaylistName } from "@/lib/playlists/playlists";
 import { addTracksToPlaylist } from "./playlist-client";
 
 /** Desktop sidebar list of playlists; library tracks can be dropped on them. */
@@ -31,7 +31,8 @@ function SidebarPlaylist({ playlist }: { playlist: PlaylistName }) {
   const href = `/playlists/${playlist.id}`;
   const drop = useDropTarget(
     (item) => startTransition(async () => void (await addTracksToPlaylist(playlist, [item.id]))),
-    (item) => item.kind === "track",
+    // YouTube results that are not saved in the library have no uuid yet.
+    (item) => item.kind === "track" && isId(item.id),
   );
 
   return (

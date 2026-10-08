@@ -71,10 +71,10 @@ Cada épica puede ser uno o varios commits (los hace el humano). `[ ]` pendiente
 
 ## E6 · YouTube
 
-- [ ] `/api/youtube/search` + cache en `yt_search_cache`
-- [ ] API key propia del usuario (cifrada) como prioridad / fallback al agotar la cuota compartida
-- [ ] `YouTubeSource` con IFrame Player API (vídeo visible en "Ahora suena")
-- [ ] Añadir resultados a cola/carpetas
+- [x] `/api/youtube/search` + cache en `yt_search_cache`
+- [x] API key propia del usuario (cifrada) como prioridad / fallback al agotar la cuota compartida
+- [x] `YouTubeSource` con IFrame Player API (vídeo visible en "Ahora suena")
+- [x] Añadir resultados a cola/carpetas
 
 ## E7 · Spotify
 
