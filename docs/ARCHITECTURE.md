@@ -146,7 +146,7 @@ app_sessions(id, owner_id, started_at, last_seen_at)       -- tiempo de uso, ali
 radio_feedback(owner_id, artist, score)                     -- "No me gusta" penaliza
 ```
 
-Vistas: `stats_top_tracks`, `stats_listening_time`, `stats_usage_time`, `stats_heatmap` (todas filtradas por `auth.uid()`).
+Agregados: funciones SQL `stats_summary`, `stats_top`, `stats_heatmap`, `stats_most_skipped`, `stats_by_source` (RPC, `security invoker`, filtradas por `auth.uid()`). Son funciones y no vistas porque reciben el periodo y la zona horaria del usuario. `touch_app_session()` alimenta `app_sessions` desde el heartbeat.
 
 Buckets: `media` (privado, ruta `{uid}/{trackId}.{ext}`), `covers`.
 

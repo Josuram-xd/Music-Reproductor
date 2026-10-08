@@ -104,11 +104,11 @@ Cada épica puede ser uno o varios commits (los hace el humano). `[ ]` pendiente
 
 ## E10 · Estadísticas
 
-- [ ] Migración `app_sessions` alimentada por el heartbeat + vistas `stats_*`
-- [ ] Página "Mis stats": KPIs (tiempo escuchado, uso, sesión actual en vivo, racha)
-- [ ] Top canciones / artistas / carpetas por periodo
-- [ ] Mapa de calor día × hora, más saltadas, tiempo por fuente
-- [ ] "Borrar mi historial"
+- [x] Migración `app_sessions` alimentada por el heartbeat + vistas `stats_*`
+- [x] Página "Mis stats": KPIs (tiempo escuchado, uso, sesión actual en vivo, racha)
+- [x] Top canciones / artistas / carpetas por periodo
+- [x] Mapa de calor día × hora, más saltadas, tiempo por fuente
+- [x] "Borrar mi historial"
 
 ## E11 · Diseño kawaii
 

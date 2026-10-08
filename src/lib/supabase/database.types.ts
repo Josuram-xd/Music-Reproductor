@@ -120,6 +120,13 @@ export type RadioFeedbackRow = {
   updated_at: string;
 };
 
+export type AppSessionRow = {
+  id: string;
+  owner_id: string;
+  started_at: string;
+  last_seen_at: string;
+};
+
 export interface Database {
   public: {
     Tables: {
@@ -205,6 +212,12 @@ export interface Database {
         Update: Partial<Pick<RadioFeedbackRow, "score" | "updated_at">>;
         Relationships: [];
       };
+      app_sessions: {
+        Row: AppSessionRow;
+        Insert: Partial<AppSessionRow>;
+        Update: Partial<Pick<AppSessionRow, "last_seen_at">>;
+        Relationships: [];
+      };
       queue_state: {
         Row: QueueStateRow;
         Insert: Pick<QueueStateRow, "owner_id"> & Partial<Omit<QueueStateRow, "owner_id">>;
@@ -213,7 +226,50 @@ export interface Database {
       };
     };
     Views: Record<never, never>;
-    Functions: Record<never, never>;
+    Functions: {
+      touch_app_session: { Args: Record<string, never>; Returns: AppSessionRow };
+      stats_summary: {
+        Args: { p_tz?: string };
+        Returns: {
+          listened_s: number;
+          plays: number;
+          audio_s: number;
+          youtube_s: number;
+          spotify_s: number;
+          usage_s: number;
+          session_started_at: string | null;
+          streak_days: number;
+        }[];
+      };
+      stats_top: {
+        Args: { p_kind: "track" | "artist" | "folder"; p_since: string; p_limit?: number };
+        Returns: {
+          key: string;
+          label: string;
+          sublabel: string | null;
+          listened_s: number;
+          plays: number;
+        }[];
+      };
+      stats_heatmap: {
+        Args: { p_since: string; p_tz?: string };
+        Returns: { weekday: number; hour: number; listened_s: number }[];
+      };
+      stats_by_source: {
+        Args: { p_since: string };
+        Returns: { source: string; listened_s: number; plays: number }[];
+      };
+      stats_most_skipped: {
+        Args: { p_since: string; p_limit?: number };
+        Returns: {
+          key: string;
+          label: string;
+          sublabel: string | null;
+          skips: number;
+          plays: number;
+        }[];
+      };
+    };
     Enums: Record<never, never>;
     CompositeTypes: Record<never, never>;
   };
